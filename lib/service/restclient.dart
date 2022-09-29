@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:retrofit/http.dart';
 
@@ -7,6 +8,9 @@ part 'restclient.g.dart';
 @RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @GET("daily-task/current")
+  Future<List<DailyTask>> findCurrentDailyTask();
 
   @GET("expedition")
   Future<List<Expedition>> findAllExpedition();

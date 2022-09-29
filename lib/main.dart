@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/screen/expedition/bloc/expedition_bloc.dart';
+import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'package:receipt_online_shop/widget/splash_screen.dart';
 
 void main() {
@@ -29,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<HomeBloc>(create: (__) => HomeBloc()),
         BlocProvider<ExpeditionBloc>(create: (__) => ExpeditionBloc()),
       ],
       child: MaterialApp(

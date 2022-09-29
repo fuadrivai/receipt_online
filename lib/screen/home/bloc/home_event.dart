@@ -1,8 +1,9 @@
 part of 'home_bloc.dart';
 
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
+abstract class HomeEvent {
+  HomeEvent();
+}
 
-  @override
-  List<Object> get props => [];
+class GetCurrentDailyTask extends HomeEvent {
+  GetCurrentDailyTask();
 }

@@ -1,10 +1,27 @@
 part of 'home_bloc.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();
-  
-  @override
-  List<Object> get props => [];
-}
+class HomeState extends Equatable {
+  final List<DailyTask>? dailyTasks;
+  final bool isLoading;
 
-class HomeInitial extends HomeState {}
+  const HomeState({
+    this.dailyTasks,
+    this.isLoading = false,
+  });
+
+  HomeState copyWith({
+    dailyTasks,
+    isLoading,
+  }) {
+    return HomeState(
+      dailyTasks: dailyTasks,
+      isLoading: isLoading ?? this.isLoading ?? false,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+        dailyTasks,
+        isLoading,
+      ];
+}

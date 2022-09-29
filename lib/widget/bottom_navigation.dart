@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/expedition/screen/expedition_screen.dart';
-import 'package:receipt_online_shop/screen/home/home_screen.dart';
+import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -32,9 +32,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ),
           BottomNavigationBarItem(
-            label: "Cart",
+            label: "Form",
             icon: Icon(
-              Icons.shopping_cart_outlined,
+              Icons.add_box_outlined,
               size: 23.0,
             ),
           ),

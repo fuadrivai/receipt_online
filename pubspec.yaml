@@ -45,6 +45,7 @@ dependencies:
   intl: ^0.17.0
   font_awesome_flutter: ^10.2.1
   retrofit: ^3.0.1+1
+  responsive_grid: ^2.1.0
 
 dev_dependencies:
   flutter_test:

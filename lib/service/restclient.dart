@@ -12,6 +12,9 @@ abstract class RestClient {
   @GET("daily-task/current")
   Future<List<DailyTask>> findCurrentDailyTask();
 
+  @GET("daily-task/{id}")
+  Future<DailyTask> dailyTaskFindById(@Path() int id);
+
   @GET("expedition")
   Future<List<Expedition>> findAllExpedition();
 

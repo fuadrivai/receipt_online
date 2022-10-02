@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
 import 'package:receipt_online_shop/screen/home/data/home_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<HomeState> _getExpedition(
       GetCurrentDailyTask event, Emitter<HomeState> emit) async {
     try {
-      List<DailyTask> dailyTasks = await HomeApi.findCurrentDailyTask();
+      List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();
       emit(HomeState(dailyTasks: dailyTasks, isLoading: false));
       return state.copyWith(
         dailyTasks: dailyTasks,

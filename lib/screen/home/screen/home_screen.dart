@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_screen.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
+import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     context.read<HomeBloc>().add(GetCurrentDailyTask());
@@ -38,31 +40,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: (state.dailyTasks ?? []).map((e) {
                                 return ResponsiveGridCol(
                                   xs: 6,
-                                  child: Card(
-                                      child: ListTile(
+                                  child: GestureDetector(
                                     onTap: () {
-                                      print(e);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (__) =>
+                                              DailyTaskScreen(e.id!),
+                                        ),
+                                      );
                                     },
-                                    trailing: const Icon(
-                                      Icons.fire_truck,
-                                      color: Color.fromARGB(255, 96, 151, 245),
-                                    ),
-                                    title: Center(
-                                      child: Text(
-                                        "${e.totalPackage} / ${e.receipts?.length ?? 0}",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20,
+                                    child: Card(
+                                        child: ListTile(
+                                      trailing: const Icon(
+                                        Icons.fire_truck,
+                                        color:
+                                            Color.fromARGB(255, 96, 151, 245),
+                                      ),
+                                      subtitle: Center(
+                                        child: Text(
+                                          "${e.receipts?.length ?? 0}/${e.totalPackage}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    subtitle: Center(
-                                        child: Text(
-                                      '${e.expedition?.name}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w700),
+                                      title: Center(
+                                          child: Text(
+                                        '${e.expedition?.name}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700),
+                                      )),
                                     )),
-                                  )),
+                                  ),
                                 );
                               }).toList(),
                             )
@@ -79,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor:
                                 const Color.fromARGB(255, 63, 157, 235),
                           ),
-                          onPressed: () {},
+                          onPressed: _formDialog,
                           child: const Text(
                             "+ Buat Tugas Harian",
                             style: TextStyle(color: Colors.white),
@@ -91,6 +102,74 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
         },
       ),
+    );
+  }
+
+  _formDialog() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Form Tugas Harian'),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(Icons.close),
+                  )
+                ],
+              ),
+              const Divider(color: Colors.grey)
+            ],
+          ),
+          content: Stack(
+            children: [
+              Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    TextFormField(
+                      readOnly: true,
+                      decoration: TextFormDecoration.dateBox("Tanggal"),
+                      onTap: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1990),
+                          lastDate: DateTime(3000),
+                        ).then((value) {
+                          print(value);
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      decoration: TextFormDecoration.box("Expedisi"),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      decoration: TextFormDecoration.box("Total Paket"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+                child: const Text("Submit"),
+                onPressed: () {
+                  // your code
+                })
+          ],
+        );
+      },
     );
   }
 }

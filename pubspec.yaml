@@ -46,6 +46,8 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   retrofit: ^3.0.1+1
   responsive_grid: ^2.1.0
+  flutter_barcode_listener: ^0.1.3
+  visibility_detector: ^0.3.3
 
 dev_dependencies:
   flutter_test:

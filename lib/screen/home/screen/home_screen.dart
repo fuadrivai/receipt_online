@@ -45,8 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (__) =>
-                                              DailyTaskScreen(e.id!),
+                                          builder: (__) => DailyTaskScreen(
+                                            dailyTaskId: e.id!,
+                                            platform: e.expedition?.alias ?? "",
+                                          ),
                                         ),
                                       );
                                     },

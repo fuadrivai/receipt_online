@@ -31,7 +31,7 @@ class DioInterceptors extends InterceptorsWrapper {
           icon: const Icon(
             Icons.cancel_outlined,
             color: Colors.red,
-            size: 40,
+            size: 30,
           ),
         );
       }
@@ -43,7 +43,7 @@ class DioInterceptors extends InterceptorsWrapper {
         icon: const Icon(
           Icons.cancel_outlined,
           color: Colors.red,
-          size: 40,
+          size: 30,
         ),
       );
     }

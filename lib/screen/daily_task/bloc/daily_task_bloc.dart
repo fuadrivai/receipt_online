@@ -1,10 +1,19 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/library/interceptor/injector.dart';
+import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
+import 'package:receipt_online_shop/screen/daily_task/data/expedition_enum.dart';
 
 part 'daily_task_event.dart';
 part 'daily_task_state.dart';
+
+final NavigationService _nav = locator<NavigationService>();
 
 class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
   DailyTaskBloc() : super(const DailyTaskState()) {
@@ -12,6 +21,11 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
       if (event is GetDailyTask) {
         emit(const DailyTaskState(isLoading: true));
         DailyTaskState dailyTaskState = await _getDailyTask(event, emit);
+        emit(dailyTaskState);
+      }
+      if (event is PostReceipt) {
+        // emit(const DailyTaskState(isLoading: true));
+        DailyTaskState dailyTaskState = await _postReceipt(event, emit);
         emit(dailyTaskState);
       }
     });
@@ -30,6 +44,51 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
     } catch (e) {
       emit(const DailyTaskState(isLoading: false));
       return state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<DailyTaskState> _postReceipt(
+      PostReceipt event, Emitter<DailyTaskState> emit) async {
+    try {
+      bool valid = ValidExpedition.validReceipt(
+        platform: event.platform,
+        data: event.barcode,
+      );
+      if (valid) {
+        Receipt receipt = Receipt();
+        receipt.number = event.barcode;
+        await DailyTaskApi.posReceipt(event.id, receipt);
+        DailyTask dailyTask = await DailyTaskApi.findById(event.id);
+        emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
+        return state.copyWith(
+          dailyTask: dailyTask,
+          isLoading: false,
+        );
+      } else {
+        DailyTask dailyTask = await DailyTaskApi.findById(event.id);
+        emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
+        Common.modalInfo(
+          _nav.navKey.currentContext!,
+          title: "Error",
+          message: "${event.barcode} - Resi Tidak Valid",
+          icon: const Icon(
+            Icons.cancel_outlined,
+            color: Colors.red,
+            size: 30,
+          ),
+        );
+        return state.copyWith(
+          dailyTask: dailyTask,
+          isLoading: false,
+        );
+      }
+    } catch (e) {
+      DailyTask dailyTask = await DailyTaskApi.findById(event.id);
+      emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
+      return state.copyWith(
+        dailyTask: dailyTask,
+        isLoading: false,
+      );
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -10,9 +11,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class DailyTaskScreen extends StatefulWidget {
   final int dailyTaskId;
-  const DailyTaskScreen(
-    this.dailyTaskId, {
+  final String platform;
+
+  const DailyTaskScreen({
     super.key,
+    required this.dailyTaskId,
+    required this.platform,
   });
 
   @override
@@ -53,7 +57,10 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                   },
                   child: BarcodeKeyboardListener(
                     onBarcodeScanned: (barcode) {
-                      print(barcode);
+                      context.read<DailyTaskBloc>().add(PostReceipt(
+                          widget.dailyTaskId,
+                          state.dailyTask?.expedition?.alias ?? "",
+                          barcode));
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

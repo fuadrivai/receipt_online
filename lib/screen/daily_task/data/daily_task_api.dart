@@ -1,4 +1,5 @@
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/service/api.dart';
 
 class DailyTaskApi {
@@ -23,6 +24,12 @@ class DailyTaskApi {
   static Future put(int id, DailyTask dailyTask) async {
     final client = await Api.restClient();
     var data = client.dailyTaskEdit(id, dailyTask);
+    return data;
+  }
+
+  static Future posReceipt(int id, Receipt receipt) async {
+    final client = await Api.restClient();
+    var data = client.dailyTaskPostReceipt(id, receipt);
     return data;
   }
 }

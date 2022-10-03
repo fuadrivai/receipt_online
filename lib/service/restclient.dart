@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:retrofit/http.dart';
 
@@ -8,6 +9,9 @@ part 'restclient.g.dart';
 @RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @POST("daily-task/receipt/{id}")
+  Future<dynamic> dailyTaskPostReceipt(@Path() int id, @Body() Receipt receipt);
 
   @GET("daily-task/current")
   Future<List<DailyTask>> findCurrentDailyTask();

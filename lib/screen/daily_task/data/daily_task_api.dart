@@ -32,4 +32,10 @@ class DailyTaskApi {
     var data = client.dailyTaskPostReceipt(id, receipt);
     return data;
   }
+
+  static Future deleteReceipt(String number) async {
+    final client = await Api.restClient();
+    var data = client.deleteReceipt(number);
+    return data;
+  }
 }

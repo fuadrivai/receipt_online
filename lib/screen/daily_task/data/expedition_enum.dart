@@ -76,7 +76,7 @@ class ValidExpedition {
         valid = true;
         break;
       default:
-        valid = false;
+        valid = true;
         break;
     }
     return valid;

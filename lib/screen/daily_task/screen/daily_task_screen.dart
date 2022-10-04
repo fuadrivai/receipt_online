@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
@@ -7,7 +5,6 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -164,7 +161,11 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                   return Card(
                                     child: ListTile(
                                       trailing: IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            context
+                                                .read<DailyTaskBloc>()
+                                                .add(RemoveReceipt(e.number!));
+                                          },
                                           icon: const FaIcon(
                                             FontAwesomeIcons.trash,
                                             size: 20,
@@ -223,7 +224,9 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
     try {
       barcodeScaner = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      onSuccess(barcodeScaner);
+      if (barcodeScaner != "-1") {
+        onSuccess(barcodeScaner);
+      }
     } on PlatformException {
       barcodeScaner = 'Failed to get platform version.';
     }

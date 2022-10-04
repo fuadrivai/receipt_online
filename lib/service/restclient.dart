@@ -13,6 +13,9 @@ abstract class RestClient {
   @POST("daily-task/receipt/{id}")
   Future<dynamic> dailyTaskPostReceipt(@Path() int id, @Body() Receipt receipt);
 
+  @DELETE("daily-task/receipt/{number}")
+  Future<dynamic> deleteReceipt(@Path() String number);
+
   @GET("daily-task/current")
   Future<List<DailyTask>> findCurrentDailyTask();
 

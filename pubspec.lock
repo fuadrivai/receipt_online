@@ -140,7 +140,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.0"
+    version: "4.3.0"
   collection:
     dependency: transitive
     description:
@@ -372,7 +372,7 @@ packages:
       name: json_serializable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.4.0"
+    version: "6.4.1"
   lints:
     dependency: transitive
     description:
@@ -589,14 +589,14 @@ packages:
       name: retrofit
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1+1"
+    version: "3.0.2"
   retrofit_generator:
     dependency: "direct dev"
     description:
       name: retrofit_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0+1"
+    version: "4.1.2"
   shared_preferences:
     dependency: "direct main"
     description:

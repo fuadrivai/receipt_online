@@ -27,6 +27,11 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         DailyTaskState dailyTaskState = await _postReceipt(event, emit);
         emit(dailyTaskState);
       }
+      if (event is RemoveReceipt) {
+        // emit(const DailyTaskState(isLoading: true));
+        DailyTaskState dailyTaskState = await _removeReceipt(event, emit);
+        emit(dailyTaskState);
+      }
     });
   }
 
@@ -83,6 +88,26 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
       }
     } catch (e) {
       DailyTask dailyTask = await DailyTaskApi.findById(event.id);
+      emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
+      return state.copyWith(
+        dailyTask: dailyTask,
+        isLoading: false,
+      );
+    }
+  }
+
+  Future<DailyTaskState> _removeReceipt(
+      RemoveReceipt event, Emitter<DailyTaskState> emit) async {
+    try {
+      await DailyTaskApi.deleteReceipt(event.number);
+      DailyTask dailyTask = await DailyTaskApi.findById(state.dailyTask!.id!);
+      emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
+      return state.copyWith(
+        dailyTask: dailyTask,
+        isLoading: false,
+      );
+    } catch (e) {
+      DailyTask dailyTask = await DailyTaskApi.findById(state.dailyTask!.id!);
       emit(DailyTaskState(dailyTask: dailyTask, isLoading: false));
       return state.copyWith(
         dailyTask: dailyTask,

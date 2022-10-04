@@ -9,6 +9,11 @@ class GetDailyTask extends DailyTaskEvent {
   GetDailyTask(this.id);
 }
 
+class RemoveReceipt extends DailyTaskEvent {
+  String number;
+  RemoveReceipt(this.number);
+}
+
 class PostReceipt extends DailyTaskEvent {
   int id;
   String platform;

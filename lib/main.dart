@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
@@ -24,6 +25,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    Jiffy.locale('id');
     super.initState();
   }
 

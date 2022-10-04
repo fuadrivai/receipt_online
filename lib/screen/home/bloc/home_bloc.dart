@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
-import 'package:receipt_online_shop/screen/home/data/home_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'home_event.dart';

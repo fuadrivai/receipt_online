@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.receipt_online_shop">
+     <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="receipt_online_shop"
         android:name="${applicationName}"

@@ -6,12 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
+import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
+import 'package:receipt_online_shop/screen/daily_task/screen/search_daily_task.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 
 class DailyTaskScreen extends StatefulWidget {
   final int dailyTaskId;
@@ -42,20 +42,24 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
       appBar: AppBar(
         title: const Text('Tugas Harian'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+          BlocBuilder<DailyTaskBloc, DailyTaskState>(
+            builder: (context, state) {
+              return IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context,
+                        delegate: SearchTaskDelegate(
+                            state.dailyTask?.receipts ?? []));
+                  },
+                  icon: const Icon(Icons.search));
+            },
+          ),
           IconButton(
-              onPressed: () async {
-                final pdf = pw.Document();
-                pdf.addPage(
-                  pw.Page(
-                    build: (pw.Context context) => pw.Center(
-                      child: pw.Text('Hello World!'),
-                    ),
-                  ),
-                );
-
-                await Printing.layoutPdf(
-                    onLayout: (PdfPageFormat format) async => pdf.save());
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (__) => const DailyPdfPreviewScreen()));
               },
               icon: const Icon(Icons.print)),
           IconButton(
@@ -161,10 +165,17 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                   return Card(
                                     child: ListTile(
                                       trailing: IconButton(
-                                          onPressed: () {
-                                            context
-                                                .read<DailyTaskBloc>()
-                                                .add(RemoveReceipt(e.number!));
+                                          onPressed: () async {
+                                            if (await confirm(
+                                              context,
+                                              content: Text(
+                                                  'Yakin Ingin Menghapus Nomor Resi ${e.number}'),
+                                              textOK: const Text('Yes'),
+                                              textCancel: const Text('No'),
+                                            )) {
+                                              context.read<DailyTaskBloc>().add(
+                                                  RemoveReceipt(e.number!));
+                                            }
                                           },
                                           icon: const FaIcon(
                                             FontAwesomeIcons.trash,
@@ -188,33 +199,6 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
         },
       ),
     );
-  }
-
-  Future<Uint8List> _generatePdf(PdfPageFormat format, String title) async {
-    final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
-
-    pdf.addPage(
-      pw.Page(
-        pageFormat: format,
-        build: (context) {
-          return pw.Column(
-            children: [
-              pw.SizedBox(
-                width: double.infinity,
-                child: pw.FittedBox(
-                  child: pw.Text(title, style: pw.TextStyle(font: font)),
-                ),
-              ),
-              pw.SizedBox(height: 20),
-              pw.Flexible(child: pw.FlutterLogo())
-            ],
-          );
-        },
-      ),
-    );
-
-    return pdf.save();
   }
 
   Future<void> scanBarcodeNormal(BuildContext context,

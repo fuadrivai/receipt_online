@@ -19,6 +19,29 @@ class _RestClient implements RestClient {
   String? baseUrl;
 
   @override
+  Future<Receipt> receiptByDailyTaskId(id) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result =
+        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Receipt>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'daily-task/receipt/${id}',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = Receipt.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<dynamic> dailyTaskPostReceipt(
     id,
     receipt,

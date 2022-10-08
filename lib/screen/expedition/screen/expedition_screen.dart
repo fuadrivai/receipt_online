@@ -12,7 +12,6 @@ class ExpeditionScreen extends StatefulWidget {
 }
 
 class _ExpeditionScreenState extends State<ExpeditionScreen> {
-  final TextEditingController _expeditionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override

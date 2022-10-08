@@ -15,9 +15,11 @@ class ValidExpedition {
   static bool lex(String data) {
     if (data.length < 15) {
       return false;
-    } else if ((data.contains("LXAD")) ||
-        (data.contains("JNAP")) ||
-        (data.contains("NLIDAP"))) {
+    } else if (data.contains("LXAD") || data.contains("lxad")) {
+      return true;
+    } else if (data.contains("JNAP") || data.contains("jnap")) {
+      return true;
+    } else if (data.contains("NLIDAP") || data.contains("nlidap")) {
       return true;
     } else {
       return false;

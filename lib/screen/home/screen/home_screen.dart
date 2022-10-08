@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_screen.dart';
+import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
+  Expedition? expedition;
   @override
   void initState() {
     context.read<HomeBloc>().add(GetCurrentDailyTask());
@@ -99,7 +101,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               backgroundColor:
                                   const Color.fromARGB(255, 63, 157, 235),
                             ),
-                            onPressed: _formDialog,
+                            onPressed: () {
+                              _formDialog(state);
+                            },
                             child: const Text(
                               "+ Buat Tugas Harian",
                               style: TextStyle(color: Colors.white),
@@ -119,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<HomeBloc>().add(GetCurrentDailyTask());
   }
 
-  _formDialog() {
+  _formDialog(HomeState state) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -148,23 +152,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    TextFormField(
-                      readOnly: true,
-                      decoration: TextFormDecoration.dateBox("Tanggal"),
-                      onTap: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1990),
-                          lastDate: DateTime(3000),
-                        ).then((value) {
-                          print(value);
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      decoration: TextFormDecoration.box("Expedisi"),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButtonFormField(
+                        isExpanded: true,
+                        hint: Text(
+                          'Select Item',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).hintColor,
+                          ),
+                        ),
+                        items: (state.expeditions ?? [])
+                            .map((item) => DropdownMenuItem<Expedition>(
+                                  value: item,
+                                  child: Text(
+                                    item.name ?? "--",
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        value: expedition,
+                        onChanged: (Expedition? value) {
+                          setState(() {
+                            expedition = value;
+                          });
+                        },
+                      ),
                     ),
                     const SizedBox(height: 8),
                     TextFormField(
@@ -179,7 +194,9 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
                 child: const Text("Submit"),
                 onPressed: () {
-                  // your code
+                  context
+                      .read<HomeBloc>()
+                      .add(DailyTaskOnSave(state.dailyTask!));
                 })
           ],
         );

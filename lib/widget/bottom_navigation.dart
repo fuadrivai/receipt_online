@@ -32,9 +32,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ),
           BottomNavigationBarItem(
-            label: "Form",
+            label: "Data Resi",
             icon: Icon(
-              Icons.add_box_outlined,
+              Icons.folder,
               size: 23.0,
             ),
           ),

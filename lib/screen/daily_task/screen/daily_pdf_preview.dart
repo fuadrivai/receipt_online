@@ -6,7 +6,6 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
-import 'package:receipt_online_shop/model/receipt.dart';
 
 class DailyPdfPreviewScreen extends StatefulWidget {
   final DailyTask dailyTask;
@@ -242,6 +241,7 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
   }
 
   _appenTableRow() {
+    // List<String> tableData = [];
     tableRow.add(
       pw.TableRow(
         children: tableHeader.map((e) => pw.Text(e)).toList(),

@@ -138,6 +138,30 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<DailyTask> postDailyTask(dailyTask) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(dailyTask.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<DailyTask>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'daily-task',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = DailyTask.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
   Future<List<Expedition>> findAllExpedition() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

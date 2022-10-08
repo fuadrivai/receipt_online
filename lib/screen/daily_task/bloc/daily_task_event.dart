@@ -19,6 +19,16 @@ class RemoveReceipt extends DailyTaskEvent {
   RemoveReceipt(this.number);
 }
 
+class ExpeditionOnChange extends DailyTaskEvent {
+  Expedition expedition;
+  ExpeditionOnChange(this.expedition);
+}
+
+class TotalPackageOnChange extends DailyTaskEvent {
+  int total;
+  TotalPackageOnChange(this.total);
+}
+
 class PostReceipt extends DailyTaskEvent {
   int id;
   String platform;

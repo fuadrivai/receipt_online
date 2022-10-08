@@ -25,6 +25,9 @@ abstract class RestClient {
   @GET("daily-task/{id}")
   Future<DailyTask> dailyTaskFindById(@Path() int id);
 
+  @POST("daily-task")
+  Future<DailyTask> postDailyTask(@Body() DailyTask dailyTask);
+
   @GET("expedition")
   Future<List<Expedition>> findAllExpedition();
 

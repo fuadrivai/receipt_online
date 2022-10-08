@@ -5,7 +5,6 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/search_daily_task.dart';

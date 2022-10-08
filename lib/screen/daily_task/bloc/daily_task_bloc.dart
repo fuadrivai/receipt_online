@@ -8,6 +8,7 @@ import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/expedition_enum.dart';
+import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 
 part 'daily_task_event.dart';
 part 'daily_task_state.dart';

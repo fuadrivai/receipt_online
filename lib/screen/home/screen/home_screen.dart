@@ -127,78 +127,97 @@ class _HomeScreenState extends State<HomeScreen> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Column(
                 children: [
-                  const Text('Form Tugas Harian'),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Icon(Icons.close),
-                  )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Form Tugas Harian'),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Icon(Icons.close),
+                      )
+                    ],
+                  ),
+                  const Divider(color: Colors.grey)
                 ],
               ),
-              const Divider(color: Colors.grey)
-            ],
-          ),
-          content: Stack(
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    DropdownButtonHideUnderline(
-                      child: DropdownButtonFormField(
-                        isExpanded: true,
-                        hint: Text(
-                          'Select Item',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).hintColor,
+              content: Stack(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField(
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Item',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: (state.expeditions ?? [])
+                                .map((item) => DropdownMenuItem<Expedition>(
+                                      value: item,
+                                      child: Text(
+                                        item.name ?? "--",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: expedition,
+                            onChanged: (Expedition? value) {
+                              setState(() {
+                                context
+                                    .read<HomeBloc>()
+                                    .add(OnChangeExpedition(value!));
+                              });
+                            },
                           ),
                         ),
-                        items: (state.expeditions ?? [])
-                            .map((item) => DropdownMenuItem<Expedition>(
-                                  value: item,
-                                  child: Text(
-                                    item.name ?? "--",
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                        value: expedition,
-                        onChanged: (Expedition? value) {
-                          setState(() {
-                            expedition = value;
-                          });
-                        },
-                      ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                          decoration: TextFormDecoration.box("Total Paket"),
+                          onChanged: (value) {
+                            setState(() {
+                              context
+                                  .read<HomeBloc>()
+                                  .add(OnChangeTotal(int.parse(value)));
+                            });
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      decoration: TextFormDecoration.box("Total Paket"),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-                child: const Text("Submit"),
-                onPressed: () {
-                  context
-                      .read<HomeBloc>()
-                      .add(DailyTaskOnSave(state.dailyTask!));
-                })
-          ],
+              actions: [
+                TextButton(
+                    child: const Text("Submit"),
+                    onPressed: () {
+                      context.read<HomeBloc>().add(DailyTaskOnSave());
+                      // if (_formKey.currentState!.validate()) {
+                      // }
+                    })
+              ],
+            );
+          },
         );
       },
     );

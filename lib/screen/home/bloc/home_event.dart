@@ -13,7 +13,11 @@ class OnChangeTotal extends HomeEvent {
   OnChangeTotal(this.total);
 }
 
+class OnChangeExpedition extends HomeEvent {
+  Expedition expedition;
+  OnChangeExpedition(this.expedition);
+}
+
 class DailyTaskOnSave extends HomeEvent {
-  DailyTask dailyTask;
-  DailyTaskOnSave(this.dailyTask);
+  DailyTaskOnSave();
 }

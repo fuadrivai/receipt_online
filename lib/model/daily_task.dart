@@ -18,10 +18,10 @@ class DailyTask {
       this.date,
       this.expedition,
       this.id,
-      this.left,
-      this.picked,
-      this.status,
-      this.totalPackage,
+      this.left = 0,
+      this.picked = 0,
+      this.status = false,
+      this.totalPackage = 0,
       this.updatedAt,
       this.receipts});
 

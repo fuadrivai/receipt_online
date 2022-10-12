@@ -29,7 +29,7 @@ class ValidExpedition {
   static bool shopee(String data) {
     if (data.length < 17) {
       return false;
-    } else if (data.contains("SPXID")) {
+    } else if (data.contains("SPXID")||data.contains("spxid")) {
       return true;
     } else {
       return false;

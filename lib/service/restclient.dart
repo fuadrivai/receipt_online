@@ -10,6 +10,9 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @GET("lazada-order")
+  Future<dynamic> getOrders();
+
   @GET("daily-task/receipt/{id}")
   Future<Receipt> receiptByDailyTaskId(@Path() int id);
 

@@ -1,6 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
+import 'package:receipt_online_shop/widget/loading_screen.dart';
 
 class LazadaScreen extends StatefulWidget {
   const LazadaScreen({super.key});
@@ -10,26 +10,22 @@ class LazadaScreen extends StatefulWidget {
 }
 
 class _LazadaScreenState extends State<LazadaScreen> {
-  var data;
+  bool isLoading = false;
+  List dataOrder = [];
   @override
   void initState() {
-    _getCode();
+    isLoading = true;
+    LazadaApi.getOrders().then((value) {
+      print(value);
+      dataOrder = value['data']['orders'];
+      isLoading = false;
+      setState(() {});
+    }).catchError((e) {
+      print(e);
+      isLoading = false;
+      setState(() {});
+    });
     super.initState();
-  }
-
-  _getCode() async {
-    Dio _dio = Dio();
-    var response = await _dio
-        .get("https://auth.lazada.com/oauth/authorize", queryParameters: {
-      "response_type": "code",
-      "force_auth": true,
-      "redirect_uri": "https://www.google.com",
-      "client_id": 112922,
-    });
-    setState(() {
-      data = response.data;
-      print(data);
-    });
   }
 
   @override
@@ -38,12 +34,13 @@ class _LazadaScreenState extends State<LazadaScreen> {
       appBar: AppBar(
         title: const Text("Otorisasi Lazada"),
       ),
-      body: Html(
-        data: data,
-        onLinkTap: (str, context, map, element) {
-          print(str);
-        },
-      ),
+      body: isLoading
+          ? const LoadingScreen()
+          : ListView.builder(
+              itemBuilder: (__, i) {
+                return const Text('ok');
+              },
+              itemCount: dataOrder.length),
     );
   }
 }

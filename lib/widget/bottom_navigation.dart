@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/expedition/screen/expedition_screen.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
+import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -45,6 +46,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
               size: 23.0,
             ),
           ),
+          BottomNavigationBarItem(
+            label: "Test",
+            icon: Icon(
+              Icons.fire_truck,
+              size: 23.0,
+            ),
+          ),
         ],
       ),
     );
@@ -59,6 +67,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
         return const Scaffold();
       case 2:
         return const ExpeditionScreen();
+      case 3:
+        return const LazadaScreen();
       default:
         return const Scaffold();
     }

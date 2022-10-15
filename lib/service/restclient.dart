@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:retrofit/http.dart';
+
+import '../model/lazada/full_order.dart';
 
 part 'restclient.g.dart';
 
@@ -10,8 +13,11 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @GET("lazada-order/{orderId}")
+  Future<Order> getOrder(@Path() int orderId);
+
   @GET("lazada-order")
-  Future<dynamic> getOrders();
+  Future<FullOrder> getOrders();
 
   @GET("daily-task/receipt/{id}")
   Future<Receipt> receiptByDailyTaskId(@Path() int id);

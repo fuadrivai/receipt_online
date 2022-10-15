@@ -6,6 +6,7 @@ import 'package:receipt_online_shop/library/interceptor/navigation_service.dart'
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/expedition/bloc/expedition_bloc.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
+import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
 import 'package:receipt_online_shop/widget/splash_screen.dart';
 
 void main() {
@@ -36,6 +37,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<HomeBloc>(create: (__) => HomeBloc()),
         BlocProvider<ExpeditionBloc>(create: (__) => ExpeditionBloc()),
         BlocProvider<DailyTaskBloc>(create: (__) => DailyTaskBloc()),
+        BlocProvider<LazadaBloc>(create: (__) => LazadaBloc()),
       ],
       child: MaterialApp(
         navigatorKey: _nav.navKey,

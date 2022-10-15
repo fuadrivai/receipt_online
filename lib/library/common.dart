@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Common {
@@ -37,5 +39,20 @@ class Common {
         );
       },
     );
+  }
+
+  static Future<void> scanBarcodeNormal(BuildContext context,
+      {required Function onSuccess}) async {
+    String barcodeScaner;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScaner = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      if (barcodeScaner != "-1") {
+        onSuccess(barcodeScaner);
+      }
+    } on PlatformException {
+      barcodeScaner = 'Failed to get platform version.';
+    }
   }
 }

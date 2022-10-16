@@ -27,8 +27,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(homeState);
       }
     });
-    on<OnChangeTotal>((event, emit) => onChangeTotal(event, emit));
-    on<OnChangeExpedition>((event, emit) => onChangeExpedition(event, emit));
+    on<OnChangeTotal>(onChangeTotal);
+    on<OnChangeExpedition>(onChangeExpedition);
   }
 
   onChangeTotal(OnChangeTotal event, Emitter<HomeState> emit) {

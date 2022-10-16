@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: _nav.navKey,
         theme: ThemeData(
           fontFamily: 'Lato',
+          scaffoldBackgroundColor: const Color.fromARGB(255, 247, 246, 246),
         ),
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),

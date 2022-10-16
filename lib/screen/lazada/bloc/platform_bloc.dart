@@ -1,35 +1,32 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:receipt_online_shop/model/lazada/full_order.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
-import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
+import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 
 part 'platform_event.dart';
 part 'platform_state.dart';
 
 class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
   PlatformBloc() : super(PlatformLoading()) {
-    on<PlatformFullOder>(_getFullOrder);
     on<PlatformSingleOrder>(_getSingleOrder);
+    on<PlatformRTS>(_rtsOrder);
   }
 
-  void _getFullOrder(
-      PlatformFullOder event, Emitter<PlatformState> emit) async {
-    emit(PlatformLoading());
+  void _getSingleOrder(
+      PlatformSingleOrder event, Emitter<PlatformState> emit) async {
     try {
-      FullOrder fullOrder = await LazadaApi.getOrders();
-      emit(PlatformLoaded(fullOrder));
+      emit(PlatformLoading());
+      emit(PlatformOrder(event.order));
     } catch (e) {
       emit(PlatformError());
     }
   }
 
-  void _getSingleOrder(
-      PlatformSingleOrder event, Emitter<PlatformState> emit) async {
-    emit(LoadingSingle());
+  void _rtsOrder(PlatformRTS event, Emitter<PlatformState> emit) async {
     try {
-      Order order = await LazadaApi.getOrder(event.orderId);
-      emit(PlatformOrder(order));
+      emit(PlatformLoading());
+      OrderRTS orderRTS = event.orderRts;
+      print(orderRTS);
     } catch (e) {
       emit(PlatformError());
     }

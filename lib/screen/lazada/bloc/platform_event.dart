@@ -4,15 +4,18 @@ abstract class PlatformEvent extends Equatable {
   const PlatformEvent();
 }
 
-class PlatformFullOder extends PlatformEvent {
+class PlatformSingleOrder extends PlatformEvent {
+  final Order order;
+  const PlatformSingleOrder(this.order);
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [order];
 }
 
-class PlatformSingleOrder extends PlatformEvent {
-  final int orderId;
-  const PlatformSingleOrder(this.orderId);
+class PlatformRTS extends PlatformEvent {
+  final OrderRTS orderRts;
+  const PlatformRTS(this.orderRts);
 
   @override
-  List<Object?> get props => [orderId];
+  List<Object?> get props => [orderRts];
 }

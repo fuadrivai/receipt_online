@@ -1,24 +1,22 @@
 part of 'lazada_bloc.dart';
 
-class LazadaState extends Equatable {
-  final FullOrder? fullOrder;
-  final Order? order;
-  final bool isLoading;
+abstract class LazadaState extends Equatable {
+  const LazadaState();
+}
 
-  const LazadaState({
-    this.fullOrder,
-    this.order,
-    this.isLoading = false,
-  });
-
-  LazadaState copyWith({fullOrder, tempDailyTask, isLoading, order}) {
-    return LazadaState(
-      fullOrder: fullOrder ?? this.fullOrder,
-      order: order ?? this.order,
-      isLoading: isLoading ?? this.isLoading ?? false,
-    );
-  }
-
+class LazadaErrorState extends LazadaState {
   @override
-  List<Object?> get props => [order, isLoading, fullOrder];
+  List<Object?> get props => [];
+}
+
+class LazadaLoadingState extends LazadaState {
+  @override
+  List<Object?> get props => [];
+}
+
+class LazadaFullOrderState extends LazadaState {
+  final FullOrder fullOrder;
+  const LazadaFullOrderState(this.fullOrder);
+  @override
+  List<Object?> get props => [fullOrder];
 }

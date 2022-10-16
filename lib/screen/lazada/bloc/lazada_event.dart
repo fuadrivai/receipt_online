@@ -1,14 +1,10 @@
 part of 'lazada_bloc.dart';
 
-abstract class LazadaEvent {
-  LazadaEvent();
+abstract class LazadaEvent extends Equatable {
+  const LazadaEvent();
 }
 
-class GetFullOder extends LazadaEvent {
-  GetFullOder();
-}
-
-class GetSingleOrder extends LazadaEvent {
-  int orderId;
-  GetSingleOrder(this.orderId);
+class GetFullOrderEvent extends LazadaEvent {
+  @override
+  List<Object?> get props => [];
 }

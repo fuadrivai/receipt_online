@@ -35,40 +35,45 @@ class Order {
   String? giftMessage;
   List<Item>? items;
   String? trackingNumber;
+  String? shippingProviderType;
+  String? shipmentProvider;
 
-  Order(
-      {this.voucherPlatform,
-      this.voucher,
-      this.warehouseCode,
-      this.orderNumber,
-      this.voucherSeller,
-      this.createdAt,
-      this.voucherCode,
-      this.giftOption,
-      this.shippingFeeDiscountPlatform,
-      this.customerLastName,
-      this.promisedShippingTimes,
-      this.updatedAt,
-      this.price,
-      this.nationalRegistrationNumber,
-      this.shippingFeeOriginal,
-      this.paymentMethod,
-      this.customerFirstName,
-      this.shippingFeeDiscountSeller,
-      this.shippingFee,
-      this.branchNumber,
-      this.taxCode,
-      this.itemsCount,
-      this.deliveryInfo,
-      this.statuses,
-      this.addressBilling,
-      this.addressShipping,
-      this.extraAttributes,
-      this.orderId,
-      this.remarks,
-      this.giftMessage,
-      this.items,
-      this.trackingNumber});
+  Order({
+    this.voucherPlatform,
+    this.voucher,
+    this.warehouseCode,
+    this.orderNumber,
+    this.voucherSeller,
+    this.createdAt,
+    this.voucherCode,
+    this.giftOption,
+    this.shippingFeeDiscountPlatform,
+    this.customerLastName,
+    this.promisedShippingTimes,
+    this.updatedAt,
+    this.price,
+    this.nationalRegistrationNumber,
+    this.shippingFeeOriginal,
+    this.paymentMethod,
+    this.customerFirstName,
+    this.shippingFeeDiscountSeller,
+    this.shippingFee,
+    this.branchNumber,
+    this.taxCode,
+    this.itemsCount,
+    this.deliveryInfo,
+    this.statuses,
+    this.addressBilling,
+    this.addressShipping,
+    this.extraAttributes,
+    this.orderId,
+    this.remarks,
+    this.giftMessage,
+    this.items,
+    this.trackingNumber,
+    this.shippingProviderType,
+    this.shipmentProvider,
+  });
 
   Order.fromJson(Map<String, dynamic> json) {
     voucherPlatform = json['voucher_platform'];
@@ -112,6 +117,8 @@ class Order {
       });
     }
     trackingNumber = json['tracking_number'];
+    shippingProviderType = json['shipping_provider_type'];
+    shipmentProvider = json['shipment_provider'];
   }
 
   Map<String, dynamic> toJson() {
@@ -154,6 +161,7 @@ class Order {
       data['items'] = items!.map((v) => v.toJson()).toList();
     }
     data['tracking_number'] = trackingNumber;
+    data['shipment_provider'] = shipmentProvider;
     return data;
   }
 }

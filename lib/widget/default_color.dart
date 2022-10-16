@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class DefaultColor {
   static Color primary = const Color.fromRGBO(30, 160, 80, 1);
-  Color secondary = const Color.fromRGBO(91, 185, 139, 1);
-  Color text = const Color.fromRGBO(0, 0, 0, 0.68);
-  Color price = const Color.fromRGBO(125, 119, 119, 1);
-  Color navbar = const Color.fromRGBO(0, 0, 0, 0.68);
-  Color fruit = const Color.fromRGBO(229, 229, 229, 0.63);
+  static Color secondary = const Color.fromRGBO(91, 185, 139, 1);
+  static Color text = const Color.fromRGBO(0, 0, 0, 0.68);
+  static Color price = const Color.fromRGBO(125, 119, 119, 1);
+  static Color navbar = const Color.fromRGBO(0, 0, 0, 0.68);
+  static Color fruit = const Color.fromRGBO(229, 229, 229, 0.63);
 
   static MaterialColor material(Color color) {
     List strengths = <double>[.05];

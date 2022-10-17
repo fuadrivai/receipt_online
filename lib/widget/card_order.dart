@@ -51,7 +51,9 @@ class CardOrder extends StatelessWidget {
                 visualDensity: VisualDensity.comfortable,
                 title: Row(
                   children: [
-                    Text('Resi : ${order.trackingNumber ?? ""}'),
+                    order.trackingNumber == ""
+                        ? const SizedBox()
+                        : Text('Resi : ${order.trackingNumber ?? ""}'),
                     const SizedBox(width: 4),
                     Badge(
                       toAnimate: false,
@@ -143,6 +145,29 @@ class CardOrder extends StatelessWidget {
                     ),
                   );
                 }).toList(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text('Status Paket'),
+                    const SizedBox(width: 10),
+                    Badge(
+                      toAnimate: false,
+                      shape: BadgeShape.square,
+                      badgeColor: Colors.deepPurple,
+                      borderRadius: BorderRadius.circular(4),
+                      badgeContent: Text(
+                        order.statuses![0],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

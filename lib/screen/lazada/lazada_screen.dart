@@ -120,33 +120,24 @@ class _LazadaScreenState extends State<LazadaScreen>
                         listOrders: (state.fullOrder.orders ?? []),
                         barcode: barcode);
                   },
-                  child: Column(
-                    children: [
-                      // Row(
-                      //   children: [],
-                      // ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemBuilder: (__, i) {
-                            Order order = (state.fullOrder.orders ?? [])[i];
-                            return CardOrder(
-                              order: order,
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (__) => LazadaDetailOrderScreen(
-                                      order: order,
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          itemCount: state.fullOrder.orders?.length ?? 0,
-                        ),
-                      ),
-                    ],
+                  child: ListView.builder(
+                    itemBuilder: (__, i) {
+                      Order order = (state.fullOrder.orders ?? [])[i];
+                      return CardOrder(
+                        order: order,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (__) => LazadaDetailOrderScreen(
+                                order: order,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    itemCount: state.fullOrder.orders?.length ?? 0,
                   ),
                 ),
               );

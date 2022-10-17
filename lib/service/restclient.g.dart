@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: non_constant_identifier_names
+
 part of 'restclient.dart';
 
 // **************************************************************************
@@ -17,6 +19,33 @@ class _RestClient implements RestClient {
   final Dio _dio;
 
   String? baseUrl;
+
+  @override
+  Future<dynamic> orderRts(
+    tracking_number,
+    shipment_provider,
+    order_item_ids,
+  ) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'lazada-order/rts/${tracking_number}/${shipment_provider}/${order_item_ids}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
 
   @override
   Future<Order> getOrder(orderId) async {

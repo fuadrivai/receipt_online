@@ -13,9 +13,9 @@ class PlatformSingleOrder extends PlatformEvent {
 }
 
 class PlatformRTS extends PlatformEvent {
-  final OrderRTS orderRts;
-  const PlatformRTS(this.orderRts);
+  final Order order;
+  const PlatformRTS(this.order);
 
   @override
-  List<Object?> get props => [orderRts];
+  List<Object?> get props => [order];
 }

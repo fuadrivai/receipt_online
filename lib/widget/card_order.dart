@@ -63,7 +63,7 @@ class CardOrder extends StatelessWidget {
                             .toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -82,7 +82,7 @@ class CardOrder extends StatelessWidget {
                   children: [
                     const Text(
                       'Total Qty',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Badge(
                       toAnimate: false,

@@ -1,6 +1,6 @@
 class OrderRTS {
   String? deliveryType;
-  String? orderItemIds;
+  List<int>? orderItemIds;
   String? shipmentProvider;
   String? trackingNumber;
 

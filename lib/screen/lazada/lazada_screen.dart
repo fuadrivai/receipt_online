@@ -16,10 +16,13 @@ class LazadaScreen extends StatefulWidget {
   State<LazadaScreen> createState() => _LazadaScreenState();
 }
 
-class _LazadaScreenState extends State<LazadaScreen> {
+class _LazadaScreenState extends State<LazadaScreen>
+    with SingleTickerProviderStateMixin {
   late bool visible;
+  late TabController controller;
   @override
   void initState() {
+    controller = TabController(vsync: this, length: 3, initialIndex: 1);
     context.read<LazadaBloc>().add(GetFullOrderEvent());
     super.initState();
   }
@@ -28,7 +31,53 @@ class _LazadaScreenState extends State<LazadaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Lazada Printed"),
+        title: BlocBuilder<LazadaBloc, LazadaState>(
+          builder: (context, state) {
+            if (state is LazadaFullOrderState) {
+              return Text("Lazada (${state.fullOrder.allTotal}) Order");
+            }
+            return const Text("Lazada (0) Order");
+          },
+        ),
+        bottom: TabBar(
+          controller: controller,
+          //source code lanjutan
+          tabs: [
+            Tab(
+              icon: BlocBuilder<LazadaBloc, LazadaState>(
+                builder: (context, state) {
+                  if (state is LazadaFullOrderState) {
+                    return Text(state.fullOrder.totalPending.toString());
+                  }
+                  return const Text("0");
+                },
+              ),
+              text: "Pending",
+            ),
+            Tab(
+              icon: BlocBuilder<LazadaBloc, LazadaState>(
+                builder: (context, state) {
+                  if (state is LazadaFullOrderState) {
+                    return Text(state.fullOrder.totalPacked.toString());
+                  }
+                  return const Text("0");
+                },
+              ),
+              text: "Packing",
+            ),
+            Tab(
+              icon: BlocBuilder<LazadaBloc, LazadaState>(
+                builder: (context, state) {
+                  if (state is LazadaFullOrderState) {
+                    return Text(state.fullOrder.totalRts.toString());
+                  }
+                  return const Text("0");
+                },
+              ),
+              text: "Siap Kirim",
+            ),
+          ],
+        ),
         actions: [
           BlocBuilder<LazadaBloc, LazadaState>(
             builder: (context, state) {
@@ -73,9 +122,9 @@ class _LazadaScreenState extends State<LazadaScreen> {
                   },
                   child: Column(
                     children: [
-                      Row(
-                        children: [],
-                      ),
+                      // Row(
+                      //   children: [],
+                      // ),
                       Expanded(
                         child: ListView.builder(
                           itemBuilder: (__, i) {

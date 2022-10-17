@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
@@ -12,6 +14,11 @@ part 'restclient.g.dart';
 @RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @POST(
+      "lazada-order/rts/{tracking_number}/{shipment_provider}/{order_item_ids}")
+  Future<dynamic> orderRts(@Path() String tracking_number,
+      @Path() String shipment_provider, @Path() List<int>? order_item_ids);
 
   @GET("lazada-order/{orderId}")
   Future<Order> getOrder(@Path() int orderId);

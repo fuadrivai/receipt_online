@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receipt_online_shop/model/lazada/item.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
-import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/platform_bloc.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
@@ -36,7 +34,7 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
             return const LoadingScreen();
           }
           if (state is PlatformOrder) {
-            return Column(
+            return ListView(
               children: [
                 CardOrder(order: state.order),
                 Padding(
@@ -55,21 +53,9 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
                             backgroundColor: DefaultColor.primary,
                           ),
                           onPressed: () {
-                            List<int> orderItemIds = [];
-                            String shipment = "";
-                            for (Item e in (state.order.items ?? [])) {
-                              orderItemIds.add(e.orderItemId!);
-                            }
-                            List<String> ship =
-                                state.order.shipmentProvider!.split(",");
-                            String data = ship[0].replaceAll("Pickup: ", "");
-                            OrderRTS orderRTS = OrderRTS(
-                              deliveryType: 'dropship',
-                              orderItemIds: '[${orderItemIds.join(",")}]',
-                              trackingNumber: state.order.trackingNumber,
-                              shipmentProvider: data,
-                            );
-                            print(orderRTS);
+                            context
+                                .read<PlatformBloc>()
+                                .add(PlatformRTS(state.order));
                           },
                           child: const Text(
                             "Siap Kirim",

@@ -1,7 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:receipt_online_shop/library/interceptor/injector.dart';
-import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +10,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final NavigationService _nav = locator<NavigationService>();
+  // final NavigationService _nav = locator<NavigationService>();
   HomeBloc() : super(const HomeState()) {
     on<HomeEvent>((event, emit) async {
       if (event is GetCurrentDailyTask) {

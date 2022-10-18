@@ -6,6 +6,8 @@ import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_detail_screen.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
+import 'package:receipt_online_shop/widget/custom_badge.dart';
+import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -19,10 +21,11 @@ class LazadaScreen extends StatefulWidget {
 class _LazadaScreenState extends State<LazadaScreen>
     with SingleTickerProviderStateMixin {
   late bool visible;
-  late TabController controller;
+  int selectedTab = 0;
+  // late TabController controller;
   @override
   void initState() {
-    controller = TabController(vsync: this, length: 3, initialIndex: 1);
+    selectedTab = 1;
     context.read<LazadaBloc>().add(GetFullOrderEvent());
     super.initState();
   }
@@ -38,45 +41,6 @@ class _LazadaScreenState extends State<LazadaScreen>
             }
             return const Text("Lazada (0) Order");
           },
-        ),
-        bottom: TabBar(
-          controller: controller,
-          //source code lanjutan
-          tabs: [
-            Tab(
-              icon: BlocBuilder<LazadaBloc, LazadaState>(
-                builder: (context, state) {
-                  if (state is LazadaFullOrderState) {
-                    return Text(state.fullOrder.totalPending.toString());
-                  }
-                  return const Text("0");
-                },
-              ),
-              text: "Pending",
-            ),
-            Tab(
-              icon: BlocBuilder<LazadaBloc, LazadaState>(
-                builder: (context, state) {
-                  if (state is LazadaFullOrderState) {
-                    return Text(state.fullOrder.totalPacked.toString());
-                  }
-                  return const Text("0");
-                },
-              ),
-              text: "Packing",
-            ),
-            Tab(
-              icon: BlocBuilder<LazadaBloc, LazadaState>(
-                builder: (context, state) {
-                  if (state is LazadaFullOrderState) {
-                    return Text(state.fullOrder.totalRts.toString());
-                  }
-                  return const Text("0");
-                },
-              ),
-              text: "Siap Kirim",
-            ),
-          ],
         ),
         actions: [
           BlocBuilder<LazadaBloc, LazadaState>(
@@ -115,29 +79,94 @@ class _LazadaScreenState extends State<LazadaScreen>
                   visible = info.visibleFraction > 0;
                 },
                 child: BarcodeKeyboardListener(
-                  onBarcodeScanned: (barcode) {
+                  onBarcodeScanned: (String barcode) {
                     filterTrackingNumber(
-                        listOrders: (state.fullOrder.orders ?? []),
-                        barcode: barcode);
+                      listOrders: (state.fullOrder.orders ?? []),
+                      barcode: barcode.toUpperCase(),
+                    );
                   },
-                  child: ListView.builder(
-                    itemBuilder: (__, i) {
-                      Order order = (state.fullOrder.orders ?? [])[i];
-                      return CardOrder(
-                        order: order,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (__) => LazadaDetailOrderScreen(
-                                order: order,
-                              ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            BlocBuilder<LazadaBloc, LazadaState>(
+                              builder: (context, state) {
+                                if (state is LazadaFullOrderState) {
+                                  return CustomeBadge(
+                                    backgroundColor: selectedTab == 0
+                                        ? DefaultColor.primary
+                                        : null,
+                                    text:
+                                        'Baru (${state.fullOrder.totalPending.toString()})',
+                                    onTap: () {
+                                      selectedTab = 0;
+                                      setState(() {});
+                                    },
+                                  );
+                                }
+                                return const CustomeBadge(text: 'Baru (0)');
+                              },
                             ),
-                          );
-                        },
-                      );
-                    },
-                    itemCount: state.fullOrder.orders?.length ?? 0,
+                            BlocBuilder<LazadaBloc, LazadaState>(
+                              builder: (context, state) {
+                                if (state is LazadaFullOrderState) {
+                                  return CustomeBadge(
+                                    backgroundColor: selectedTab == 0
+                                        ? DefaultColor.primary
+                                        : null,
+                                    text:
+                                        'Dikemas (${state.fullOrder.totalPacked.toString()})',
+                                    onTap: () {},
+                                  );
+                                }
+                                return const CustomeBadge(text: 'Dikemas (0)');
+                              },
+                            ),
+                            BlocBuilder<LazadaBloc, LazadaState>(
+                              builder: (context, state) {
+                                if (state is LazadaFullOrderState) {
+                                  return CustomeBadge(
+                                    backgroundColor: selectedTab == 0
+                                        ? DefaultColor.primary
+                                        : null,
+                                    text:
+                                        'Siap Kirim (${state.fullOrder.totalRts.toString()})',
+                                    onTap: () {},
+                                  );
+                                }
+                                return const CustomeBadge(
+                                    text: 'Siap Kirim (0)');
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemBuilder: (__, i) {
+                            Order order = (state.fullOrder.orders ?? [])[i];
+                            return CardOrder(
+                              order: order,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (__) => LazadaDetailOrderScreen(
+                                      order: order,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          itemCount: state.fullOrder.orders?.length ?? 0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

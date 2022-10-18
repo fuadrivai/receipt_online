@@ -53,7 +53,13 @@ class CardOrder extends StatelessWidget {
                   children: [
                     order.trackingNumber == ""
                         ? const SizedBox()
-                        : Text('Resi : ${order.trackingNumber ?? ""}'),
+                        : Text(
+                            'Resi : ${order.trackingNumber ?? ""}',
+                            style: const TextStyle(
+                              fontSize: 14.5,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                     const SizedBox(width: 4),
                     Badge(
                       toAnimate: false,
@@ -65,7 +71,7 @@ class CardOrder extends StatelessWidget {
                             .toUpperCase(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 12,
+                          fontSize: 10,
                         ),
                       ),
                     ),

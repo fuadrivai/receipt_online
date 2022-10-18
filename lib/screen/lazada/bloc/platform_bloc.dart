@@ -39,7 +39,7 @@ class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
         orderItemIds.add(e.orderItemId!);
       }
       List<String> ship = order.shipmentProvider!.split(",");
-      String shipmentProvider = ship[0].replaceAll("Pickup: ", "");
+      String shipmentProvider = ship[1].replaceAll(" Delivery: ", "");
       OrderRTS orderRTS = OrderRTS(
         deliveryType: 'dropship',
         orderItemIds: orderItemIds,

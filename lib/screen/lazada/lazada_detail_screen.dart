@@ -27,6 +27,11 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Order Detail"),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: BlocBuilder<PlatformBloc, PlatformState>(
         builder: (context, state) {

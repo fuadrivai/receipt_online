@@ -71,7 +71,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<FullOrder> getOrders() async {
+  Future<FullOrder> getPendingOrder() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -84,7 +84,53 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order',
+              'lazada-order/pending',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FullOrder.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FullOrder> getRtsOrder() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FullOrder>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'lazada-order/rts',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = FullOrder.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<FullOrder> getPackedOrder() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<FullOrder>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'lazada-order/packed',
               queryParameters: queryParameters,
               data: _data,
             )

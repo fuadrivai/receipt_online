@@ -4,9 +4,21 @@ import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 import 'package:receipt_online_shop/service/api.dart';
 
 class LazadaApi {
-  static Future<FullOrder> getOrders() async {
+  static Future<FullOrder> getPackedOrder() async {
     final client = await Api.restClient();
-    var data = client.getOrders();
+    var data = client.getPackedOrder();
+    return data;
+  }
+
+  static Future<FullOrder> getRtsOrder() async {
+    final client = await Api.restClient();
+    var data = client.getRtsOrder();
+    return data;
+  }
+
+  static Future<FullOrder> getPendingOrder() async {
+    final client = await Api.restClient();
+    var data = client.getPendingOrder();
     return data;
   }
 

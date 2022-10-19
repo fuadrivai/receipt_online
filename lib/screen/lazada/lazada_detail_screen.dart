@@ -42,46 +42,50 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
                     horizontal: 5.0,
                     vertical: 15,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        height: 45,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: DefaultColor.primary,
-                          ),
-                          onPressed: () {
-                            context
-                                .read<PlatformBloc>()
-                                .add(PlatformRTS(state.order));
-                          },
-                          child: const Text(
-                            "Siap Kirim",
-                            style: TextStyle(
-                              color: Color(0xffffffff),
+                  child: Visibility(
+                    visible:
+                        state.order.statuses![0] != 'packed' ? false : true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          height: 45,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: DefaultColor.primary,
+                            ),
+                            onPressed: () {
+                              context
+                                  .read<PlatformBloc>()
+                                  .add(PlatformRTS(state.order));
+                            },
+                            child: const Text(
+                              "Siap Kirim",
+                              style: TextStyle(
+                                color: Color(0xffffffff),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 150,
-                        height: 45,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            "Buat Paket",
-                            style: TextStyle(
-                              color: Color(0xffffffff),
+                        SizedBox(
+                          width: 150,
+                          height: 45,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blueAccent,
+                            ),
+                            onPressed: () {},
+                            child: const Text(
+                              "Buat Paket",
+                              style: TextStyle(
+                                color: Color(0xffffffff),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],

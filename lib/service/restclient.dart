@@ -23,14 +23,14 @@ abstract class RestClient {
   @GET("lazada-order/{orderId}")
   Future<Order> getOrder(@Path() int orderId);
 
-  @GET("lazada-order/pending")
-  Future<FullOrder> getPendingOrder();
+  @GET("lazada-order/pending/{sorting}")
+  Future<FullOrder> getPendingOrder(@Path() String sorting);
 
-  @GET("lazada-order/rts")
-  Future<FullOrder> getRtsOrder();
+  @GET("lazada-order/rts/{sorting}")
+  Future<FullOrder> getRtsOrder(@Path() String sorting);
 
-  @GET("lazada-order/packed")
-  Future<FullOrder> getPackedOrder();
+  @GET("lazada-order/packed/{sorting}")
+  Future<FullOrder> getPackedOrder(@Path() String sorting);
 
   @GET("daily-task/receipt/{id}")
   Future<Receipt> receiptByDailyTaskId(@Path() int id);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_detail_screen.dart';
@@ -21,8 +22,14 @@ class LazadaScreen extends StatefulWidget {
 class _LazadaScreenState extends State<LazadaScreen> {
   late bool visible;
   String dataValue = "";
+  int selectedTab = 1;
+  String sortingValue = "DESC";
+  int allTotal = 0;
   @override
   void initState() {
+    Session.get("sorting").then((value) {
+      sortingValue = value!;
+    });
     context.read<LazadaBloc>().add(GetPacked());
     super.initState();
   }
@@ -34,9 +41,10 @@ class _LazadaScreenState extends State<LazadaScreen> {
         title: BlocBuilder<LazadaBloc, LazadaState>(
           builder: (context, state) {
             if (state is LazadaFullOrderState) {
+              allTotal = state.fullOrder.allTotal!;
               return Text("Lazada (${state.fullOrder.allTotal}) Order");
             }
-            return const Text("Lazada (0) Order");
+            return Text("Lazada ($allTotal) Order");
           },
         ),
         actions: [
@@ -62,22 +70,48 @@ class _LazadaScreenState extends State<LazadaScreen> {
       ),
       body: Column(
         children: [
-          const TopTabar(),
-          DropdownButton(
-            // value: dataValue,
-            items: List.generate(20, (int index) {
-              return DropdownMenuItem(
-                value: dataValue,
-                child: SizedBox(
-                  width: 200.0,
-                  child: Text("Item#$index"), //200.0 to 100.0
+          TopTabar(tapCallback: (int selected) {
+            selectedTab = selected;
+            setState(() {});
+          }),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width / 2.5,
+                child: DropdownButtonFormField(
+                  decoration: const InputDecoration.collapsed(hintText: ''),
+                  isExpanded: true,
+                  items: const [
+                    DropdownMenuItem<String>(
+                      value: "DESC",
+                      child: Text(
+                        "Pesanan Terbaru",
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    DropdownMenuItem<String>(
+                      value: "ASC",
+                      child: Text(
+                        "Pesanan Terlama",
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                  value: sortingValue,
+                  onChanged: (String? value) {
+                    context
+                        .read<LazadaBloc>()
+                        .add(OnChangeSortingEvent(value!, selectedTab));
+                  },
                 ),
-              );
-            }),
-            onChanged: (value) {
-              dataValue = value!;
-              setState(() {});
-            },
+              ),
+            ),
           ),
           Expanded(
             child: BlocBuilder<LazadaBloc, LazadaState>(
@@ -100,7 +134,9 @@ class _LazadaScreenState extends State<LazadaScreen> {
                       },
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          context.read<LazadaBloc>().add(GetPacked());
+                          context
+                              .read<LazadaBloc>()
+                              .add(OnRefresh(selectedTab));
                         },
                         child: ListView.builder(
                           itemBuilder: (__, i) {
@@ -134,8 +170,10 @@ class _LazadaScreenState extends State<LazadaScreen> {
     );
   }
 
-  filterTrackingNumber(
-      {required List<Order> listOrders, required String barcode}) {
+  filterTrackingNumber({
+    required List<Order> listOrders,
+    required String barcode,
+  }) {
     List<Order> orders =
         listOrders.where((e) => e.trackingNumber == barcode).toList();
     if (orders.isNotEmpty) {
@@ -155,7 +193,8 @@ class _LazadaScreenState extends State<LazadaScreen> {
 }
 
 class TopTabar extends StatefulWidget {
-  const TopTabar({super.key});
+  final Function(int selected)? tapCallback;
+  const TopTabar({super.key, this.tapCallback});
 
   @override
   State<TopTabar> createState() => _TopTabarState();
@@ -163,6 +202,7 @@ class TopTabar extends StatefulWidget {
 
 class _TopTabarState extends State<TopTabar> {
   int selectedTab = 0;
+  int toPack = 0, pending = 0, readyToShip = 0;
   @override
   void initState() {
     selectedTab = 1;
@@ -179,52 +219,97 @@ class _TopTabarState extends State<TopTabar> {
           BlocBuilder<LazadaBloc, LazadaState>(
             builder: (context, state) {
               if (state is LazadaFullOrderState) {
+                pending = state.fullOrder.totalPending!;
                 return CustomeBadge(
                   backgroundColor:
                       selectedTab == 0 ? DefaultColor.primary : null,
                   text: 'Baru (${state.fullOrder.totalPending.toString()})',
                   onTap: () {
-                    selectedTab = 0;
-                    setState(() {});
-                    context.read<LazadaBloc>().add(GetPending());
+                    if (mounted) {
+                      selectedTab = 0;
+                      widget.tapCallback!(selectedTab);
+                      context.read<LazadaBloc>().add(GetPending());
+                      setState(() {});
+                    }
                   },
                 );
               }
-              return const CustomeBadge(text: 'Baru (0)');
+              return CustomeBadge(
+                backgroundColor: selectedTab == 0 ? DefaultColor.primary : null,
+                text: 'Baru ($pending)',
+                onTap: () {
+                  if (mounted) {
+                    selectedTab = 0;
+                    widget.tapCallback!(selectedTab);
+                    context.read<LazadaBloc>().add(GetPending());
+                    setState(() {});
+                  }
+                },
+              );
             },
           ),
           BlocBuilder<LazadaBloc, LazadaState>(
             builder: (context, state) {
               if (state is LazadaFullOrderState) {
+                toPack = state.fullOrder.totalPacked!;
                 return CustomeBadge(
                   backgroundColor:
                       selectedTab == 1 ? DefaultColor.primary : null,
                   text: 'Dikemas (${state.fullOrder.totalPacked.toString()})',
                   onTap: () {
-                    selectedTab = 1;
-                    setState(() {});
-                    context.read<LazadaBloc>().add(GetPacked());
+                    if (mounted) {
+                      selectedTab = 1;
+                      widget.tapCallback!(selectedTab);
+                      context.read<LazadaBloc>().add(GetPacked());
+                      setState(() {});
+                    }
                   },
                 );
               }
-              return const CustomeBadge(text: 'Dikemas (0)');
+              return CustomeBadge(
+                backgroundColor: selectedTab == 1 ? DefaultColor.primary : null,
+                text: 'Dikemas ($toPack)',
+                onTap: () {
+                  if (mounted) {
+                    selectedTab = 1;
+                    widget.tapCallback!(selectedTab);
+                    context.read<LazadaBloc>().add(GetPacked());
+                    setState(() {});
+                  }
+                },
+              );
             },
           ),
           BlocBuilder<LazadaBloc, LazadaState>(
             builder: (context, state) {
               if (state is LazadaFullOrderState) {
+                readyToShip = state.fullOrder.totalRts!;
                 return CustomeBadge(
                   backgroundColor:
                       selectedTab == 2 ? DefaultColor.primary : null,
                   text: 'Siap Kirim (${state.fullOrder.totalRts.toString()})',
                   onTap: () {
-                    selectedTab = 2;
-                    setState(() {});
-                    context.read<LazadaBloc>().add(GetRts());
+                    if (mounted) {
+                      selectedTab = 2;
+                      widget.tapCallback!(selectedTab);
+                      context.read<LazadaBloc>().add(GetRts());
+                      setState(() {});
+                    }
                   },
                 );
               }
-              return const CustomeBadge(text: 'Siap Kirim (0)');
+              return CustomeBadge(
+                backgroundColor: selectedTab == 2 ? DefaultColor.primary : null,
+                text: 'Siap Kirim ($readyToShip)',
+                onTap: () {
+                  if (mounted) {
+                    selectedTab = 2;
+                    widget.tapCallback!(selectedTab);
+                    context.read<LazadaBloc>().add(GetRts());
+                    setState(() {});
+                  }
+                },
+              );
             },
           ),
         ],

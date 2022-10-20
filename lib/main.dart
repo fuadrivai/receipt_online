@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
+import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/expedition/bloc/expedition_bloc.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
@@ -27,6 +28,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    Session.checkValue("sorting").then((value) {
+      if (!value) {
+        Session.set("sorting", "DESC");
+      }
+    });
     Jiffy.locale('id');
     super.initState();
   }

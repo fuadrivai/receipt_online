@@ -71,7 +71,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<FullOrder> getPendingOrder() async {
+  Future<FullOrder> getPendingOrder(sorting) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -84,7 +84,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/pending',
+              'lazada-order/pending/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -94,7 +94,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<FullOrder> getRtsOrder() async {
+  Future<FullOrder> getRtsOrder(sorting) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -107,7 +107,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/rts',
+              'lazada-order/rts/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -117,7 +117,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<FullOrder> getPackedOrder() async {
+  Future<FullOrder> getPackedOrder(sorting) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -130,7 +130,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/packed',
+              'lazada-order/packed/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )

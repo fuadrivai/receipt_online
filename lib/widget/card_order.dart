@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/model/lazada/item.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
@@ -11,6 +12,7 @@ class CardOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = NumberFormat("#,##0", "en_US");
     List<Item> listItem = [];
     Color deliveryTpeColor = Colors.redAccent;
     for (Item e in (order.items ?? [])) {
@@ -92,6 +94,7 @@ class CardOrder extends StatelessWidget {
                       'Total Qty',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
+                    const SizedBox(height: 2),
                     Badge(
                       toAnimate: false,
                       shape: BadgeShape.square,
@@ -108,9 +111,7 @@ class CardOrder extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(
-                color: Colors.black45,
-              ),
+              const Divider(color: Colors.black45),
               Column(
                 children: listItem.map((e) {
                   return ListTile(
@@ -123,6 +124,10 @@ class CardOrder extends StatelessWidget {
                         e.variation != ""
                             ? Text(e.variation ?? "")
                             : const SizedBox(),
+                        Text(
+                          "Rp. ${currency.format(e.itemPrice)}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         listItem.last == e
                             ? const SizedBox()
                             : const Divider(color: Colors.grey)
@@ -152,28 +157,44 @@ class CardOrder extends StatelessWidget {
                   );
                 }).toList(),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text('Status Paket'),
-                    const SizedBox(width: 10),
-                    Badge(
-                      toAnimate: false,
-                      shape: BadgeShape.square,
-                      badgeColor: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(4),
-                      badgeContent: Text(
-                        order.statuses![0],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                        ),
+              const Divider(color: Colors.black45),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Total Rp. ${currency.format(double.parse(order.price ?? "0"))}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text('Status Paket'),
+                        const SizedBox(width: 10),
+                        Badge(
+                          toAnimate: false,
+                          shape: BadgeShape.square,
+                          badgeColor: Colors.deepPurple,
+                          borderRadius: BorderRadius.circular(4),
+                          badgeContent: Text(
+                            order.statuses![0],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               )
             ],
           ),
@@ -191,7 +212,7 @@ class ImageDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       child: Container(
-        constraints: const BoxConstraints(minHeight: 100, maxHeight: 500),
+        constraints: const BoxConstraints(minHeight: 100, maxHeight: 550),
         padding: const EdgeInsets.all(3),
         decoration: const BoxDecoration(
           color: Colors.white,

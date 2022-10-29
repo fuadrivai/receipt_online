@@ -225,7 +225,7 @@ class _TopTabarState extends State<TopTabar> {
                       selectedTab == 0 ? DefaultColor.primary : null,
                   text: 'Baru (${state.fullOrder.totalPending.toString()})',
                   onTap: () {
-                    if (mounted) {
+                    if (selectedTab != 0) {
                       selectedTab = 0;
                       widget.tapCallback!(selectedTab);
                       context.read<LazadaBloc>().add(GetPending());
@@ -238,7 +238,7 @@ class _TopTabarState extends State<TopTabar> {
                 backgroundColor: selectedTab == 0 ? DefaultColor.primary : null,
                 text: 'Baru ($pending)',
                 onTap: () {
-                  if (mounted) {
+                  if (selectedTab != 0) {
                     selectedTab = 0;
                     widget.tapCallback!(selectedTab);
                     context.read<LazadaBloc>().add(GetPending());
@@ -257,7 +257,7 @@ class _TopTabarState extends State<TopTabar> {
                       selectedTab == 1 ? DefaultColor.primary : null,
                   text: 'Dikemas (${state.fullOrder.totalPacked.toString()})',
                   onTap: () {
-                    if (mounted) {
+                    if (selectedTab != 1) {
                       selectedTab = 1;
                       widget.tapCallback!(selectedTab);
                       context.read<LazadaBloc>().add(GetPacked());
@@ -270,7 +270,7 @@ class _TopTabarState extends State<TopTabar> {
                 backgroundColor: selectedTab == 1 ? DefaultColor.primary : null,
                 text: 'Dikemas ($toPack)',
                 onTap: () {
-                  if (mounted) {
+                  if (selectedTab != 1) {
                     selectedTab = 1;
                     widget.tapCallback!(selectedTab);
                     context.read<LazadaBloc>().add(GetPacked());
@@ -289,7 +289,7 @@ class _TopTabarState extends State<TopTabar> {
                       selectedTab == 2 ? DefaultColor.primary : null,
                   text: 'Siap Kirim (${state.fullOrder.totalRts.toString()})',
                   onTap: () {
-                    if (mounted) {
+                    if (selectedTab != 2) {
                       selectedTab = 2;
                       widget.tapCallback!(selectedTab);
                       context.read<LazadaBloc>().add(GetRts());
@@ -302,7 +302,7 @@ class _TopTabarState extends State<TopTabar> {
                 backgroundColor: selectedTab == 2 ? DefaultColor.primary : null,
                 text: 'Siap Kirim ($readyToShip)',
                 onTap: () {
-                  if (mounted) {
+                  if (selectedTab != 2) {
                     selectedTab = 2;
                     widget.tapCallback!(selectedTab);
                     context.read<LazadaBloc>().add(GetRts());

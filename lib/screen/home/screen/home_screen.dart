@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Expedition? expedition;
   @override
   void initState() {
-    context.read<HomeBloc>().add(GetCurrentDailyTask());
+    context.read<HomeBloc>().add(GetData());
     super.initState();
   }
 
@@ -31,99 +31,104 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (__, state) {
-          return state.isLoading
-              ? const LoadingScreen()
-              : RefreshIndicator(
-                  onRefresh: _refresh,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: ListView(
-                      children: [
-                        (state.dailyTasks ?? []).isNotEmpty
-                            ? ResponsiveGridRow(
-                                children: (state.dailyTasks ?? []).map((e) {
-                                  return ResponsiveGridCol(
-                                    xs: 6,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (__) => DailyTaskScreen(
-                                              dailyTaskId: e.id!,
-                                              platform:
-                                                  e.expedition?.alias ?? "",
-                                            ),
-                                          ),
-                                        ).then((value) {
-                                          context
-                                              .read<HomeBloc>()
-                                              .add(GetCurrentDailyTask());
-                                        });
-                                      },
-                                      child: Card(
-                                          child: ListTile(
-                                        trailing: const Icon(
-                                          Icons.fire_truck,
-                                          color:
-                                              Color.fromARGB(255, 96, 151, 245),
+          if (state is HomeLoadingState) {
+            return const LoadingScreen();
+          }
+          if (state is DataState) {
+            return RefreshIndicator(
+              onRefresh: _refresh,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: ListView(
+                  children: [
+                    (state.dailyTasks ?? []).isNotEmpty
+                        ? ResponsiveGridRow(
+                            children: (state.dailyTasks ?? []).map((e) {
+                              return ResponsiveGridCol(
+                                xs: 6,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (__) => DailyTaskScreen(
+                                          dailyTaskId: e.id!,
+                                          platform: e.expedition?.alias ?? "",
                                         ),
-                                        subtitle: Center(
-                                          child: Text(
-                                            "${e.receipts?.length ?? 0}/${e.totalPackage}",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ),
-                                        title: Center(
-                                            child: Text(
-                                          '${e.expedition?.name}',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w700),
-                                        )),
-                                      )),
+                                      ),
+                                    ).then((value) {
+                                      context.read<HomeBloc>().add(GetData());
+                                    });
+                                  },
+                                  child: Card(
+                                      child: ListTile(
+                                    trailing: const Icon(
+                                      Icons.fire_truck,
+                                      color: Color.fromARGB(255, 96, 151, 245),
                                     ),
-                                  );
-                                }).toList(),
-                              )
-                            : const Card(
-                                child: Center(
-                                    child: Padding(
-                                  padding: EdgeInsets.all(20),
-                                  child: Text('Tidak Ada Tugas Harian'),
-                                )),
-                              ),
-                        Center(
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 63, 157, 235),
-                            ),
-                            onPressed: () {
-                              _formDialog(state);
-                            },
-                            child: const Text(
-                              "+ Buat Tugas Harian",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                                    subtitle: Center(
+                                      child: Text(
+                                        "${e.receipts?.length ?? 0}/${e.totalPackage}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ),
+                                    title: Center(
+                                        child: Text(
+                                      '${e.expedition?.name}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    )),
+                                  )),
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        : const Card(
+                            child: Center(
+                                child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Text('Tidak Ada Tugas Harian'),
+                            )),
                           ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 63, 157, 235),
+                        ),
+                        onPressed: () {
+                          _formDialog(state);
+                        },
+                        child: const Text(
+                          "+ Buat Tugas Harian",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          }
+          if (state is HomeErrorState) {
+            return Center(
+              child: Text(state.error.toString()),
+            );
+          }
+          return Container();
         },
       ),
     );
   }
 
   Future _refresh() async {
-    context.read<HomeBloc>().add(GetCurrentDailyTask());
+    context.read<HomeBloc>().add(GetData());
   }
 
-  _formDialog(HomeState state) {
+  _formDialog(DataState state) {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -196,9 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: TextFormDecoration.box("Total Paket"),
                           onChanged: (value) {
                             setState(() {
-                              context
-                                  .read<HomeBloc>()
-                                  .add(OnChangeTotal(int.parse(value)));
+                              int val = (value == "") ? 0 : int.parse(value);
+                              context.read<HomeBloc>().add(OnChangeTotal(val));
                             });
                           },
                         ),
@@ -211,9 +215,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextButton(
                     child: const Text("Submit"),
                     onPressed: () {
-                      context.read<HomeBloc>().add(DailyTaskOnSave());
-                      // if (_formKey.currentState!.validate()) {
-                      // }
+                      if (_formKey.currentState!.validate()) {
+                        context.read<HomeBloc>().add(OnSaveDailyTask());
+                      }
                     })
               ],
             );

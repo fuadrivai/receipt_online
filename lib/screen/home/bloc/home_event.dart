@@ -1,23 +1,31 @@
 part of 'home_bloc.dart';
 
-abstract class HomeEvent {
-  HomeEvent();
+abstract class HomeEvent extends Equatable {
+  const HomeEvent();
 }
 
-class GetCurrentDailyTask extends HomeEvent {
-  GetCurrentDailyTask();
-}
-
-class OnChangeTotal extends HomeEvent {
-  int total;
-  OnChangeTotal(this.total);
+class GetData extends HomeEvent {
+  @override
+  List<Object?> get props => [];
 }
 
 class OnChangeExpedition extends HomeEvent {
-  Expedition expedition;
-  OnChangeExpedition(this.expedition);
+  final Expedition expedition;
+  const OnChangeExpedition(this.expedition);
+
+  @override
+  List<Object?> get props => [expedition];
 }
 
-class DailyTaskOnSave extends HomeEvent {
-  DailyTaskOnSave();
+class OnChangeTotal extends HomeEvent {
+  final int totalPackage;
+  const OnChangeTotal(this.totalPackage);
+
+  @override
+  List<Object?> get props => [totalPackage];
+}
+
+class OnSaveDailyTask extends HomeEvent {
+  @override
+  List<Object?> get props => [];
 }

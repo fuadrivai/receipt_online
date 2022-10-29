@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
+import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:retrofit/http.dart';
 
@@ -14,6 +15,9 @@ part 'restclient.g.dart';
 @RestApi()
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
+
+  @GET("shopee-order/order/{orderSn}")
+  Future<List<ShopeeOrder>> getShopeeOrderByNo(@Path() String orderSn);
 
   @POST(
       "lazada-order/rts/{tracking_number}/{shipment_provider}/{order_item_ids}")

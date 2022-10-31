@@ -25,8 +25,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
           _currentIndex = i;
           setState(() {});
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             label: "Dashboard",
             icon: Icon(
               Icons.home,
@@ -35,19 +35,23 @@ class _BottomNavigationState extends State<BottomNavigation> {
           ),
           BottomNavigationBarItem(
             label: "Shopee",
-            icon: Icon(
-              Icons.folder,
-              size: 23.0,
+            icon: Image.asset(
+              "assets/images/shopee.png",
+              width: 30.0,
+              height: 30.0,
+              fit: BoxFit.cover,
             ),
           ),
           BottomNavigationBarItem(
             label: "Lazada",
-            icon: Icon(
-              Icons.fire_truck,
-              size: 23.0,
+            icon: Image.asset(
+              "assets/images/lazada.jpg",
+              width: 30.0,
+              height: 30.0,
+              fit: BoxFit.cover,
             ),
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             label: "Expedisi",
             icon: Icon(
               Icons.fire_truck,

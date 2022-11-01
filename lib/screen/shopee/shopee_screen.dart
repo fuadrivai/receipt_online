@@ -7,6 +7,7 @@ import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/model/shopee/item_shopee.dart';
 import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
+import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ShopeeScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
   List<ShopeeOrder> orders = [];
   final currency = NumberFormat("#,##0", "en_US");
   late bool visible;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -37,8 +39,14 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
               Common.scanBarcodeNormal(
                 context,
                 onSuccess: (barcodeScanner) async {
-                  orders = await ShopeeApi.getShopeeOrderByNo(barcodeScanner);
-                  setState(() {});
+                  setState(() {
+                    isLoading = true;
+                    ShopeeApi.getShopeeOrderByNo(barcodeScanner).then((value) {
+                      orders = value;
+                      isLoading = false;
+                      setState(() {});
+                    });
+                  });
                 },
               );
             },
@@ -55,170 +63,176 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
             orders = await ShopeeApi.getShopeeOrderByNo(barcode);
             setState(() {});
           },
-          child: ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, i) {
-                ShopeeOrder order = orders[i];
-                DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                    (order.createTime ?? 0) * 1000);
-                int totalQty = 0;
-                for (ItemShopee e in (order.itemList ?? [])) {
-                  {
-                    totalQty = totalQty + (e.modelQuantityPurchased ?? 0);
-                  }
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 5.0,
-                    vertical: 3,
-                  ),
-                  child: Card(
-                    shadowColor: Colors.black,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              order.shippingCarrier ?? "",
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Divider(color: Colors.black45),
-                        ListView(
-                          shrinkWrap: true,
-                          physics: const ScrollPhysics(),
+          child: isLoading
+              ? const LoadingScreen()
+              : ListView.builder(
+                  itemCount: orders.length,
+                  itemBuilder: (context, i) {
+                    ShopeeOrder order = orders[i];
+                    DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                        (order.createTime ?? 0) * 1000);
+                    int totalQty = 0;
+                    for (ItemShopee e in (order.itemList ?? [])) {
+                      {
+                        totalQty = totalQty + (e.modelQuantityPurchased ?? 0);
+                      }
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5.0,
+                        vertical: 3,
+                      ),
+                      child: Card(
+                        shadowColor: Colors.black,
+                        child: Column(
                           children: [
-                            ListTile(
-                              visualDensity: VisualDensity.comfortable,
-                              title: Text(
-                                'Resi : ${order.trackingNumber ?? ""}',
-                                style: const TextStyle(
-                                  fontSize: 14.5,
-                                  fontWeight: FontWeight.bold,
+                            Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  order.shippingCarrier ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('No. Order : ${order.orderSn}'),
-                                  Text(
-                                      'Tanggal : ${Jiffy(date).format("dd MMMM yyyy HH:mm")}'),
-                                ],
-                              ),
-                              trailing: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  const Text(
-                                    'Total Qty',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Badge(
-                                    toAnimate: false,
-                                    shape: BadgeShape.square,
-                                    badgeColor: Colors.deepPurple,
-                                    borderRadius: BorderRadius.circular(4),
-                                    badgeContent: Text(
-                                      totalQty.toString(),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
                             const Divider(color: Colors.black45),
-                            Column(
-                              children: (order.itemList ?? []).map((e) {
-                                totalQty =
-                                    totalQty + (e.modelQuantityPurchased ?? 0);
-                                return ListTile(
+                            ListView(
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              children: [
+                                ListTile(
                                   visualDensity: VisualDensity.comfortable,
-                                  title: Text(e.itemName ?? ""),
+                                  title: Text(
+                                    'Resi : ${order.trackingNumber ?? ""}',
+                                    style: const TextStyle(
+                                      fontSize: 14.5,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   subtitle: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      e.modelName != ""
-                                          ? Text(e.modelName ?? "")
-                                          : const SizedBox(),
-                                      Text("SKU : ${e.itemSku ?? '--'}"),
+                                      Text('No. Order : ${order.orderSn}'),
                                       Text(
-                                        "Rp. ${currency.format(e.modelDiscountedPrice == 0 ? e.modelOriginalPrice : e.modelDiscountedPrice)}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      (order.itemList ?? []).last == e
-                                          ? const SizedBox()
-                                          : const Divider(color: Colors.grey)
+                                          'Tanggal : ${Jiffy(date).format("dd MMMM yyyy HH:mm")}'),
                                     ],
                                   ),
-                                  trailing: Text(
-                                    e.modelQuantityPurchased.toString(),
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  leading: InkWell(
-                                    onTap: () async {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (_) => ImageDialog(item: e),
-                                      );
-                                    },
-                                    splashColor: Colors
-                                        .white10, // Splash color over image
-                                    child: Ink.image(
-                                      fit: BoxFit.cover, // Fixes border issues
-                                      width: 60,
-                                      image: NetworkImage(
-                                          e.imageInfo?.imageUrl ?? ""),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                            const Divider(color: Colors.black45),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const Text('Status Paket'),
-                                  const SizedBox(width: 10),
-                                  Badge(
-                                    toAnimate: false,
-                                    shape: BadgeShape.square,
-                                    badgeColor: Colors.deepPurple,
-                                    borderRadius: BorderRadius.circular(4),
-                                    badgeContent: Text(
-                                      order.orderStatus ?? "",
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 10,
+                                  trailing: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Text(
+                                        'Total Qty',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600),
                                       ),
-                                    ),
+                                      const SizedBox(height: 2),
+                                      Badge(
+                                        toAnimate: false,
+                                        shape: BadgeShape.square,
+                                        badgeColor: Colors.deepPurple,
+                                        borderRadius: BorderRadius.circular(4),
+                                        badgeContent: Text(
+                                          totalQty.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            )
+                                ),
+                                const Divider(color: Colors.black45),
+                                Column(
+                                  children: (order.itemList ?? []).map((e) {
+                                    totalQty = totalQty +
+                                        (e.modelQuantityPurchased ?? 0);
+                                    return ListTile(
+                                      visualDensity: VisualDensity.comfortable,
+                                      title: Text(e.itemName ?? ""),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          e.modelName != ""
+                                              ? Text(e.modelName ?? "")
+                                              : const SizedBox(),
+                                          Text("SKU : ${e.itemSku ?? '--'}"),
+                                          Text(
+                                            "Rp. ${currency.format(e.modelDiscountedPrice == 0 ? e.modelOriginalPrice : e.modelDiscountedPrice)}",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          (order.itemList ?? []).last == e
+                                              ? const SizedBox()
+                                              : const Divider(
+                                                  color: Colors.grey)
+                                        ],
+                                      ),
+                                      trailing: Text(
+                                        e.modelQuantityPurchased.toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                      leading: InkWell(
+                                        onTap: () async {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (_) =>
+                                                ImageDialog(item: e),
+                                          );
+                                        },
+                                        splashColor: Colors
+                                            .white10, // Splash color over image
+                                        child: Ink.image(
+                                          fit: BoxFit
+                                              .cover, // Fixes border issues
+                                          width: 60,
+                                          image: NetworkImage(
+                                              e.imageInfo?.imageUrl ?? ""),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                                const Divider(color: Colors.black45),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const Text('Status Paket'),
+                                      const SizedBox(width: 10),
+                                      Badge(
+                                        toAnimate: false,
+                                        shape: BadgeShape.square,
+                                        badgeColor: Colors.deepPurple,
+                                        borderRadius: BorderRadius.circular(4),
+                                        badgeContent: Text(
+                                          order.orderStatus ?? "",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
+                      ),
+                    );
+                  }),
         ),
       ),
     );

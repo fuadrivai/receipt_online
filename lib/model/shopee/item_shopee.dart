@@ -9,7 +9,7 @@ class ItemShopee {
   int? modelOriginalPrice;
   int? modelDiscountedPrice;
   bool? wholesale;
-  double? weight;
+  // double? weight;
   bool? addOnDeal;
   bool? mainItem;
   int? addOnDealId;
@@ -33,7 +33,7 @@ class ItemShopee {
       this.modelOriginalPrice,
       this.modelDiscountedPrice,
       this.wholesale,
-      this.weight,
+      // this.weight,
       this.addOnDeal,
       this.mainItem,
       this.addOnDealId,
@@ -57,7 +57,7 @@ class ItemShopee {
     modelOriginalPrice = json['model_original_price'];
     modelDiscountedPrice = json['model_discounted_price'];
     wholesale = json['wholesale'];
-    weight = json['weight'];
+    // weight = json['weight'];
     addOnDeal = json['add_on_deal'];
     mainItem = json['main_item'];
     addOnDealId = json['add_on_deal_id'];
@@ -85,7 +85,7 @@ class ItemShopee {
     data['model_original_price'] = modelOriginalPrice;
     data['model_discounted_price'] = modelDiscountedPrice;
     data['wholesale'] = wholesale;
-    data['weight'] = weight;
+    // data['weight'] = weight;
     data['add_on_deal'] = addOnDeal;
     data['main_item'] = mainItem;
     data['add_on_deal_id'] = addOnDealId;

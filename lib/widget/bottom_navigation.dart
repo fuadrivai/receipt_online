@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/expedition/screen/expedition_screen.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
-import 'package:receipt_online_shop/screen/shopee/shopee_screen.dart';
+import 'package:receipt_online_shop/screen/shopee/shopee_detail_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -68,7 +68,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 0:
         return const HomeScreen();
       case 1:
-        return const ShopeeScreen();
+        return const ShopeeDetailScreen();
       case 2:
         return const LazadaScreen();
       case 3:

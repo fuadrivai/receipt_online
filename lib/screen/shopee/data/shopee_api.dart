@@ -7,4 +7,10 @@ class ShopeeApi {
     var data = client.getShopeeOrderByNo(orderSn);
     return data;
   }
+
+  static Future<List<ShopeeOrder>> getOrders() async {
+    final client = await Api.restClient();
+    var data = client.getShopeeOrders();
+    return data;
+  }
 }

@@ -221,6 +221,7 @@ class _TopTabarState extends State<TopTabar> {
               if (state is LazadaFullOrderState) {
                 pending = state.fullOrder.totalPending!;
                 return CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
                   backgroundColor:
                       selectedTab == 0 ? DefaultColor.primary : null,
                   text: 'Baru (${state.fullOrder.totalPending.toString()})',
@@ -235,6 +236,7 @@ class _TopTabarState extends State<TopTabar> {
                 );
               }
               return CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
                 backgroundColor: selectedTab == 0 ? DefaultColor.primary : null,
                 text: 'Baru ($pending)',
                 onTap: () {
@@ -253,6 +255,7 @@ class _TopTabarState extends State<TopTabar> {
               if (state is LazadaFullOrderState) {
                 toPack = state.fullOrder.totalPacked!;
                 return CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
                   backgroundColor:
                       selectedTab == 1 ? DefaultColor.primary : null,
                   text: 'Dikemas (${state.fullOrder.totalPacked.toString()})',
@@ -267,6 +270,7 @@ class _TopTabarState extends State<TopTabar> {
                 );
               }
               return CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
                 backgroundColor: selectedTab == 1 ? DefaultColor.primary : null,
                 text: 'Dikemas ($toPack)',
                 onTap: () {
@@ -285,6 +289,7 @@ class _TopTabarState extends State<TopTabar> {
               if (state is LazadaFullOrderState) {
                 readyToShip = state.fullOrder.totalRts!;
                 return CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
                   backgroundColor:
                       selectedTab == 2 ? DefaultColor.primary : null,
                   text: 'Siap Kirim (${state.fullOrder.totalRts.toString()})',
@@ -299,6 +304,7 @@ class _TopTabarState extends State<TopTabar> {
                 );
               }
               return CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
                 backgroundColor: selectedTab == 2 ? DefaultColor.primary : null,
                 text: 'Siap Kirim ($readyToShip)',
                 onTap: () {

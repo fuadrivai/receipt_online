@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CustomeBadge extends StatelessWidget {
   final Color? backgroundColor;
   final BorderSide? borderSide;
+  final double? width;
   final BorderRadiusGeometry? borderRadius;
   final String text;
   final GestureTapCallback? onTap;
@@ -14,6 +15,7 @@ class CustomeBadge extends StatelessWidget {
     this.borderRadius,
     required this.text,
     this.onTap,
+    this.width,
   });
 
   @override
@@ -32,7 +34,7 @@ class CustomeBadge extends StatelessWidget {
             ),
         borderRadius: borderRadius ?? BorderRadius.circular(8),
         badgeContent: SizedBox(
-          width: MediaQuery.of(context).size.width * 30 / 100,
+          width: width,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Center(

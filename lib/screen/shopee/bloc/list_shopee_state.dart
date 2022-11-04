@@ -18,7 +18,8 @@ class ListShopeeLoading extends ListShopeeState {
 
 class ListShopeeData extends ListShopeeState {
   final List<ShopeeOrder> listOrder;
-  const ListShopeeData(this.listOrder);
+  final List<LogisticChannel> listLogisticChannel;
+  const ListShopeeData(this.listOrder, this.listLogisticChannel);
   @override
-  List<Object?> get props => [listOrder];
+  List<Object?> get props => [listOrder, listLogisticChannel];
 }

@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:receipt_online_shop/library/interceptor/injector.dart';
-// import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
 

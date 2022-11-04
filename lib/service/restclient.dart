@@ -18,6 +18,7 @@ abstract class RestClient {
 
   @GET("shopee-order")
   Future<List<ShopeeOrder>> getShopeeOrders();
+
   @GET("shopee-order/order/{orderSn}")
   Future<List<ShopeeOrder>> getShopeeOrderByNo(@Path() String orderSn);
 

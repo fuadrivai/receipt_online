@@ -36,31 +36,28 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
         title: const Text("Shopee Order Detail"),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (__) => const ShopeeScreen()));
-              },
-              icon: const Icon(Icons.next_plan)),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (__) => const ShopeeScreen()));
+            },
+            icon: const Icon(Icons.next_plan),
+          ),
           const SizedBox(),
-          BlocBuilder<ShopeeDetailBloc, ShopeeDetailState>(
-            builder: (context, state) {
-              return IconButton(
-                icon: const Icon(Icons.qr_code_scanner_outlined),
-                onPressed: () {
-                  Common.scanBarcodeNormal(
-                    context,
-                    onSuccess: (barcodeScanner) {
-                      barcodeController.text = barcodeScanner;
-                      setState(() {});
-                      context
-                          .read<ShopeeDetailBloc>()
-                          .add(GetShopeeOrder(barcodeScanner));
-                    },
-                  );
+          IconButton(
+            icon: const Icon(Icons.qr_code_scanner_outlined),
+            onPressed: () {
+              Common.scanBarcodeNormal(
+                context,
+                onSuccess: (barcodeScanner) {
+                  barcodeController.text = barcodeScanner;
+                  setState(() {});
+                  context
+                      .read<ShopeeDetailBloc>()
+                      .add(GetShopeeOrder(barcodeScanner));
                 },
               );
             },
-          ),
+          )
         ],
       ),
       body: VisibilityDetector(

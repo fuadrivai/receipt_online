@@ -21,13 +21,37 @@ class _RestClient implements RestClient {
   String? baseUrl;
 
   @override
-  Future<List<ShopeeOrder>> getShopeeOrders() async {
+  Future<TransactionOnline> postTransactionOnline(dataOnline) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(dataOnline.toJson());
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TransactionOnline>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'transaction-online',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = TransactionOnline.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<TransactionOnline>> getShopeeOrders() async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<ShopeeOrder>>(Options(
+        .fetch<List<dynamic>>(_setStreamType<List<TransactionOnline>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -40,32 +64,34 @@ class _RestClient implements RestClient {
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => ShopeeOrder.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) =>
+            TransactionOnline.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }
 
   @override
-  Future<List<ShopeeOrder>> getShopeeOrderByNo(orderSn) async {
+  Future<List<TransactionOnline>> getShopeeOrderByNo(orderSn) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio
-        .fetch<List<dynamic>>(_setStreamType<List<ShopeeOrder>>(Options(
+        .fetch<List<dynamic>>(_setStreamType<List<TransactionOnline>>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
             .compose(
               _dio.options,
-              'shopee-order/order/${orderSn}',
+              'shopee-order/order/v2/${orderSn}',
               queryParameters: queryParameters,
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     var value = _result.data!
-        .map((dynamic i) => ShopeeOrder.fromJson(i as Map<String, dynamic>))
+        .map((dynamic i) =>
+            TransactionOnline.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

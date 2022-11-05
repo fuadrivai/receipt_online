@@ -2,11 +2,12 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:receipt_online_shop/model/shopee/item_shopee.dart';
-import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
+import 'package:receipt_online_shop/service/api.dart';
+import 'package:receipt_online_shop/widget/default_color.dart';
 
 class ShopeeListView extends StatelessWidget {
-  final List<ShopeeOrder> orders;
+  final List<TransactionOnline> orders;
   const ShopeeListView({super.key, required this.orders});
 
   @override
@@ -15,13 +16,12 @@ class ShopeeListView extends StatelessWidget {
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, i) {
-        ShopeeOrder order = orders[i];
-        DateTime date =
-            DateTime.fromMillisecondsSinceEpoch((order.createTime ?? 0) * 1000);
+        TransactionOnline order = orders[i];
+
         int totalQty = 0;
-        for (ItemShopee e in (order.itemList ?? [])) {
+        for (Items e in (order.items ?? [])) {
           {
-            totalQty = totalQty + (e.modelQuantityPurchased ?? 0);
+            totalQty = totalQty + (e.qty ?? 0);
           }
         }
         return Padding(
@@ -37,7 +37,7 @@ class ShopeeListView extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      order.shippingCarrier ?? "",
+                      order.pickupBy ?? "",
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -63,9 +63,9 @@ class ShopeeListView extends StatelessWidget {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('No. Order : ${order.orderSn}'),
+                          Text('No. Order : ${order.orderNo}'),
                           Text(
-                              'Tanggal : ${Jiffy(date).format("dd MMMM yyyy HH:mm")}'),
+                              'Tanggal : ${Jiffy(order.createTimeOnline).format("dd MMMM yyyy HH:mm")}'),
                         ],
                       ),
                       trailing: Column(
@@ -94,30 +94,30 @@ class ShopeeListView extends StatelessWidget {
                     ),
                     const Divider(color: Colors.black45),
                     Column(
-                      children: (order.itemList ?? []).map((e) {
-                        totalQty = totalQty + (e.modelQuantityPurchased ?? 0);
+                      children: (order.items ?? []).map((e) {
+                        totalQty = totalQty + (e.qty ?? 0);
                         return ListTile(
                           visualDensity: VisualDensity.comfortable,
                           title: Text(e.itemName ?? ""),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              e.modelName != ""
-                                  ? Text(e.modelName ?? "")
+                              e.itemName != ""
+                                  ? Text(e.itemName ?? "")
                                   : const SizedBox(),
                               Text("SKU : ${e.itemSku ?? '--'}"),
                               Text(
-                                "Rp. ${currency.format(e.modelDiscountedPrice == 0 ? e.modelOriginalPrice : e.modelDiscountedPrice)}",
+                                "Rp. ${currency.format(e.discountedPrice == 0 ? e.originalPrice : e.discountedPrice)}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
-                              (order.itemList ?? []).last == e
+                              (order.items ?? []).last == e
                                   ? const SizedBox()
                                   : const Divider(color: Colors.grey)
                             ],
                           ),
                           trailing: Text(
-                            e.modelQuantityPurchased.toString(),
+                            e.qty.toString(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -135,7 +135,7 @@ class ShopeeListView extends StatelessWidget {
                             child: Ink.image(
                               fit: BoxFit.cover, // Fixes border issues
                               width: 60,
-                              image: NetworkImage(e.imageInfo?.imageUrl ?? ""),
+                              image: NetworkImage(e.imageUrl ?? ""),
                             ),
                           ),
                         );
@@ -164,6 +164,65 @@ class ShopeeListView extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                    Visibility(
+                      visible: (order.status == 1 || order.status == 2),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 5.0,
+                          vertical: 15,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Visibility(
+                              visible: order.status == 2,
+                              child: SizedBox(
+                                width: 150,
+                                height: 45,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: DefaultColor.primary,
+                                  ),
+                                  onPressed: () {},
+                                  child: const Text(
+                                    "Siap Kirim",
+                                    style: TextStyle(
+                                      color: Color(0xffffffff),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: order.status == 1,
+                              child: SizedBox(
+                                width: 150,
+                                height: 45,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.blueAccent,
+                                  ),
+                                  onPressed: () {
+                                    order.totalQty = totalQty;
+                                    Api.postOrder(order).then((value) {
+                                      print(value);
+                                    }).catchError((e) {
+                                      print(e);
+                                    });
+                                  },
+                                  child: const Text(
+                                    "Buat Paket",
+                                    style: TextStyle(
+                                      color: Color(0xffffffff),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -177,7 +236,7 @@ class ShopeeListView extends StatelessWidget {
 }
 
 class ImageDialog extends StatelessWidget {
-  final ItemShopee item;
+  final Items item;
   const ImageDialog({super.key, required this.item});
 
   @override
@@ -200,7 +259,7 @@ class ImageDialog extends StatelessWidget {
                 )
               ],
             ),
-            Center(child: Image.network(item.imageInfo?.imageUrl ?? "")),
+            Center(child: Image.network(item.imageUrl ?? "")),
             const Divider(color: Colors.grey),
             ListTile(
               visualDensity: VisualDensity.comfortable,
@@ -208,7 +267,7 @@ class ImageDialog extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.modelName ?? ""),
+                  Text(item.itemName ?? ""),
                   Text("Seller SKU : ${item.itemSku ?? '--'}"),
                 ],
               ),
@@ -221,7 +280,7 @@ class ImageDialog extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    item.modelQuantityPurchased.toString(),
+                    item.qty.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

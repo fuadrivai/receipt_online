@@ -22,7 +22,7 @@ class ShopeeDetailStandBy extends ShopeeDetailState {
 }
 
 class ShopeeOrderDetail extends ShopeeDetailState {
-  final List<ShopeeOrder> listOrder;
+  final List<TransactionOnline> listOrder;
   const ShopeeOrderDetail(this.listOrder);
   @override
   List<Object?> get props => [listOrder];

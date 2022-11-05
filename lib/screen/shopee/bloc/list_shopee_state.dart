@@ -17,7 +17,7 @@ class ListShopeeLoading extends ListShopeeState {
 }
 
 class ListShopeeData extends ListShopeeState {
-  final List<ShopeeOrder> listOrder;
+  final List<TransactionOnline> listOrder;
   final List<LogisticChannel> listLogisticChannel;
   const ListShopeeData(this.listOrder, this.listLogisticChannel);
   @override

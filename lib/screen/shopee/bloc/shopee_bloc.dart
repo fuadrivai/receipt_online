@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
 
 part 'shopee_event.dart';
@@ -23,7 +23,7 @@ class ShopeeDetailBloc extends Bloc<ShopeeDetailEvent, ShopeeDetailState> {
       GetShopeeOrder event, Emitter<ShopeeDetailState> emit) async {
     try {
       emit(ShopeeDetailLoading());
-      List<ShopeeOrder> listOrder =
+      List<TransactionOnline> listOrder =
           await ShopeeApi.getShopeeOrderByNo(event.orderSn);
       emit(ShopeeOrderDetail(listOrder));
     } catch (e) {

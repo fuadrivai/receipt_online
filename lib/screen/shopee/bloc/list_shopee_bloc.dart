@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/model/shopee/logistic.dart';
-import 'package:receipt_online_shop/model/shopee/shopee_order.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
 
 part 'list_shopee_event.dart';
@@ -18,15 +18,15 @@ class ListShopeeBloc extends Bloc<ListShopeeEvent, ListShopeeState> {
       GetListShopeeOrder event, Emitter<ListShopeeState> emit) async {
     try {
       emit(ListShopeeLoading());
-      List<ShopeeOrder> listOrder = await ShopeeApi.getOrders();
+      List<TransactionOnline> listOrder = await ShopeeApi.getOrders();
       List<LogisticChannel> logistics = [];
-      for (ShopeeOrder order in listOrder) {
+      for (TransactionOnline order in listOrder) {
         LogisticChannel exitingChannel = logistics.firstWhere(
-            (data) => data.name == order.shippingCarrier,
+            (data) => data.name == order.pickupBy,
             orElse: () => LogisticChannel());
         if (exitingChannel.name == null) {
           LogisticChannel logistic =
-              LogisticChannel(name: order.shippingCarrier, totalOrder: 1);
+              LogisticChannel(name: order.pickupBy, totalOrder: 1);
           logistics.add(logistic);
         } else {
           exitingChannel.totalOrder = exitingChannel.totalOrder! + 1;

@@ -29,8 +29,10 @@ class _LazadaScreenState extends State<LazadaScreen> {
   void initState() {
     Session.get("sorting").then((value) {
       sortingValue = value!;
+      context
+          .read<LazadaBloc>()
+          .add(GetOrders(selectedTab, sortingValue, "packed"));
     });
-    context.read<LazadaBloc>().add(GetPacked());
     super.initState();
   }
 

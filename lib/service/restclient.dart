@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
 import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
@@ -20,6 +21,10 @@ abstract class RestClient {
   Future<TransactionOnline> postTransactionOnline(
       @Body() TransactionOnline dataOnline);
 
+  @GET("lazada-order/{status}/{sorting}")
+  Future<List<TransactionOnline>> lazadaGetFullOrder(
+      @Path() String status, @Path() String sorting);
+
   @GET("shopee-order")
   Future<List<TransactionOnline>> getShopeeOrders();
 
@@ -30,6 +35,9 @@ abstract class RestClient {
       "lazada-order/rts/{tracking_number}/{shipment_provider}/{order_item_ids}")
   Future<dynamic> orderRts(@Path() String tracking_number,
       @Path() String shipment_provider, @Path() List<int>? order_item_ids);
+
+  @GET("lazada-order/get/count")
+  Future<LazadaCount> lazadaGetCount();
 
   @GET("lazada-order/{orderId}")
   Future<Order> getOrder(@Path() int orderId);

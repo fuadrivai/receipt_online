@@ -6,6 +6,7 @@ class TransactionOnline {
   String? orderStatus;
   String? trackingNumber;
   String? deliveryBy;
+  String? shippingProviderType;
   String? pickupBy;
   double? totalAmount;
   int? totalQty;
@@ -16,23 +17,25 @@ class TransactionOnline {
   String? packagePicture;
   List<Items>? items;
 
-  TransactionOnline(
-      {this.createTimeOnline,
-      this.updateTimeOnline,
-      this.messageToSeller,
-      this.orderNo,
-      this.orderStatus,
-      this.trackingNumber,
-      this.deliveryBy,
-      this.pickupBy,
-      this.totalAmount,
-      this.totalQty,
-      this.status,
-      this.onlineShopId,
-      this.orderId,
-      this.productPicture,
-      this.packagePicture,
-      this.items});
+  TransactionOnline({
+    this.createTimeOnline,
+    this.updateTimeOnline,
+    this.messageToSeller,
+    this.orderNo,
+    this.orderStatus,
+    this.trackingNumber,
+    this.deliveryBy,
+    this.pickupBy,
+    this.totalAmount,
+    this.totalQty,
+    this.status,
+    this.onlineShopId,
+    this.orderId,
+    this.productPicture,
+    this.packagePicture,
+    this.items,
+    this.shippingProviderType,
+  });
 
   TransactionOnline.fromJson(Map<String, dynamic> json) {
     createTimeOnline = json['create_time_online'];
@@ -50,6 +53,7 @@ class TransactionOnline {
     orderId = json['order_id'];
     productPicture = json['product_picture'];
     packagePicture = json['package_picture'];
+    shippingProviderType = json['shipping_provider_type'];
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
@@ -64,6 +68,7 @@ class TransactionOnline {
     data['update_time_online'] = updateTimeOnline;
     data['message_to_seller'] = messageToSeller;
     data['order_no'] = orderNo;
+    data['shipping_provider_type'] = shippingProviderType;
     data['order_status'] = orderStatus;
     data['tracking_number'] = trackingNumber;
     data['delivery_by'] = deliveryBy;

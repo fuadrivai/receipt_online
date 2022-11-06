@@ -23,8 +23,8 @@ class LazadaOnChangeState extends LazadaState {
 }
 
 class LazadaFullOrderState extends LazadaState {
-  final FullOrder fullOrder;
-  const LazadaFullOrderState(this.fullOrder);
+  final List<TransactionOnline> transactions;
+  const LazadaFullOrderState(this.transactions);
   @override
-  List<Object?> get props => [fullOrder];
+  List<Object?> get props => [transactions];
 }

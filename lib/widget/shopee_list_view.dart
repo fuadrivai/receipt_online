@@ -102,8 +102,8 @@ class ShopeeListView extends StatelessWidget {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              e.itemName != ""
-                                  ? Text(e.itemName ?? "")
+                              e.variation != ""
+                                  ? Text(e.variation ?? "")
                                   : const SizedBox(),
                               Text("SKU : ${e.itemSku ?? '--'}"),
                               Text(

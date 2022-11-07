@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receipt_online_shop/model/lazada/order.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/platform_bloc.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 
 class LazadaDetailOrderScreen extends StatefulWidget {
-  final Order order;
+  final TransactionOnline order;
   const LazadaDetailOrderScreen({super.key, required this.order});
 
   @override
@@ -41,15 +41,16 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
           if (state is PlatformOrder) {
             return ListView(
               children: [
-                CardOrder(order: state.order),
+                CardOrder(order: state.transaction),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 5.0,
                     vertical: 15,
                   ),
                   child: Visibility(
-                    visible:
-                        state.order.statuses![0] != 'packed' ? false : true,
+                    visible: state.transaction.orderStatus != 'packed'
+                        ? false
+                        : true,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -63,7 +64,7 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
                             onPressed: () {
                               context
                                   .read<PlatformBloc>()
-                                  .add(PlatformRTS(state.order));
+                                  .add(PlatformRTS(state.transaction));
                             },
                             child: const Text(
                               "Siap Kirim",

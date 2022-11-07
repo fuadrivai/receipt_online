@@ -92,6 +92,7 @@ class Items {
   String? itemName;
   String? itemSku;
   String? variation;
+  String? skuId;
   int? orderItemId;
   int? qty;
   int? originalPrice;
@@ -100,23 +101,26 @@ class Items {
   int? orderId;
   String? orderType;
 
-  Items(
-      {this.imageUrl,
-      this.itemName,
-      this.itemSku,
-      this.variation,
-      this.orderItemId,
-      this.qty,
-      this.originalPrice,
-      this.discountedPrice,
-      this.productId,
-      this.orderId,
-      this.orderType});
+  Items({
+    this.imageUrl,
+    this.itemName,
+    this.itemSku,
+    this.variation,
+    this.orderItemId,
+    this.qty,
+    this.originalPrice,
+    this.discountedPrice,
+    this.productId,
+    this.orderId,
+    this.orderType,
+    this.skuId,
+  });
 
   Items.fromJson(Map<String, dynamic> json) {
     imageUrl = json['image_url'];
     itemName = json['item_name'];
     itemSku = json['item_sku'];
+    skuId = json['sku_id'];
     variation = json['variation'];
     orderItemId = json['order_item_id'];
     qty = json['qty'];
@@ -132,6 +136,7 @@ class Items {
     data['image_url'] = imageUrl;
     data['item_name'] = itemName;
     data['item_sku'] = itemSku;
+    data['sku_id'] = skuId;
     data['variation'] = variation;
     data['order_item_id'] = orderItemId;
     data['qty'] = qty;

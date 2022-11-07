@@ -2,7 +2,7 @@
     package="com.example.receipt_online_shop">
      <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="receipt_online_shop"
+        android:label="Product Checker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

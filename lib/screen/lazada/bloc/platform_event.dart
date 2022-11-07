@@ -5,7 +5,7 @@ abstract class PlatformEvent extends Equatable {
 }
 
 class PlatformSingleOrder extends PlatformEvent {
-  final Order order;
+  final TransactionOnline order;
   const PlatformSingleOrder(this.order);
 
   @override
@@ -13,7 +13,7 @@ class PlatformSingleOrder extends PlatformEvent {
 }
 
 class PlatformRTS extends PlatformEvent {
-  final Order order;
+  final TransactionOnline order;
   const PlatformRTS(this.order);
 
   @override

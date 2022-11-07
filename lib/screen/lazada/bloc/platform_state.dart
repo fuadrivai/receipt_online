@@ -15,8 +15,8 @@ class PlatformLoading extends PlatformState {
 }
 
 class PlatformOrder extends PlatformState {
-  final Order order;
-  const PlatformOrder(this.order);
+  final TransactionOnline transaction;
+  const PlatformOrder(this.transaction);
   @override
-  List<Object?> get props => [order];
+  List<Object?> get props => [transaction];
 }

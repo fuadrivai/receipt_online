@@ -5,6 +5,7 @@ class CustomeBadge extends StatelessWidget {
   final Color? backgroundColor;
   final BorderSide? borderSide;
   final double? width;
+  final double? height;
   final BorderRadiusGeometry? borderRadius;
   final String text;
   final GestureTapCallback? onTap;
@@ -16,6 +17,7 @@ class CustomeBadge extends StatelessWidget {
     required this.text,
     this.onTap,
     this.width,
+    this.height,
   });
 
   @override
@@ -35,6 +37,7 @@ class CustomeBadge extends StatelessWidget {
         borderRadius: borderRadius ?? BorderRadius.circular(8),
         badgeContent: SizedBox(
           width: width,
+          height: height,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Center(

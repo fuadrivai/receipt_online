@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
+import 'package:receipt_online_shop/model/shopee/logistic.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
 
@@ -10,58 +12,31 @@ part 'lazada_state.dart';
 class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
   LazadaBloc() : super(LazadaLoadingState()) {
     on<OnChangeSortingEvent>(_onChangeSorting);
-    on<OnRefresh>(_onRefresh);
     on<GetOrders>(_onGetOrders);
-  }
-
-  void _onRefresh(OnRefresh event, Emitter<LazadaState> emit) async {
-    try {
-      emit(LazadaLoadingState());
-      List<TransactionOnline> transactions = [];
-      String sorting = await Session.get("sorting") ?? "DESC";
-      switch (event.tab) {
-        case 0:
-          transactions = await LazadaApi.getorders("pending", sorting);
-          break;
-        case 1:
-          transactions = await LazadaApi.getorders("packed", sorting);
-          break;
-        case 2:
-          transactions = await LazadaApi.getorders("ready_to_ship", sorting);
-          break;
-        default:
-          transactions = await LazadaApi.getorders("packed", sorting);
-          break;
-      }
-      emit(LazadaFullOrderState(transactions));
-    } catch (e) {
-      emit(LazadaErrorState());
-    }
   }
 
   void _onChangeSorting(
       OnChangeSortingEvent event, Emitter<LazadaState> emit) async {
     try {
       emit(LazadaLoadingState());
-      List<TransactionOnline> transactions = [];
       Session.set("sorting", event.sorting);
-      switch (event.tab) {
-        case 0:
-          transactions = await LazadaApi.getorders("pending", event.sorting);
-          break;
-        case 1:
-          transactions = await LazadaApi.getorders("packed", event.sorting);
-          break;
-        case 2:
-          transactions =
-              await LazadaApi.getorders("ready_to_ship", event.sorting);
-          break;
-        default:
-          transactions = await LazadaApi.getorders("packed", event.sorting);
-          break;
+      List<TransactionOnline> transactions = await getOrders(event.tab);
+      List<LogisticChannel> logistics = [];
+      for (TransactionOnline order in transactions) {
+        LogisticChannel exitingChannel = logistics.firstWhere(
+            (data) => data.name == order.shippingProviderType,
+            orElse: () => LogisticChannel());
+        if (exitingChannel.name == null) {
+          LogisticChannel logistic =
+              LogisticChannel(name: order.pickupBy, totalOrder: 1);
+          logistics.add(logistic);
+        } else {
+          exitingChannel.totalOrder = exitingChannel.totalOrder! + 1;
+        }
       }
+      LazadaCount count = await LazadaApi.getCount();
       emit(LazadaOnChangeState(event.sorting, event.tab));
-      emit(LazadaFullOrderState(transactions));
+      emit(LazadaFullOrderState(transactions, count, transactions, logistics));
     } catch (e) {
       emit(LazadaErrorState());
     }
@@ -70,13 +45,44 @@ class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
   void _onGetOrders(GetOrders event, Emitter<LazadaState> emit) async {
     try {
       emit(LazadaLoadingState());
-      Session.set("sorting", event.sorting);
-      List<TransactionOnline> transactions =
-          await LazadaApi.getorders("packed", event.sorting);
-      emit(LazadaOnChangeState(event.sorting, event.tab));
-      emit(LazadaFullOrderState(transactions));
+      LazadaCount count = await LazadaApi.getCount();
+      List<TransactionOnline> transactions = await getOrders(event.tab);
+      List<LogisticChannel> logistics = [];
+      for (TransactionOnline order in transactions) {
+        LogisticChannel exitingChannel = logistics.firstWhere(
+            (data) => data.name == order.shippingProviderType,
+            orElse: () => LogisticChannel());
+        if (exitingChannel.name == null) {
+          LogisticChannel logistic =
+              LogisticChannel(name: order.shippingProviderType, totalOrder: 1);
+          logistics.add(logistic);
+        } else {
+          exitingChannel.totalOrder = exitingChannel.totalOrder! + 1;
+        }
+      }
+      emit(LazadaFullOrderState(transactions, count, transactions, logistics));
     } catch (e) {
       emit(LazadaErrorState());
     }
+  }
+
+  Future<List<TransactionOnline>> getOrders(int tabIndex) async {
+    String status = "packed";
+    switch (tabIndex) {
+      case 0:
+        status = "pending";
+        break;
+      case 1:
+        status = "packed";
+        break;
+      case 2:
+        status = "ready_to_ship";
+        break;
+      default:
+        status = "packed";
+        break;
+    }
+    String? sorting = await Session.get("sorting");
+    return await LazadaApi.getorders(status, sorting ?? "DESC");
   }
 }

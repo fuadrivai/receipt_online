@@ -21,7 +21,7 @@ abstract class RestClient {
   Future<TransactionOnline> postTransactionOnline(
       @Body() TransactionOnline dataOnline);
 
-  @GET("lazada-order/{status}/{sorting}")
+  @GET("lazada/order/{status}/{sorting}")
   Future<List<TransactionOnline>> lazadaGetFullOrder(
       @Path() String status, @Path() String sorting);
 
@@ -36,7 +36,7 @@ abstract class RestClient {
   Future<dynamic> orderRts(@Path() String tracking_number,
       @Path() String shipment_provider, @Path() List<int>? order_item_ids);
 
-  @GET("lazada-order/get/count")
+  @GET("lazada-order/count")
   Future<LazadaCount> lazadaGetCount();
 
   @GET("lazada-order/{orderId}")

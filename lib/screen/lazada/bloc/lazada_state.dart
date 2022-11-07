@@ -24,7 +24,12 @@ class LazadaOnChangeState extends LazadaState {
 
 class LazadaFullOrderState extends LazadaState {
   final List<TransactionOnline> transactions;
-  const LazadaFullOrderState(this.transactions);
+  final List<TransactionOnline> tempTransaction;
+  final List<LogisticChannel> listLogisticChannel;
+  final LazadaCount count;
+  const LazadaFullOrderState(this.transactions, this.count,
+      this.tempTransaction, this.listLogisticChannel);
   @override
-  List<Object?> get props => [transactions];
+  List<Object?> get props =>
+      [transactions, count, tempTransaction, listLogisticChannel];
 }

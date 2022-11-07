@@ -6,11 +6,9 @@ abstract class LazadaEvent extends Equatable {
 
 class GetOrders extends LazadaEvent {
   final int tab;
-  final String sorting;
-  final String status;
-  const GetOrders(this.tab, this.sorting, this.status);
+  const GetOrders(this.tab);
   @override
-  List<Object?> get props => [tab, sorting, status];
+  List<Object?> get props => [tab];
 }
 
 class OnChangeSortingEvent extends LazadaEvent {
@@ -19,11 +17,4 @@ class OnChangeSortingEvent extends LazadaEvent {
   const OnChangeSortingEvent(this.sorting, this.tab);
   @override
   List<Object?> get props => [sorting, tab];
-}
-
-class OnRefresh extends LazadaEvent {
-  final int tab;
-  const OnRefresh(this.tab);
-  @override
-  List<Object?> get props => [tab];
 }

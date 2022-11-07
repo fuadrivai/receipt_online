@@ -2,11 +2,10 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:receipt_online_shop/model/lazada/item.dart';
-import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 
@@ -33,18 +32,16 @@ class PlatformBloc extends Bloc<PlatformEvent, PlatformState> {
   void _rtsOrder(PlatformRTS event, Emitter<PlatformState> emit) async {
     try {
       emit(PlatformLoading());
-      Order order = event.order;
+      TransactionOnline order = event.order;
       List<int> orderItemIds = [];
-      for (Item e in (order.items ?? [])) {
+      for (Items e in (order.items ?? [])) {
         orderItemIds.add(e.orderItemId!);
       }
-      List<String> ship = order.shipmentProvider!.split(",");
-      String shipmentProvider = ship[1].replaceAll(" Delivery: ", "");
       OrderRTS orderRTS = OrderRTS(
         deliveryType: 'dropship',
         orderItemIds: orderItemIds,
         trackingNumber: order.trackingNumber,
-        shipmentProvider: shipmentProvider,
+        shipmentProvider: order.deliveryBy,
       );
       await LazadaApi.orderRts(orderRTS);
       await Flushbar(

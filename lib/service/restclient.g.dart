@@ -61,7 +61,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/${status}/${sorting}',
+              'lazada/order/${status}/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -166,7 +166,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/get/count',
+              'lazada-order/count',
               queryParameters: queryParameters,
               data: _data,
             )

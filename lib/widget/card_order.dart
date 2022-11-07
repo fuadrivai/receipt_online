@@ -2,20 +2,19 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:receipt_online_shop/model/lazada/item.dart';
-import 'package:receipt_online_shop/model/lazada/order.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 
 class CardOrder extends StatelessWidget {
   final GestureTapCallback? onTap;
-  final Order order;
+  final TransactionOnline order;
   const CardOrder({super.key, this.onTap, required this.order});
 
   @override
   Widget build(BuildContext context) {
     final currency = NumberFormat("#,##0", "en_US");
-    List<Item> listItem = [];
+    List<Items> listItem = [];
     Color deliveryTpeColor = Colors.redAccent;
-    for (Item e in (order.items ?? [])) {
+    for (Items e in (order.items ?? [])) {
       bool isExis = listItem.any((el) => el.skuId == e.skuId);
       if (isExis) {
         listItem
@@ -84,7 +83,7 @@ class CardOrder extends StatelessWidget {
                   children: [
                     Text('No. Order : ${order.orderId}'),
                     Text(
-                        'Tanggal : ${Jiffy(order.createdAt).format("dd MMMM yyyy HH:mm:ss")}'),
+                        'Tanggal : ${Jiffy(order.createTimeOnline).format("dd MMMM yyyy HH:mm:ss")}'),
                   ],
                 ),
                 trailing: Column(
@@ -101,7 +100,7 @@ class CardOrder extends StatelessWidget {
                       badgeColor: Colors.deepPurple,
                       borderRadius: BorderRadius.circular(4),
                       badgeContent: Text(
-                        order.itemsCount.toString(),
+                        order.totalQty.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -116,16 +115,16 @@ class CardOrder extends StatelessWidget {
                 children: listItem.map((e) {
                   return ListTile(
                     visualDensity: VisualDensity.comfortable,
-                    title: Text(e.name ?? ""),
+                    title: Text(e.itemName ?? ""),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("SKU : ${e.sku ?? '--'}"),
+                        Text("SKU : ${e.itemSku ?? '--'}"),
                         e.variation != ""
                             ? Text(e.variation ?? "")
                             : const SizedBox(),
                         Text(
-                          "Rp. ${currency.format(e.itemPrice)}",
+                          "Rp. ${currency.format(e.discountedPrice)}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         listItem.last == e
@@ -151,7 +150,7 @@ class CardOrder extends StatelessWidget {
                       child: Ink.image(
                         fit: BoxFit.cover, // Fixes border issues
                         width: 60,
-                        image: NetworkImage(e.productMainImage!),
+                        image: NetworkImage(e.imageUrl!),
                       ),
                     ),
                   );
@@ -164,7 +163,7 @@ class CardOrder extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Total Rp. ${currency.format(double.parse(order.price ?? "0"))}",
+                      "Total Rp. ${currency.format(order.totalAmount ?? "0")}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -184,7 +183,7 @@ class CardOrder extends StatelessWidget {
                           badgeColor: Colors.deepPurple,
                           borderRadius: BorderRadius.circular(4),
                           badgeContent: Text(
-                            order.statuses![0],
+                            order.orderStatus ?? "",
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -205,7 +204,7 @@ class CardOrder extends StatelessWidget {
 }
 
 class ImageDialog extends StatelessWidget {
-  final Item item;
+  final Items item;
   const ImageDialog({super.key, required this.item});
 
   @override
@@ -228,15 +227,15 @@ class ImageDialog extends StatelessWidget {
                 )
               ],
             ),
-            Center(child: Image.network(item.productMainImage!)),
+            Center(child: Image.network(item.imageUrl!)),
             const Divider(color: Colors.grey),
             ListTile(
               visualDensity: VisualDensity.comfortable,
-              title: Text(item.name ?? ""),
+              title: Text(item.itemName ?? ""),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Seller SKU : ${item.sku ?? '--'}"),
+                  Text("Seller SKU : ${item.itemSku ?? '--'}"),
                   Text(item.variation ?? "")
                 ],
               ),

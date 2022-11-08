@@ -1,8 +1,11 @@
 import 'package:badges/badges.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
+import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/service/api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 
@@ -144,6 +147,30 @@ class ShopeeListView extends StatelessWidget {
                     const Divider(color: Colors.black45),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Catatan Pembeli',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            order.messageToSeller ?? "",
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(color: Colors.black45),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -166,7 +193,7 @@ class ShopeeListView extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: (order.status == 1 || order.status == 2),
+                      visible: (order.orderStatus == "READY_TO_SHIP"),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5.0,
@@ -176,7 +203,7 @@ class ShopeeListView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Visibility(
-                              visible: order.status == 2,
+                              visible: true,
                               child: SizedBox(
                                 width: 150,
                                 height: 45,
@@ -184,7 +211,19 @@ class ShopeeListView extends StatelessWidget {
                                   style: TextButton.styleFrom(
                                     backgroundColor: DefaultColor.primary,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    if (await confirm(
+                                      context,
+                                      content: const Text(
+                                          'Yakin Ingin Memanggil Kurir'),
+                                      textOK: const Text('Panggil'),
+                                      textCancel: const Text('Kembali'),
+                                    )) {
+                                      context
+                                          .read<ShopeeDetailBloc>()
+                                          .add(ShopeeRtsEvent(order.orderNo!));
+                                    }
+                                  },
                                   child: const Text(
                                     "Siap Kirim",
                                     style: TextStyle(
@@ -195,7 +234,7 @@ class ShopeeListView extends StatelessWidget {
                               ),
                             ),
                             Visibility(
-                              visible: order.status == 1,
+                              visible: false,
                               child: SizedBox(
                                 width: 150,
                                 height: 45,

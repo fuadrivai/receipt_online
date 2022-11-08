@@ -17,6 +17,9 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @POST("shopee-order/rts/{orderSn}")
+  Future shopeeRts(@Path() String orderSn);
+  
   @POST("transaction-online")
   Future<TransactionOnline> postTransactionOnline(
       @Body() TransactionOnline dataOnline);

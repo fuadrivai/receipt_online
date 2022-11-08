@@ -97,7 +97,7 @@ class Items {
   int? qty;
   int? originalPrice;
   int? discountedPrice;
-  String? productId;
+  int? productId;
   int? orderId;
   String? orderType;
 

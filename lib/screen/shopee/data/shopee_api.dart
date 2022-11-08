@@ -14,4 +14,10 @@ class ShopeeApi {
     var data = client.getShopeeOrders();
     return data;
   }
+
+  static Future rts(String orderSn) async {
+    final client = await Api.restClient();
+    var data = client.shopeeRts(orderSn);
+    return data;
+  }
 }

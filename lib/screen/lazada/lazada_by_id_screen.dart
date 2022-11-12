@@ -139,9 +139,8 @@ class _LazadaByIdScreenState extends State<LazadaByIdScreen> {
                                         backgroundColor: DefaultColor.primary,
                                       ),
                                       onPressed: () {
-                                        context
-                                            .read<PlatformBloc>()
-                                            .add(PlatformRTS(state.listOrder));
+                                        context.read<ByIdBloc>().add(
+                                            LazadaRtsEvent(state.listOrder));
                                       },
                                       child: const Text(
                                         "Siap Kirim",

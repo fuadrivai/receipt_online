@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
-import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
@@ -19,7 +18,7 @@ abstract class RestClient {
 
   @POST("shopee-order/rts/{orderSn}")
   Future shopeeRts(@Path() String orderSn);
-  
+
   @POST("transaction-online")
   Future<TransactionOnline> postTransactionOnline(
       @Body() TransactionOnline dataOnline);
@@ -43,7 +42,7 @@ abstract class RestClient {
   Future<LazadaCount> lazadaGetCount();
 
   @GET("lazada-order/{orderId}")
-  Future<Order> getOrder(@Path() int orderId);
+  Future<TransactionOnline> getOrder(@Path() String orderId);
 
   @GET("lazada-order/pending/{sorting}")
   Future<FullOrder> getPendingOrder(@Path() String sorting);

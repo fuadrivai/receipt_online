@@ -198,13 +198,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<Order> getOrder(orderId) async {
+  Future<TransactionOnline> getOrder(orderId) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result =
-        await _dio.fetch<Map<String, dynamic>>(_setStreamType<Order>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<TransactionOnline>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -216,7 +216,7 @@ class _RestClient implements RestClient {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = Order.fromJson(_result.data!);
+    final value = TransactionOnline.fromJson(_result.data!);
     return value;
   }
 

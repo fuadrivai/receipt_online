@@ -1,6 +1,5 @@
 import 'package:receipt_online_shop/model/lazada/full_order.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
-import 'package:receipt_online_shop/model/lazada/order.dart';
 import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/service/api.dart';
@@ -24,7 +23,7 @@ class LazadaApi {
     return data;
   }
 
-  static Future<Order> getOrder(int orderId) async {
+  static Future<TransactionOnline> getOrder(String orderId) async {
     final client = await Api.restClient();
     var data = client.getOrder(orderId);
     return data;

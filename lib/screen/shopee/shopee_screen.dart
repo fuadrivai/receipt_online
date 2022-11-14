@@ -1,8 +1,10 @@
+import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/model/shopee/logistic.dart';
 import 'package:receipt_online_shop/screen/shopee/bloc/list_shopee_bloc.dart';
+import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/widget/custom_badge.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/shopee_list_view.dart';
@@ -62,7 +64,22 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
                       ),
                     ),
                   ),
-                  Expanded(child: ShopeeListView(orders: state.listOrder)),
+                  Expanded(
+                      child: ShopeeListView(
+                    orders: state.listOrder,
+                    onPressed: () async {
+                      if (await confirm(
+                        context,
+                        content: const Text('Yakin Ingin Memanggil Kurir'),
+                        textOK: const Text('Panggil'),
+                        textCancel: const Text('Kembali'),
+                      )) {
+                        context
+                            .read<ShopeeDetailBloc>()
+                            .add(ShopeeRtsEvent(state.listOrder[0].orderNo!));
+                      }
+                    },
+                  )),
                 ],
               );
             }

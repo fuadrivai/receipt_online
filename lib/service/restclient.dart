@@ -27,6 +27,8 @@ abstract class RestClient {
   Future<List<TransactionOnline>> lazadaGetFullOrder(
       @Path() String status, @Path() String sorting);
 
+  @GET("jd-order")
+  Future<TransactionOnline> getJdIdOrderByNo();
   @GET("shopee-order")
   Future<List<TransactionOnline>> getShopeeOrders();
 

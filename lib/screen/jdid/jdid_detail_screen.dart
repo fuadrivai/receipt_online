@@ -1,32 +1,30 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt_online_shop/library/common.dart';
-import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
-import 'package:receipt_online_shop/screen/shopee/shopee_screen.dart';
+import 'package:receipt_online_shop/screen/jdid/bloc/jd_id_bloc.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/shopee_list_view.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ShopeeDetailScreen extends StatefulWidget {
-  const ShopeeDetailScreen({super.key});
+class JdIdDetailScreen extends StatefulWidget {
+  const JdIdDetailScreen({super.key});
 
   @override
-  State<ShopeeDetailScreen> createState() => _ShopeeDetailScreenState();
+  State<JdIdDetailScreen> createState() => _JdIdDetailScreenState();
 }
 
-class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
+class _JdIdDetailScreenState extends State<JdIdDetailScreen> {
   final currency = NumberFormat("#,##0", "en_US");
   TextEditingController barcodeController = TextEditingController();
   late bool visible;
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
-    context.read<ShopeeDetailBloc>().add(ShopeeStandBy());
+    context.read<JdIdBloc>().add(JdIdStandBy());
     super.initState();
   }
 
@@ -34,16 +32,16 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Shopee Order Detail"),
+        title: const Text("JD ID Order Detail"),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (__) => const ShopeeScreen()));
-            },
-            icon: const Icon(Icons.next_plan),
-          ),
-          const SizedBox(),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(context,
+          //         MaterialPageRoute(builder: (__) => const ShopeeScreen()));
+          //   },
+          //   icon: const Icon(Icons.next_plan),
+          // ),
+          // const SizedBox(),
           IconButton(
             icon: const Icon(Icons.qr_code_scanner_outlined),
             onPressed: () {
@@ -52,9 +50,7 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
                 onSuccess: (barcodeScanner) {
                   barcodeController.text = barcodeScanner;
                   setState(() {});
-                  context
-                      .read<ShopeeDetailBloc>()
-                      .add(GetShopeeOrder(barcodeScanner));
+                  context.read<JdIdBloc>().add(GetJdIdOrder(barcodeScanner));
                 },
               );
             },
@@ -70,7 +66,7 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
           onBarcodeScanned: (String barcode) {
             barcodeController.text = barcode;
             setState(() {});
-            context.read<ShopeeDetailBloc>().add(GetShopeeOrder(barcode));
+            context.read<JdIdBloc>().add(GetJdIdOrder(barcode));
           },
           child: Column(
             children: [
@@ -94,8 +90,8 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
                             suffixIcon: IconButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  context.read<ShopeeDetailBloc>().add(
-                                      GetShopeeOrder(barcodeController.text));
+                                  context.read<JdIdBloc>().add(
+                                      GetJdIdOrder(barcodeController.text));
                                 }
                               },
                               icon: const Icon(
@@ -111,28 +107,18 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
                 ),
               ),
               Expanded(
-                child: BlocBuilder<ShopeeDetailBloc, ShopeeDetailState>(
+                child: BlocBuilder<JdIdBloc, JdIdState>(
                   builder: (context, state) {
-                    if (state is ShopeeDetailLoading) {
+                    if (state is JdIdDetailLoading) {
                       return const LoadingScreen();
                     }
-                    if (state is ShopeeOrderDetail) {
+                    if (state is JdIdOrderDetail) {
                       return ShopeeListView(
                         orders: state.listOrder,
-                        onPressed: () async {
-                          if (await confirm(
-                            context,
-                            content: const Text('Yakin Ingin Memanggil Kurir'),
-                            textOK: const Text('Panggil'),
-                            textCancel: const Text('Kembali'),
-                          )) {
-                            context.read<ShopeeDetailBloc>().add(
-                                ShopeeRtsEvent(state.listOrder[0].orderNo!));
-                          }
-                        },
+                        onPressed: () async {},
                       );
                     }
-                    if (state is ShopeeDetailError) {
+                    if (state is JdIdDetailError) {
                       return Card(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -161,7 +147,7 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
                         ),
                       );
                     }
-                    if (state is ShopeeDetailStandBy) {
+                    if (state is JdIdDetailStandBy) {
                       return Card(
                         child: Container(
                           width: MediaQuery.of(context).size.width,

@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/by_id_bloc.dart';
-import 'package:receipt_online_shop/screen/lazada/bloc/platform_bloc.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';

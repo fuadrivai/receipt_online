@@ -7,6 +7,7 @@ import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/expedition/bloc/expedition_bloc.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
+import 'package:receipt_online_shop/screen/jdid/bloc/jd_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/by_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/platform_bloc.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<ShopeeDetailBloc>(create: (__) => ShopeeDetailBloc()),
         BlocProvider<ListShopeeBloc>(create: (__) => ListShopeeBloc()),
         BlocProvider<ByIdBloc>(create: (__) => ByIdBloc()),
+        BlocProvider<JdIdBloc>(create: (__) => JdIdBloc()),
       ],
       child: MaterialApp(
         navigatorKey: _nav.navKey,

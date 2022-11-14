@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:receipt_online_shop/screen/expedition/screen/expedition_screen.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
+import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_by_id_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/shopee/shopee_detail_screen.dart';
@@ -60,7 +60,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ),
           const BottomNavigationBarItem(
-            label: "Expedisi",
+            label: "JD ID",
             icon: Icon(
               Icons.fire_truck,
               size: 23.0,
@@ -82,7 +82,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 3:
         return const LazadaScreen();
       case 4:
-        return const ExpeditionScreen();
+        return const JdIdDetailScreen();
       default:
         return const HomeScreen();
     }

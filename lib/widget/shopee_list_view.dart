@@ -1,17 +1,16 @@
 import 'package:badges/badges.dart';
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
-import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/service/api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 
 class ShopeeListView extends StatelessWidget {
   final List<TransactionOnline> orders;
-  const ShopeeListView({super.key, required this.orders});
+  final VoidCallback onPressed;
+  const ShopeeListView(
+      {super.key, required this.orders, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -211,19 +210,7 @@ class ShopeeListView extends StatelessWidget {
                                   style: TextButton.styleFrom(
                                     backgroundColor: DefaultColor.primary,
                                   ),
-                                  onPressed: () async {
-                                    if (await confirm(
-                                      context,
-                                      content: const Text(
-                                          'Yakin Ingin Memanggil Kurir'),
-                                      textOK: const Text('Panggil'),
-                                      textCancel: const Text('Kembali'),
-                                    )) {
-                                      context
-                                          .read<ShopeeDetailBloc>()
-                                          .add(ShopeeRtsEvent(order.orderNo!));
-                                    }
-                                  },
+                                  onPressed: onPressed,
                                   child: const Text(
                                     "Siap Kirim",
                                     style: TextStyle(

@@ -6,15 +6,17 @@ abstract class ProductCheckerState extends Equatable {
 
 class ProductCheckerStandByState extends ProductCheckerState {
   final List<Platform>? platforms;
-  const ProductCheckerStandByState({this.platforms});
+  final Platform? platform;
+  const ProductCheckerStandByState({this.platforms, this.platform});
   @override
-  List<Object?> get props => [platforms];
+  List<Object?> get props => [platforms, platform];
 }
 
 class ProductCheckerDataState extends ProductCheckerState {
   final List<Platform>? platforms;
   final List<TransactionOnline>? data;
-  const ProductCheckerDataState({this.platforms, this.data});
+  final Platform? platform;
+  const ProductCheckerDataState({this.platforms, this.data, this.platform});
 
   @override
   List<Object?> get props => [platforms, data];

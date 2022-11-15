@@ -19,6 +19,14 @@ class ProductCheckerLoadingEvent extends ProductCheckerEvent {
   List<Object?> get props => [];
 }
 
+class ProductCheckerOnTabEvent extends ProductCheckerEvent {
+  final Platform platform;
+  final List<Platform> platforms;
+  const ProductCheckerOnTabEvent(this.platform, this.platforms);
+  @override
+  List<Object?> get props => [platform, platforms];
+}
+
 class GetOrderEvent extends ProductCheckerEvent {
   final String platform;
   const GetOrderEvent(this.platform);

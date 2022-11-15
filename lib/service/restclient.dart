@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
+import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
@@ -16,6 +17,9 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @GET("platform/active")
+  Future<List<Platform>> getPlatform();
+
   @POST("shopee-order/rts/{orderSn}")
   Future shopeeRts(@Path() String orderSn);
 
@@ -27,8 +31,8 @@ abstract class RestClient {
   Future<List<TransactionOnline>> lazadaGetFullOrder(
       @Path() String status, @Path() String sorting);
 
-  @GET("jd-order")
-  Future<TransactionOnline> getJdIdOrderByNo();
+  @GET("jd-order/{orderSn}")
+  Future<TransactionOnline> getJdIdOrderByNo(@Path() String orderSn);
   @GET("shopee-order")
   Future<List<TransactionOnline>> getShopeeOrders();
 

@@ -19,6 +19,31 @@ class _RestClient implements RestClient {
   String? baseUrl;
 
   @override
+  Future<List<Platform>> getPlatform() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result =
+        await _dio.fetch<List<dynamic>>(_setStreamType<List<Platform>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              'platform/active',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => Platform.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
   Future<dynamic> shopeeRts(orderSn) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -94,7 +119,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<TransactionOnline> getJdIdOrderByNo() async {
+  Future<TransactionOnline> getJdIdOrderByNo(orderSn) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -107,7 +132,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'jd-order',
+              'jd-order/${orderSn}',
               queryParameters: queryParameters,
               data: _data,
             )

@@ -11,6 +11,7 @@ import 'package:receipt_online_shop/screen/jdid/bloc/jd_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/by_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/platform_bloc.dart';
+import 'package:receipt_online_shop/screen/product_checker/bloc/product_checker_bloc.dart';
 import 'package:receipt_online_shop/screen/shopee/bloc/list_shopee_bloc.dart';
 import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/widget/splash_screen.dart';
@@ -54,6 +55,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<ListShopeeBloc>(create: (__) => ListShopeeBloc()),
         BlocProvider<ByIdBloc>(create: (__) => ByIdBloc()),
         BlocProvider<JdIdBloc>(create: (__) => JdIdBloc()),
+        BlocProvider<ProductCheckerBloc>(create: (__) => ProductCheckerBloc()),
       ],
       child: MaterialApp(
         navigatorKey: _nav.navKey,

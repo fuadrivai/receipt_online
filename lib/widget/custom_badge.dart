@@ -7,6 +7,7 @@ class CustomeBadge extends StatelessWidget {
   final double? width;
   final double? height;
   final BorderRadiusGeometry? borderRadius;
+  final Widget? icon;
   final String text;
   final GestureTapCallback? onTap;
   const CustomeBadge({
@@ -18,6 +19,7 @@ class CustomeBadge extends StatelessWidget {
     this.onTap,
     this.width,
     this.height,
+    this.icon,
   });
 
   @override
@@ -40,17 +42,22 @@ class CustomeBadge extends StatelessWidget {
           height: height,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
-            child: Center(
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontSize: 13,
-                  color: ((backgroundColor ?? Colors.black).computeLuminance() >
-                          0.179)
-                      ? Colors.white
-                      : Colors.black,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                icon ?? const SizedBox(),
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color:
+                        ((backgroundColor ?? Colors.black).computeLuminance() >
+                                0.179)
+                            ? Colors.white
+                            : Colors.black,
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

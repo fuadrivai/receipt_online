@@ -57,6 +57,7 @@ dependencies:
   flutter_html: ^2.2.1
   badges: ^2.0.3
   another_flushbar: ^1.12.29
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

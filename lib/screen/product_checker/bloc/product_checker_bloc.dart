@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receipt_online_shop/library/interceptor/injector.dart';
-import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
+// import 'package:receipt_online_shop/library/interceptor/injector.dart';
+// import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/product_checker/data/product_checker_api.dart';
@@ -12,7 +12,7 @@ part 'product_checker_state.dart';
 
 class ProductCheckerBloc
     extends Bloc<ProductCheckerEvent, ProductCheckerState> {
-  final NavigationService _nav = locator<NavigationService>();
+  // final NavigationService _nav = locator<NavigationService>();
   ProductCheckerBloc() : super(ProductCheckerInitialState()) {
     on<ProductCheckerStandByEvent>(_standBy);
     on<ProductCheckerOnTabEvent>(_onTabPlatform);

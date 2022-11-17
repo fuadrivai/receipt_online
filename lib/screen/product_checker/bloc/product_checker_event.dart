@@ -28,8 +28,9 @@ class ProductCheckerOnTabEvent extends ProductCheckerEvent {
 }
 
 class GetOrderEvent extends ProductCheckerEvent {
-  final String platform;
-  const GetOrderEvent(this.platform);
+  final Platform platform;
+  final String orderSn;
+  const GetOrderEvent(this.platform, this.orderSn);
   @override
-  List<Object?> get props => [platform];
+  List<Object?> get props => [platform, orderSn];
 }

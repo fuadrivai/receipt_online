@@ -34,7 +34,7 @@ class ProductCheckerBloc
     } catch (e) {
       String message =
           e is DioError ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(message));
+      emit(ProductCheckerErrorState(message: message));
     }
   }
 
@@ -46,14 +46,15 @@ class ProductCheckerBloc
     } catch (e) {
       String message =
           e is DioError ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(message));
+      emit(ProductCheckerErrorState(message: message));
     }
   }
 
   void _getOrder(GetOrderEvent event, Emitter<ProductCheckerState> emit) async {
+    emit(ProductCheckerLoadingState());
+    List<Platform> platforms = await ProductCheckerApi.getPlatforms();
     try {
       List<TransactionOnline> listTrans = [];
-      List<Platform> platforms = await ProductCheckerApi.getPlatforms();
       switch (event.platform.name?.toLowerCase()) {
         case "lazada":
           TransactionOnline trans = await LazadaApi.getOrder(event.orderSn);
@@ -79,7 +80,11 @@ class ProductCheckerBloc
     } catch (e) {
       String message =
           e is DioError ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(message));
+      emit(ProductCheckerErrorState(
+        message: message,
+        platforms: platforms,
+        platform: event.platform,
+      ));
     }
   }
 }

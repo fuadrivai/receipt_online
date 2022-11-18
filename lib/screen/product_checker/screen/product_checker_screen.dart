@@ -51,6 +51,9 @@ class _ProductCheckerScreenState extends State<ProductCheckerScreen> {
         child: BarcodeKeyboardListener(
           onBarcodeScanned: (String barcode) {
             barcodeController.text = barcode;
+            context
+                .read<ProductCheckerBloc>()
+                .add(GetOrderEvent(platform!, barcode));
           },
           child: Column(
             children: [
@@ -62,7 +65,9 @@ class _ProductCheckerScreenState extends State<ProductCheckerScreen> {
                   });
                 },
               ),
-              ProductCheckerTextBox(barcodeController: barcodeController),
+              ProductCheckerTextBox(
+                barcodeController: barcodeController,
+              ),
               const Expanded(child: ProductCheckerBody())
             ],
           ),

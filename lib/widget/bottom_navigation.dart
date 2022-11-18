@@ -35,9 +35,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           ),
           BottomNavigationBarItem(
-            label: "Shopee",
+            label: "Checker",
             icon: Image.asset(
-              "assets/images/shopee.png",
+              "assets/images/logo.png",
               width: 30.0,
               height: 30.0,
               fit: BoxFit.cover,

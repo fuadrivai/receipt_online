@@ -82,6 +82,34 @@ class _ProductCheckerBodyState extends State<ProductCheckerBody> {
             onPressed: () async {},
           );
         }
+        if (state is ProductCheckerErrorState) {
+          return Card(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              constraints: const BoxConstraints(minHeight: 300, maxHeight: 300),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    FontAwesomeIcons.circleXmark,
+                    color: Colors.red,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    state.message,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(255, 248, 30, 15),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
         return const Text('Something Wrong');
       }),
     );

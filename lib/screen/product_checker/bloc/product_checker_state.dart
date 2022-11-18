@@ -34,7 +34,10 @@ class ProductCheckerInitialState extends ProductCheckerState {
 
 class ProductCheckerErrorState extends ProductCheckerState {
   final String message;
-  const ProductCheckerErrorState(this.message);
+  final List<Platform>? platforms;
+  final Platform? platform;
+  const ProductCheckerErrorState(
+      {required this.message, this.platforms, this.platform});
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [message, platforms, platform];
 }

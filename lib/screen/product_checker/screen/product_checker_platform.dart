@@ -78,7 +78,16 @@ class _ListPlatformState extends State<ListPlatform> {
           );
         }
         if (state is ProductCheckerErrorState) {
-          return Center(child: Text(state.message));
+          platforms = (state.platforms ?? []);
+          widget.getPlatform!(state.platform!);
+          return PlatformList(
+            platforms: platforms,
+            onTap: (pl) {
+              widget.onTap!(pl);
+              setState(() {});
+            },
+            state: state.platform!,
+          );
         }
         return const Center(child: Text('Data Tidak Tersedia'));
       },

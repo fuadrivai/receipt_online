@@ -19,11 +19,21 @@ class ShopeeListView extends StatelessWidget {
       itemCount: orders.length,
       itemBuilder: (context, i) {
         TransactionOnline order = orders[i];
-
-        int totalQty = 0;
+        List<Items> listItem = [];
         for (Items e in (order.items ?? [])) {
-          {
-            totalQty = totalQty + (e.qty ?? 0);
+          bool isExis = listItem.any((el) => el.skuId == e.skuId);
+          if (isExis) {
+            if (e.skuId == null) {
+              listItem.add(e);
+            } else {
+              listItem
+                  .where((elm) => elm.skuId == e.skuId)
+                  .toList()
+                  .forEach((elm) => elm.qty = elm.qty! + 1);
+            }
+          } else {
+            // e.qty = e.qty;
+            listItem.add(e);
           }
         }
         return Padding(
@@ -84,7 +94,7 @@ class ShopeeListView extends StatelessWidget {
                             badgeColor: Colors.deepPurple,
                             borderRadius: BorderRadius.circular(4),
                             badgeContent: Text(
-                              totalQty.toString(),
+                              order.totalQty.toString(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -96,8 +106,8 @@ class ShopeeListView extends StatelessWidget {
                     ),
                     const Divider(color: Colors.black45),
                     Column(
-                      children: (order.items ?? []).map((e) {
-                        totalQty = totalQty + (e.qty ?? 0);
+                      children: listItem.map((e) {
+                        // totalQty = totalQty + (e.qty ?? 0);
                         return ListTile(
                           visualDensity: VisualDensity.comfortable,
                           title: Text(e.itemName ?? ""),
@@ -230,7 +240,7 @@ class ShopeeListView extends StatelessWidget {
                                     backgroundColor: Colors.blueAccent,
                                   ),
                                   onPressed: () {
-                                    order.totalQty = totalQty;
+                                    // order.totalQty = totalQty;
                                     Api.postOrder(order).then((value) {
                                       print(value);
                                     }).catchError((e) {

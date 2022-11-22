@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +22,11 @@ class ShopeeListView extends StatelessWidget {
       itemBuilder: (context, i) {
         TransactionOnline order = orders[i];
         List<Items> listItem = [];
+        (order.items ?? []).sort(
+            (a, b) => (b.orderStatus ?? "").compareTo(a.orderStatus ?? ""));
         for (Items e in (order.items ?? [])) {
-          bool isExis = listItem.any((el) => el.skuId == e.skuId);
+          bool isExis = listItem.any((el) =>
+              (el.skuId == e.skuId) && (el.orderStatus == e.orderStatus));
           if (isExis) {
             if (e.skuId == null) {
               listItem.add(e);
@@ -36,6 +41,16 @@ class ShopeeListView extends StatelessWidget {
             listItem.add(e);
           }
         }
+        Color deliveryTpeColor = Colors.redAccent;
+        switch (order.shippingProviderType?.toLowerCase()) {
+          case "economy":
+            deliveryTpeColor = const Color.fromARGB(255, 12, 155, 17);
+            break;
+          case "standard":
+            deliveryTpeColor = Colors.blueAccent;
+            break;
+          default:
+        }
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 5.0,
@@ -45,19 +60,21 @@ class ShopeeListView extends StatelessWidget {
             shadowColor: Colors.black,
             child: Column(
               children: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      order.pickupBy ?? "",
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic,
+                order.pickupBy == ""
+                    ? const SizedBox()
+                    : Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            order.pickupBy ?? "",
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
                 const Divider(color: Colors.black45),
                 ListView(
                   shrinkWrap: true,
@@ -65,12 +82,38 @@ class ShopeeListView extends StatelessWidget {
                   children: [
                     ListTile(
                       visualDensity: VisualDensity.comfortable,
-                      title: Text(
-                        'Resi : ${order.trackingNumber ?? ""}',
-                        style: const TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      title: Row(
+                        children: [
+                          order.trackingNumber == ""
+                              ? const SizedBox()
+                              : Text(
+                                  'Resi : ${order.trackingNumber ?? ""}',
+                                  style: const TextStyle(
+                                    fontSize: 14.5,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                          (order.shippingProviderType == null) ||
+                                  (order.trackingNumber == "")
+                              ? const SizedBox()
+                              : Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Badge(
+                                    toAnimate: false,
+                                    shape: BadgeShape.square,
+                                    badgeColor: deliveryTpeColor,
+                                    borderRadius: BorderRadius.circular(4),
+                                    badgeContent: Text(
+                                      (order.shippingProviderType ?? "standard")
+                                          .toUpperCase(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                        ],
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,23 +150,66 @@ class ShopeeListView extends StatelessWidget {
                     const Divider(color: Colors.black45),
                     Column(
                       children: listItem.map((e) {
-                        // totalQty = totalQty + (e.qty ?? 0);
+                        TextStyle _style = e.orderStatus == "canceled"
+                            ? const TextStyle(
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.bold,
+                              )
+                            : const TextStyle();
                         return ListTile(
                           visualDensity: VisualDensity.comfortable,
-                          title: Text(e.itemName ?? ""),
+                          title: Text(
+                            e.itemName ?? "",
+                            style: _style,
+                          ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               e.variation != ""
-                                  ? Text(e.variation ?? "")
+                                  ? Text(
+                                      e.variation ?? "",
+                                      style: _style,
+                                    )
                                   : const SizedBox(),
-                              Text("SKU : ${e.itemSku ?? '--'}"),
-                              Text(
-                                "Rp. ${currency.format(e.discountedPrice == 0 ? e.originalPrice : e.discountedPrice)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                              e.itemSku == ""
+                                  ? const SizedBox()
+                                  : Text(
+                                      "Seller SKU : ${e.itemSku ?? '--'}",
+                                      style: _style,
+                                    ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Rp. ${currency.format(e.discountedPrice == 0 ? e.originalPrice : e.discountedPrice)}",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  e.orderStatus == "canceled"
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          child: Badge(
+                                            toAnimate: false,
+                                            shape: BadgeShape.square,
+                                            badgeColor: Colors.redAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            badgeContent: Text(
+                                              e.orderStatus ?? "",
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
                               ),
-                              (order.items ?? []).last == e
+                              listItem.last == e
                                   ? const SizedBox()
                                   : const Divider(color: Colors.grey)
                             ],
@@ -188,7 +274,9 @@ class ShopeeListView extends StatelessWidget {
                           Badge(
                             toAnimate: false,
                             shape: BadgeShape.square,
-                            badgeColor: Colors.deepPurple,
+                            badgeColor: order.orderStatus == "canceled"
+                                ? Colors.redAccent
+                                : Colors.deepPurple,
                             borderRadius: BorderRadius.circular(4),
                             badgeContent: Text(
                               order.orderStatus ?? "",
@@ -303,8 +391,10 @@ class ImageDialog extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.itemName ?? ""),
-                  Text("Seller SKU : ${item.itemSku ?? '--'}"),
+                  Text(item.variation ?? ""),
+                  item.itemSku == ""
+                      ? const SizedBox()
+                      : Text("Seller SKU : ${item.itemSku ?? '--'}"),
                 ],
               ),
               trailing: Column(

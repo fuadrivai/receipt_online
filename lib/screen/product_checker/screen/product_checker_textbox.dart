@@ -38,6 +38,10 @@ class ProductCheckerTextBox extends StatelessWidget {
                       context.read<ProductCheckerBloc>().add(GetOrderEvent(
                           state.platform!, barcodeController.text));
                     }
+                    if (state is ProductCheckerErrorState) {
+                      context.read<ProductCheckerBloc>().add(GetOrderEvent(
+                          state.platform!, barcodeController.text));
+                    }
                     if (state is ProductCheckerStandByState) {
                       context.read<ProductCheckerBloc>().add(GetOrderEvent(
                           state.platform!, barcodeController.text));

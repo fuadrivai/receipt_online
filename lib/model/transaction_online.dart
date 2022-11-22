@@ -93,6 +93,7 @@ class Items {
   String? itemSku;
   String? variation;
   String? skuId;
+  String? orderStatus;
   int? orderItemId;
   int? qty;
   int? originalPrice;
@@ -114,6 +115,7 @@ class Items {
     this.orderId,
     this.orderType,
     this.skuId,
+    this.orderStatus,
   });
 
   Items.fromJson(Map<String, dynamic> json) {
@@ -121,6 +123,7 @@ class Items {
     itemName = json['item_name'];
     itemSku = json['item_sku'];
     skuId = json['sku_id'];
+    orderStatus = json['order_status'];
     variation = json['variation'];
     orderItemId = json['order_item_id'];
     qty = json['qty'];
@@ -137,6 +140,7 @@ class Items {
     data['item_name'] = itemName;
     data['item_sku'] = itemSku;
     data['sku_id'] = skuId;
+    data['order_status'] = orderStatus;
     data['variation'] = variation;
     data['order_item_id'] = orderItemId;
     data['qty'] = qty;

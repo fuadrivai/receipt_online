@@ -79,7 +79,11 @@ class _ProductCheckerBodyState extends State<ProductCheckerBody> {
         if (state is ProductCheckerDataState) {
           return ShopeeListView(
             orders: state.data ?? [],
-            onPressed: () async {},
+            onPressed: (order) {
+              context
+                  .read<ProductCheckerBloc>()
+                  .add(RtsEvent(state.platform!, order));
+            },
           );
         }
         if (state is ProductCheckerErrorState) {

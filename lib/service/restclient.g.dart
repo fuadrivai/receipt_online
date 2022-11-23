@@ -68,6 +68,28 @@ class _RestClient implements RestClient {
   }
 
   @override
+  Future<dynamic> jdIdRts(orderSn) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          'jd-order/rts/{id}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
   Future<TransactionOnline> postTransactionOnline(dataOnline) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

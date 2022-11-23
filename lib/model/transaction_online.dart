@@ -15,6 +15,7 @@ class TransactionOnline {
   String? orderId;
   String? productPicture;
   String? packagePicture;
+  bool? showRequest;
   List<Items>? items;
 
   TransactionOnline({
@@ -35,6 +36,7 @@ class TransactionOnline {
     this.packagePicture,
     this.items,
     this.shippingProviderType,
+    this.showRequest = false,
   });
 
   TransactionOnline.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class TransactionOnline {
     orderId = json['order_id'];
     productPicture = json['product_picture'];
     packagePicture = json['package_picture'];
+    showRequest = json['show_request'];
     shippingProviderType = json['shipping_provider_type'];
     if (json['items'] != null) {
       items = <Items>[];
@@ -69,6 +72,7 @@ class TransactionOnline {
     data['message_to_seller'] = messageToSeller;
     data['order_no'] = orderNo;
     data['shipping_provider_type'] = shippingProviderType;
+    data['show_request'] = showRequest;
     data['order_status'] = orderStatus;
     data['tracking_number'] = trackingNumber;
     data['delivery_by'] = deliveryBy;

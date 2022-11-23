@@ -7,4 +7,10 @@ class JdIdApi {
     var data = client.getJdIdOrderByNo(orderSn);
     return data;
   }
+
+  static Future rts(String id) async {
+    final client = await Api.restClient();
+    var data = client.jdIdRts(id);
+    return data;
+  }
 }

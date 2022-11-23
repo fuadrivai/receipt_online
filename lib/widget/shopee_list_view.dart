@@ -10,7 +10,7 @@ import 'package:receipt_online_shop/widget/default_color.dart';
 
 class ShopeeListView extends StatelessWidget {
   final List<TransactionOnline> orders;
-  final VoidCallback onPressed;
+  final Function(TransactionOnline order) onPressed;
   const ShopeeListView(
       {super.key, required this.orders, required this.onPressed});
 
@@ -150,7 +150,7 @@ class ShopeeListView extends StatelessWidget {
                     const Divider(color: Colors.black45),
                     Column(
                       children: listItem.map((e) {
-                        TextStyle _style = e.orderStatus == "canceled"
+                        TextStyle _style = e.orderStatus == "BATAL"
                             ? const TextStyle(
                                 color: Colors.redAccent,
                                 fontWeight: FontWeight.bold,
@@ -182,12 +182,12 @@ class ShopeeListView extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Rp. ${currency.format(e.discountedPrice == 0 ? e.originalPrice : e.discountedPrice)}",
+                                    "Rp. ${currency.format(e.originalPrice)}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  e.orderStatus == "canceled"
+                                  e.orderStatus == "BATAL"
                                       ? Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4.0),
@@ -274,7 +274,7 @@ class ShopeeListView extends StatelessWidget {
                           Badge(
                             toAnimate: false,
                             shape: BadgeShape.square,
-                            badgeColor: order.orderStatus == "canceled"
+                            badgeColor: order.orderStatus == "BATAL"
                                 ? Colors.redAccent
                                 : Colors.deepPurple,
                             borderRadius: BorderRadius.circular(4),
@@ -290,7 +290,7 @@ class ShopeeListView extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: (order.orderStatus == "READY_TO_SHIP"),
+                      visible: order.showRequest ?? false,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5.0,
@@ -308,7 +308,9 @@ class ShopeeListView extends StatelessWidget {
                                   style: TextButton.styleFrom(
                                     backgroundColor: DefaultColor.primary,
                                   ),
-                                  onPressed: onPressed,
+                                  onPressed: () {
+                                    onPressed(order);
+                                  },
                                   child: const Text(
                                     "Siap Kirim",
                                     style: TextStyle(

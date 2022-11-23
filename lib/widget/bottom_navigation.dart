@@ -43,24 +43,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
               fit: BoxFit.cover,
             ),
           ),
-          BottomNavigationBarItem(
-            label: "Lazada",
-            icon: Image.asset(
-              "assets/images/lazada.jpg",
-              width: 30.0,
-              height: 30.0,
-              fit: BoxFit.cover,
-            ),
-          ),
           const BottomNavigationBarItem(
             label: "Lazada",
-            icon: Icon(
-              Icons.fire_truck,
-              size: 23.0,
-            ),
-          ),
-          const BottomNavigationBarItem(
-            label: "JD ID",
             icon: Icon(
               Icons.fire_truck,
               size: 23.0,

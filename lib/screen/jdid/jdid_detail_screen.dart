@@ -115,7 +115,7 @@ class _JdIdDetailScreenState extends State<JdIdDetailScreen> {
                     if (state is JdIdOrderDetail) {
                       return ShopeeListView(
                         orders: [state.listOrder],
-                        onPressed: () async {},
+                        onPressed: (order) async {},
                       );
                     }
                     if (state is JdIdDetailError) {

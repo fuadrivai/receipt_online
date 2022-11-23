@@ -67,7 +67,7 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
                   Expanded(
                       child: ShopeeListView(
                     orders: state.listOrder,
-                    onPressed: () async {
+                    onPressed: (order) async {
                       if (await confirm(
                         context,
                         content: const Text('Yakin Ingin Memanggil Kurir'),
@@ -76,7 +76,7 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
                       )) {
                         context
                             .read<ShopeeDetailBloc>()
-                            .add(ShopeeRtsEvent(state.listOrder[0].orderNo!));
+                            .add(ShopeeRtsEvent(order.orderNo!));
                       }
                     },
                   )),

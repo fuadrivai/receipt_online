@@ -34,3 +34,11 @@ class GetOrderEvent extends ProductCheckerEvent {
   @override
   List<Object?> get props => [platform, orderSn];
 }
+
+class RtsEvent extends ProductCheckerEvent {
+  final Platform platform;
+  final TransactionOnline dataOrder;
+  const RtsEvent(this.platform, this.dataOrder);
+  @override
+  List<Object?> get props => [platform, dataOrder];
+}

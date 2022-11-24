@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'restclient.dart';
 
 // **************************************************************************
@@ -68,7 +66,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> jdIdRts(orderSn) async {
+  Future<dynamic> jdIdRts(id) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -80,7 +78,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'jd-order/rts/{id}',
+          'jd-order/rts/${id}',
           queryParameters: queryParameters,
           data: _data,
         )

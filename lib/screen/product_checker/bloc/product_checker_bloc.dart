@@ -104,7 +104,9 @@ class ProductCheckerBloc
         case "lazada":
           List<int> orderItemIds = [];
           for (Items e in (order.items ?? [])) {
-            orderItemIds.add(e.orderItemId!);
+            if (e.orderStatus != "BATAL") {
+              orderItemIds.add(e.orderItemId!);
+            }
           }
           OrderRTS orderRTS = OrderRTS(
             deliveryType: 'dropship',

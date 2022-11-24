@@ -48,9 +48,7 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
                     vertical: 15,
                   ),
                   child: Visibility(
-                    visible: state.transaction.orderStatus != 'packed'
-                        ? false
-                        : true,
+                    visible: state.transaction.showRequest ?? false,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

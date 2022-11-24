@@ -62,9 +62,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 1:
         return const ProductCheckerScreen();
       case 2:
-        return const LazadaByIdScreen();
-      case 3:
         return const LazadaScreen();
+      case 3:
+        return const LazadaByIdScreen();
+      // return const LazadaScreen();
       case 4:
         return const JdIdDetailScreen();
       default:

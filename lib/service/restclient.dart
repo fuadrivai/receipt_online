@@ -24,7 +24,7 @@ abstract class RestClient {
   Future shopeeRts(@Path() String orderSn);
 
   @GET("jd-order/rts/{id}")
-  Future jdIdRts(@Path() String orderSn);
+  Future jdIdRts(@Path() String id);
 
   @POST("transaction-online")
   Future<TransactionOnline> postTransactionOnline(

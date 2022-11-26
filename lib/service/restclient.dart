@@ -80,6 +80,9 @@ abstract class RestClient {
   @POST("daily-task")
   Future<DailyTask> postDailyTask(@Body() DailyTask dailyTask);
 
+  @POST("daily-task/multiple")
+  Future postMultipleDailyTask(@Body() List<DailyTask> tasks);
+
   @GET("expedition")
   Future<List<Expedition>> findAllExpedition();
 

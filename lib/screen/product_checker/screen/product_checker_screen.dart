@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/library/string_uppercase.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/screen/product_checker/bloc/product_checker_bloc.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_body.dart';
@@ -50,10 +51,15 @@ class _ProductCheckerScreenState extends State<ProductCheckerScreen> {
         },
         child: BarcodeKeyboardListener(
           onBarcodeScanned: (String barcode) {
-            barcodeController.text = barcode;
+            List<String> listBarcode = [];
+            for (var rune in barcode.runes) {
+              var character = String.fromCharCode(rune);
+              listBarcode.add(character.upperCase());
+            }
+            barcodeController.text = listBarcode.join();
             context
                 .read<ProductCheckerBloc>()
-                .add(GetOrderEvent(platform!, barcode));
+                .add(GetOrderEvent(platform!, listBarcode.join()));
           },
           child: Column(
             children: [

@@ -32,7 +32,9 @@ class ShopeeListView extends StatelessWidget {
               listItem.add(e);
             } else {
               listItem
-                  .where((elm) => elm.skuId == e.skuId)
+                  .where((elm) =>
+                      (elm.skuId == e.skuId) &&
+                      (elm.orderStatus == e.orderStatus))
                   .toList()
                   .forEach((elm) => elm.qty = elm.qty! + 1);
             }

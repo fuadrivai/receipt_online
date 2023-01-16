@@ -39,6 +39,9 @@ abstract class RestClient {
   @GET("shopee-order")
   Future<List<TransactionOnline>> getShopeeOrders();
 
+  @GET("tiktok-order/get")
+  Future<List<TransactionOnline>> getTiktokOrders();
+
   @GET("shopee-order/order/v2/{orderSn}")
   Future<List<TransactionOnline>> getShopeeOrderByNo(@Path() String orderSn);
 

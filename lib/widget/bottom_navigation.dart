@@ -4,6 +4,7 @@ import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_by_id_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen.dart';
+import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -43,6 +44,15 @@ class _BottomNavigationState extends State<BottomNavigation> {
               fit: BoxFit.cover,
             ),
           ),
+          BottomNavigationBarItem(
+            label: "Tiktok",
+            icon: Image.asset(
+              "assets/images/tiktok.png",
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
+            ),
+          ),
           const BottomNavigationBarItem(
             label: "Lazada",
             icon: Icon(
@@ -61,10 +71,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
         return const HomeScreen();
       case 1:
         return const ProductCheckerScreen();
-      case 2:
-        return const LazadaScreen();
       case 3:
-        return const LazadaByIdScreen();
+        return const LazadaScreen();
+      case 2:
+        return const TiktokScreen();
       // return const LazadaScreen();
       case 4:
         return const JdIdDetailScreen();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
-import 'package:receipt_online_shop/screen/lazada/lazada_by_id_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen.dart';
 import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';

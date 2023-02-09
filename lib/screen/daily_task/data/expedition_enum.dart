@@ -9,6 +9,7 @@ class ValidExpedition {
   static const String SHOPEE = "SHOPEE";
   static const String SAMEDAY = "SAMEDAY";
   static const String JX = "JX";
+  static const String JNT = "JNT";
   static const String INSTANT = "INSTANT";
   static const String SH_INSTANT = "SH_INSTANT";
 
@@ -29,7 +30,40 @@ class ValidExpedition {
   static bool shopee(String data) {
     if (data.length < 17) {
       return false;
-    } else if (data.contains("SPXID")||data.contains("spxid")) {
+    } else if (data.contains("SPXID") || data.contains("spxid")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static bool jnt(String data) {
+    data.toLowerCase();
+    if (data.length == 12) {
+      if (data.contains("JT") || data.contains("jt")) {
+        return true;
+      } else if (data.contains("JX") || data.contains("jx")) {
+        return true;
+      } else if (data.contains("JP") || data.contains("jp")) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  static bool jne(String data) {
+    data.toLowerCase();
+    print(data);
+    if (data.length < 13) {
+      return false;
+    } else if (data.contains("CM") || data.contains("cm")) {
+      return true;
+    } else if (data.contains("JT") || data.contains("jt")) {
+      return true;
+    } else if (data.contains("TLJR") || data.contains("tljr")) {
       return true;
     } else {
       return false;
@@ -56,6 +90,9 @@ class ValidExpedition {
       case ValidExpedition.SH_INSTANT:
         valid = ValidExpedition.shInstant(data);
         break;
+      case ValidExpedition.JNT:
+        valid = ValidExpedition.jnt(data);
+        break;
       case ValidExpedition.ANTARAJA:
         valid = true;
         break;
@@ -66,7 +103,7 @@ class ValidExpedition {
         valid = true;
         break;
       case ValidExpedition.JNE:
-        valid = true;
+        valid = ValidExpedition.jne(data);
         break;
       case ValidExpedition.JX:
         valid = true;

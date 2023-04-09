@@ -84,7 +84,7 @@ class CardOrder extends StatelessWidget {
                   children: [
                     Text('No. Order : ${order.orderId}'),
                     Text(
-                        'Tanggal : ${Jiffy.parse(order.createTimeOnline!).format(pattern: "dd MMMM yyyy HH:mm:ss")}'),
+                        'Tanggal : ${Jiffy.parse(order.createTimeOnline!, pattern: "yyyy-MM-dd HH:mm:ss").format(pattern: "dd MMMM yyyy HH:mm:ss")}'),
                   ],
                 ),
                 trailing: Column(

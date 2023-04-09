@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -123,7 +121,7 @@ class ShopeeListView extends StatelessWidget {
                         children: [
                           Text('No. Order : ${order.orderNo}'),
                           Text(
-                              'Tanggal : ${Jiffy.parse(order.createTimeOnline!).format(pattern: "dd MMMM yyyy HH:mm")}'),
+                              'Tanggal : ${Jiffy.parse(order.createTimeOnline!, pattern: "yyyy-MM-dd HH:mm:ss").format(pattern: "dd MMMM yyyy HH:mm")}'),
                         ],
                       ),
                       trailing: Column(
@@ -154,7 +152,7 @@ class ShopeeListView extends StatelessWidget {
                     const Divider(color: Colors.black45),
                     Column(
                       children: listItem.map((e) {
-                        TextStyle _style = e.orderStatus == "BATAL"
+                        TextStyle style = e.orderStatus == "BATAL"
                             ? const TextStyle(
                                 color: Colors.redAccent,
                                 fontWeight: FontWeight.bold,
@@ -164,7 +162,7 @@ class ShopeeListView extends StatelessWidget {
                           visualDensity: VisualDensity.comfortable,
                           title: Text(
                             e.itemName ?? "",
-                            style: _style,
+                            style: style,
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,14 +170,14 @@ class ShopeeListView extends StatelessWidget {
                               e.variation != ""
                                   ? Text(
                                       e.variation ?? "",
-                                      style: _style,
+                                      style: style,
                                     )
                                   : const SizedBox(),
                               e.itemSku == ""
                                   ? const SizedBox()
                                   : Text(
                                       "Seller SKU : ${e.itemSku ?? '--'}",
-                                      style: _style,
+                                      style: style,
                                     ),
                               Row(
                                 mainAxisAlignment:

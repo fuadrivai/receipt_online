@@ -56,7 +56,6 @@ class ValidExpedition {
 
   static bool jne(String data) {
     data.toLowerCase();
-    print(data);
     if (data.length < 13) {
       return false;
     } else if (data.contains("CM") || data.contains("cm")) {

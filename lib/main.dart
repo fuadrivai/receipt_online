@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         Session.set("sorting", "DESC");
       }
     });
-    Jiffy.locale('id');
+    Jiffy.setLocale('id');
     super.initState();
   }
 

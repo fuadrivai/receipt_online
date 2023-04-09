@@ -75,7 +75,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           BlocProvider.of<HomeBloc>(_nav.navKey.currentContext!).state;
       if (state is DataState) {
         DailyTask dailyTask = state.dailyTask ?? DailyTask();
-        dailyTask.date = Jiffy(DateTime.now()).format("yyyy-MM-dd");
+        dailyTask.date = Jiffy.now().format(pattern: "yyyy-MM-dd");
         await DailyTaskApi.post(dailyTask);
         Navigator.pop(_nav.navKey.currentContext!);
         // List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();

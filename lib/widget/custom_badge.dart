@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 
 class CustomeBadge extends StatelessWidget {
@@ -6,7 +6,7 @@ class CustomeBadge extends StatelessWidget {
   final BorderSide? borderSide;
   final double? width;
   final double? height;
-  final BorderRadiusGeometry? borderRadius;
+  final BorderRadius? borderRadius;
   final Widget? icon;
   final String text;
   final GestureTapCallback? onTap;
@@ -26,17 +26,18 @@ class CustomeBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Badge(
-        toAnimate: false,
-        shape: BadgeShape.square,
-        badgeColor: backgroundColor ?? Colors.white,
-        elevation: 0,
-        borderSide: borderSide ??
-            const BorderSide(
-              width: 1,
-              color: Colors.blueAccent,
-            ),
-        borderRadius: borderRadius ?? BorderRadius.circular(8),
+      child: badge.Badge(
+        badgeStyle: badge.BadgeStyle(
+          shape: badge.BadgeShape.square,
+          badgeColor: backgroundColor ?? Colors.white,
+          elevation: 0,
+          borderSide: borderSide ??
+              const BorderSide(
+                width: 1,
+                color: Colors.blueAccent,
+              ),
+          borderRadius: borderRadius ?? BorderRadius.circular(8),
+        ),
         badgeContent: SizedBox(
           width: width,
           height: height,

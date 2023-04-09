@@ -1,6 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
@@ -100,11 +100,12 @@ class ShopeeListView extends StatelessWidget {
                               ? const SizedBox()
                               : Padding(
                                   padding: const EdgeInsets.only(left: 4.0),
-                                  child: Badge(
-                                    toAnimate: false,
-                                    shape: BadgeShape.square,
-                                    badgeColor: deliveryTpeColor,
-                                    borderRadius: BorderRadius.circular(4),
+                                  child: badge.Badge(
+                                    badgeStyle: badge.BadgeStyle(
+                                      shape: badge.BadgeShape.square,
+                                      badgeColor: deliveryTpeColor,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
                                     badgeContent: Text(
                                       (order.shippingProviderType ?? "standard")
                                           .toUpperCase(),
@@ -122,7 +123,7 @@ class ShopeeListView extends StatelessWidget {
                         children: [
                           Text('No. Order : ${order.orderNo}'),
                           Text(
-                              'Tanggal : ${Jiffy(order.createTimeOnline).format("dd MMMM yyyy HH:mm")}'),
+                              'Tanggal : ${Jiffy.parse(order.createTimeOnline!).format(pattern: "dd MMMM yyyy HH:mm")}'),
                         ],
                       ),
                       trailing: Column(
@@ -133,11 +134,12 @@ class ShopeeListView extends StatelessWidget {
                             style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(height: 2),
-                          Badge(
-                            toAnimate: false,
-                            shape: BadgeShape.square,
-                            badgeColor: Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(4),
+                          badge.Badge(
+                            badgeStyle: badge.BadgeStyle(
+                              shape: badge.BadgeShape.square,
+                              badgeColor: Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                             badgeContent: Text(
                               order.totalQty.toString(),
                               style: const TextStyle(
@@ -193,12 +195,13 @@ class ShopeeListView extends StatelessWidget {
                                       ? Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4.0),
-                                          child: Badge(
-                                            toAnimate: false,
-                                            shape: BadgeShape.square,
-                                            badgeColor: Colors.redAccent,
-                                            borderRadius:
-                                                BorderRadius.circular(4),
+                                          child: badge.Badge(
+                                            badgeStyle: badge.BadgeStyle(
+                                              shape: badge.BadgeShape.square,
+                                              badgeColor: Colors.redAccent,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
                                             badgeContent: Text(
                                               e.orderStatus ?? "",
                                               style: const TextStyle(
@@ -273,13 +276,14 @@ class ShopeeListView extends StatelessWidget {
                         children: [
                           const Text('Status Paket'),
                           const SizedBox(width: 10),
-                          Badge(
-                            toAnimate: false,
-                            shape: BadgeShape.square,
-                            badgeColor: order.orderStatus == "BATAL"
-                                ? Colors.redAccent
-                                : Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(4),
+                          badge.Badge(
+                            badgeStyle: badge.BadgeStyle(
+                              shape: badge.BadgeShape.square,
+                              badgeColor: order.orderStatus == "BATAL"
+                                  ? Colors.redAccent
+                                  : Colors.deepPurple,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                             badgeContent: Text(
                               order.orderStatus ?? "",
                               style: const TextStyle(
@@ -334,8 +338,10 @@ class ShopeeListView extends StatelessWidget {
                                   onPressed: () {
                                     // order.totalQty = totalQty;
                                     Api.postOrder(order).then((value) {
+                                      // ignore: avoid_print
                                       print(value);
                                     }).catchError((e) {
+                                      // ignore: avoid_print
                                       print(e);
                                     });
                                   },

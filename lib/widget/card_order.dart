@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
@@ -62,11 +62,12 @@ class CardOrder extends StatelessWidget {
                             ),
                           ),
                     const SizedBox(width: 4),
-                    Badge(
-                      toAnimate: false,
-                      shape: BadgeShape.square,
-                      badgeColor: deliveryTpeColor,
-                      borderRadius: BorderRadius.circular(4),
+                    badge.Badge(
+                      badgeStyle: badge.BadgeStyle(
+                        shape: badge.BadgeShape.square,
+                        badgeColor: deliveryTpeColor,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       badgeContent: Text(
                         (order.shippingProviderType ?? "standard")
                             .toUpperCase(),
@@ -83,7 +84,7 @@ class CardOrder extends StatelessWidget {
                   children: [
                     Text('No. Order : ${order.orderId}'),
                     Text(
-                        'Tanggal : ${Jiffy(order.createTimeOnline).format("dd MMMM yyyy HH:mm:ss")}'),
+                        'Tanggal : ${Jiffy.parse(order.createTimeOnline!).format(pattern: "dd MMMM yyyy HH:mm:ss")}'),
                   ],
                 ),
                 trailing: Column(
@@ -94,11 +95,12 @@ class CardOrder extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 2),
-                    Badge(
-                      toAnimate: false,
-                      shape: BadgeShape.square,
-                      badgeColor: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(4),
+                    badge.Badge(
+                      badgeStyle: badge.BadgeStyle(
+                        shape: badge.BadgeShape.square,
+                        badgeColor: Colors.deepPurple,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
                       badgeContent: Text(
                         order.totalQty.toString(),
                         style: const TextStyle(
@@ -177,11 +179,12 @@ class CardOrder extends StatelessWidget {
                       children: [
                         const Text('Status Paket'),
                         const SizedBox(width: 10),
-                        Badge(
-                          toAnimate: false,
-                          shape: BadgeShape.square,
-                          badgeColor: Colors.deepPurple,
-                          borderRadius: BorderRadius.circular(4),
+                        badge.Badge(
+                          badgeStyle: badge.BadgeStyle(
+                            shape: badge.BadgeShape.square,
+                            badgeColor: Colors.deepPurple,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
                           badgeContent: Text(
                             order.orderStatus ?? "",
                             style: const TextStyle(

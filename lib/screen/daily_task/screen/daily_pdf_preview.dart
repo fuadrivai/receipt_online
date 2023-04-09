@@ -22,7 +22,6 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
 
   @override
   void initState() {
-    print(widget.dailyTask);
     _appenTableRow();
     super.initState();
   }
@@ -206,7 +205,8 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
                       crossAxisAlignment: pw.CrossAxisAlignment.start,
                       children: [
                         pw.Text(
-                          Jiffy(widget.dailyTask.date).format('dd MMMM yyyy'),
+                          Jiffy.parse(widget.dailyTask.date!)
+                              .format(pattern: 'dd MMMM yyyy'),
                           style: pw.TextStyle(
                             fontWeight: pw.FontWeight.bold,
                             fontSize: 11,
@@ -254,7 +254,8 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
         receipt.number ?? "",
       );
       tableData.add(
-        Jiffy(receipt.createdAt ?? "").format("dd MMM yyyy HH:mm:ss"),
+        Jiffy.parse(receipt.createdAt ?? "")
+            .format(pattern: "dd MMM yyyy HH:mm:ss"),
       );
       tableRow.add(
         pw.TableRow(

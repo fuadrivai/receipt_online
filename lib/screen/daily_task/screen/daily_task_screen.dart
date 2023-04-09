@@ -116,8 +116,8 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                 ),
                                 _gridCol(
                                   title: "Tanggal",
-                                  data: Jiffy(state.dailyTask?.date)
-                                      .format('d MMMM yyyy'),
+                                  data: Jiffy.parse(state.dailyTask!.date!)
+                                      .format(pattern: 'd MMMM yyyy'),
                                 ),
                                 _gridCol(
                                   title: "Total Paket",
@@ -171,6 +171,7 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                     child: ListTile(
                                       trailing: IconButton(
                                           onPressed: () async {
+                                            // ignore: use_build_context_synchronously
                                             if (await confirm(
                                               context,
                                               content: Text(
@@ -178,8 +179,12 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                               textOK: const Text('Yes'),
                                               textCancel: const Text('No'),
                                             )) {
-                                              context.read<DailyTaskBloc>().add(
-                                                  RemoveReceipt(e.number!));
+                                              if (context.mounted) {
+                                                context
+                                                    .read<DailyTaskBloc>()
+                                                    .add(RemoveReceipt(
+                                                        e.number!));
+                                              }
                                             }
                                           },
                                           icon: const FaIcon(
@@ -188,8 +193,9 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                             color: Colors.red,
                                           )),
                                       title: Text(e.number ?? "--"),
-                                      subtitle: Text(Jiffy(e.createdAt)
-                                          .format('d MMMM yyyy HH:mm:ss')),
+                                      subtitle: Text(Jiffy.parse(e.createdAt!)
+                                          .format(
+                                              pattern: 'd MMMM yyyy HH:mm:ss')),
                                     ),
                                   );
                                 }).toList(),

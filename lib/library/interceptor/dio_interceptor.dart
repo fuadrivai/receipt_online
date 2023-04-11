@@ -13,6 +13,8 @@ class DioInterceptors extends InterceptorsWrapper {
   @override
   Future onError(err, handler) async {
     int? responseCode = err.response?.statusCode;
+    var data = err.response?.data;
+    print(data);
     if (responseCode != null) {
       if (responseCode == 403) {
         // AppRouter.router.navigateTo(

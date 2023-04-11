@@ -200,7 +200,42 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                   );
                                 }).toList(),
                               ),
-                            )
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 15,
+                                left: 8,
+                                right: 8,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 2, 182, 122),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Selesai",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          const Color.fromARGB(255, 182, 2, 26),
+                                    ),
+                                    onPressed: () {},
+                                    child: const Text(
+                                      "Hapus",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

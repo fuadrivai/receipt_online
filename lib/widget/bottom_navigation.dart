@@ -70,10 +70,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
         return const HomeScreen();
       case 1:
         return const ProductCheckerScreen();
-      case 3:
-        return const LazadaScreen();
       case 2:
         return const TiktokScreen();
+      case 3:
+        return const LazadaScreen();
       // return const LazadaScreen();
       case 4:
         return const JdIdDetailScreen();

@@ -29,6 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Dashboard'),
       ),
+      drawer: Drawer(
+          child: ListView(
+        children: const [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text('Drawer Header'),
+          ),
+        ],
+      )),
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (__, state) {
           if (state is HomeLoadingState) {

@@ -57,10 +57,16 @@ class _ProductCheckerBodyState extends State<ProductCheckerBody> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.network(
-                    state.platform!.logo!,
-                    scale: 1.5,
-                  ),
+                  (state.platform!.logo != null)
+                      ? Image.network(
+                          state.platform!.logo!,
+                          scale: 1.5,
+                        )
+                      : const FaIcon(
+                          FontAwesomeIcons.earthEurope,
+                          size: 100,
+                          color: Colors.blueGrey,
+                        ),
                   const SizedBox(height: 10),
                   const Text(
                     "Silahkan Scann Barcode Pesanan",

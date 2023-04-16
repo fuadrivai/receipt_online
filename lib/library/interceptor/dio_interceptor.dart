@@ -14,6 +14,7 @@ class DioInterceptors extends InterceptorsWrapper {
   Future onError(err, handler) async {
     int? responseCode = err.response?.statusCode;
     var data = err.response?.data;
+    // ignore: avoid_print
     print(data);
     if (responseCode != null) {
       if (responseCode == 403) {

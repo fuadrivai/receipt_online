@@ -7,6 +7,7 @@ import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/search_daily_task.dart';
+import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -80,6 +81,8 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
       ),
       body: BlocBuilder<DailyTaskBloc, DailyTaskState>(
         builder: (__, state) {
+          bool showDeleteBtn =
+              (state.dailyTask?.receipts ?? []).isEmpty ? true : false;
           return state.isLoading
               ? const LoadingScreen()
               : VisibilityDetector(
@@ -207,33 +210,52 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                 left: 8,
                                 right: 8,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: const Color.fromARGB(
-                                          255, 2, 182, 122),
+                              child: Visibility(
+                                visible: !(state.dailyTask?.status ?? false),
+                                child: Row(
+                                  mainAxisAlignment: showDeleteBtn
+                                      ? MainAxisAlignment.spaceEvenly
+                                      : MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 150,
+                                      height: 45,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: DefaultColor.primary,
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text(
+                                          "Selesaikan",
+                                          style: TextStyle(
+                                            color: Color(0xffffffff),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    onPressed: () {},
-                                    child: const Text(
-                                      "Selesai",
-                                      style: TextStyle(color: Colors.white),
+                                    Visibility(
+                                      visible: showDeleteBtn,
+                                      child: SizedBox(
+                                        width: 150,
+                                        height: 45,
+                                        child: TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 190, 17, 4),
+                                          ),
+                                          onPressed: () {},
+                                          child: const Text(
+                                            "Hapus",
+                                            style: TextStyle(
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  TextButton(
-                                    style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          const Color.fromARGB(255, 182, 2, 26),
-                                    ),
-                                    onPressed: () {},
-                                    child: const Text(
-                                      "Hapus",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ],

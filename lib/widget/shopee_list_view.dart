@@ -233,10 +233,10 @@ class ShopeeListView extends StatelessWidget {
                             },
                             splashColor:
                                 Colors.white10, // Splash color over image
-                            child: Ink.image(
-                              fit: BoxFit.cover, // Fixes border issues
+                            child: Image.network(
+                              e.imageUrl ?? "",
                               width: 60,
-                              image: NetworkImage(e.imageUrl ?? ""),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         );

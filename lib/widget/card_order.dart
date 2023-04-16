@@ -149,10 +149,10 @@ class CardOrder extends StatelessWidget {
                         );
                       },
                       splashColor: Colors.white10, // Splash color over image
-                      child: Ink.image(
+                      child: Image.network(
+                        e.imageUrl!,
                         fit: BoxFit.cover, // Fixes border issues
                         width: 60,
-                        image: NetworkImage(e.imageUrl!),
                       ),
                     ),
                   );

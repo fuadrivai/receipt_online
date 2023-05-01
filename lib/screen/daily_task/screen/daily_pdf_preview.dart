@@ -254,8 +254,9 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
         receipt.number ?? "",
       );
       tableData.add(
-        Jiffy.parse(receipt.createdAt ?? "")
-            .format(pattern: "dd MMM yyyy HH:mm:ss"),
+        Jiffy.parseFromDateTime(
+                DateTime.parse(receipt.createdAt ?? "").toLocal())
+            .format(pattern: "d MMM yyyy HH:mm:ss"),
       );
       tableRow.add(
         pw.TableRow(

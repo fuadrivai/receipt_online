@@ -196,9 +196,10 @@ class _DailyTaskScreenState extends State<DailyTaskScreen> {
                                             color: Colors.red,
                                           )),
                                       title: Text(e.number ?? "--"),
-                                      subtitle: Text(Jiffy.parse(e.createdAt!)
-                                          .format(
-                                              pattern: 'd MMMM yyyy HH:mm:ss')),
+                                      subtitle: Text(Jiffy.parseFromDateTime(
+                                              DateTime.parse(e.createdAt!)
+                                                  .toLocal())
+                                          .yMMMdjm),
                                     ),
                                   );
                                 }).toList(),

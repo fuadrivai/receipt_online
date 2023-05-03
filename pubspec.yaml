@@ -58,6 +58,7 @@ dependencies:
   badges: ^3.0.3
   another_flushbar: ^1.12.29
   shimmer: ^2.0.0
+  animations: ^2.0.7
 
 dev_dependencies:
   flutter_test:

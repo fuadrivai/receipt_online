@@ -55,4 +55,9 @@ class Common {
       barcodeScaner = 'Failed to get platform version.';
     }
   }
+
+  static Future<bool> getDelayData() async {
+    await Future<dynamic>.delayed(const Duration(milliseconds: 50));
+    return true;
+  }
 }

@@ -105,7 +105,7 @@ class CardOrder extends StatelessWidget {
                         order.totalQty.toString(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 19,
                         ),
                       ),
                     ),

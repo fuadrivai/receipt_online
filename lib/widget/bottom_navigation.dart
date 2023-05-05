@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:receipt_online_shop/screen/home/screen/home_screen.dart';
+import 'package:receipt_online_shop/screen/home/screen/home_screen2.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen.dart';
@@ -12,8 +12,26 @@ class BottomNavigation extends StatefulWidget {
   State<BottomNavigation> createState() => _BottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _BottomNavigationState extends State<BottomNavigation>
+    with TickerProviderStateMixin {
+  AnimationController? animationController;
   int _currentIndex = 0;
+  @override
+  void initState() {
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    animationController?.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    animationController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +85,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   Widget callPage(int index) {
     switch (index) {
       case 0:
-        return const HomeScreen();
+        return HomeScreen2(animationController: animationController);
       case 1:
         return const ProductCheckerScreen();
       case 2:
@@ -78,7 +96,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       case 4:
         return const JdIdDetailScreen();
       default:
-        return const HomeScreen();
+        return HomeScreen2(animationController: animationController);
     }
   }
 }

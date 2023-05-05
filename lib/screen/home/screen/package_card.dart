@@ -12,15 +12,13 @@ class PackageCard extends StatelessWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
   final List<DailyTask>? dailyTasks;
-  final int totalPackage;
 
-  const PackageCard(
-      {Key? key,
-      this.animationController,
-      this.animation,
-      this.dailyTasks,
-      required this.totalPackage})
-      : super(key: key);
+  const PackageCard({
+    Key? key,
+    this.animationController,
+    this.animation,
+    this.dailyTasks,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,59 +57,51 @@ class PackageCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding:
-                          const EdgeInsets.only(top: 16, left: 16, right: 16),
-                      child: (dailyTasks ?? []).isEmpty
-                          ? Center(
-                              child: CircleTotalPackage(
-                                totalPackage: 0,
-                                animation: animation!,
-                              ),
-                            )
-                          : Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, right: 8, top: 4),
-                                    child: Column(
-                                        children: (dailyTasks ?? []).map((e) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (__) => DailyTaskScreen(
-                                                dailyTaskId: e.id!,
-                                                platform:
-                                                    e.expedition?.alias ?? "",
-                                              ),
-                                            ),
-                                          ).then((value) {
-                                            context
-                                                .read<HomeBloc>()
-                                                .add(GetData());
-                                          });
-                                        },
-                                        child: ExpeditionPackage(
-                                          title: e.expedition?.name ?? "",
-                                          totalPackage: e.receipts?.length ?? 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                  child: (dailyTasks ?? []).isEmpty
+                      ? Center(
+                          child: CircleTotalPackage(
+                            totalPackage: 0,
+                            animation: animation!,
+                          ),
+                        )
+                      : Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, right: 8, top: 4),
+                                child: Column(
+                                    children: (dailyTasks ?? []).map((e) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (__) => DailyTaskScreen(
+                                            dailyTaskId: e.id!,
+                                            platform: e.expedition?.alias ?? "",
+                                          ),
                                         ),
-                                      );
-                                    }).toList()),
-                                  ),
-                                ),
-                                CircleTotalPackage(
-                                  totalPackage: getTotalPackage(),
-                                  animation: animation!,
-                                )
-                              ],
+                                      ).then((value) {
+                                        context.read<HomeBloc>().add(GetData());
+                                      });
+                                    },
+                                    child: ExpeditionPackage(
+                                      title: e.expedition?.name ?? "",
+                                      totalPackage: e.receipts?.length ?? 0,
+                                    ),
+                                  );
+                                }).toList()),
+                              ),
                             ),
-                    ),
-                  ],
+                            CircleTotalPackage(
+                              totalPackage: getTotalPackage(),
+                              animation: animation!,
+                            )
+                          ],
+                        ),
                 ),
               ),
             ),

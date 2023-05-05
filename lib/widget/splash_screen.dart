@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'bottom_navigation2.dart';
+import 'bottom_navigation.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 1), () {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const BottomNavigation2()),
+          MaterialPageRoute(builder: (context) => const BottomNavigation()),
           (route) => false);
     });
     super.initState();

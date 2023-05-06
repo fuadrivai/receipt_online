@@ -106,5 +106,4 @@ abstract class RestClient {
 
   // @GET("customer/{id}")
   // Future<Customer> customerFindById(@Path() String id);
-
 }

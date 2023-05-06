@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'restclient.dart';
 
 // **************************************************************************
@@ -245,9 +243,9 @@ class _RestClient implements RestClient {
 
   @override
   Future<dynamic> orderRts(
-    tracking_number,
-    shipment_provider,
-    order_item_ids,
+    trackingNumber,
+    shipmentProvider,
+    orderItemIds,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -261,7 +259,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'lazada-order/rts/${tracking_number}/${shipment_provider}/${order_item_ids}',
+          'lazada-order/rts/${trackingNumber}/${shipmentProvider}/${orderItemIds}',
           queryParameters: queryParameters,
           data: _data,
         )

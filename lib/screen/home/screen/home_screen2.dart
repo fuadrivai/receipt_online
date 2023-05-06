@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'package:receipt_online_shop/screen/home/screen/active_packages_shimmer.dart';
-import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 
 import 'home_body.dart';
@@ -30,45 +29,40 @@ class _HomeScreen2State extends State<HomeScreen2>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppTheme.background,
+    return RefreshIndicator(
+      onRefresh: _refresh,
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Column(
-          children: <Widget>[
-            CustomAppbar(
-              title: "Dashboard",
-              animationController: widget.animationController,
-            ),
-            SizedBox(height: MediaQuery.of(context).padding.bottom),
-            BlocBuilder<HomeBloc, HomeState>(
-              builder: (_, state) {
-                if (state is HomeLoadingState) {
-                  return HomeBody(
-                    animationController: widget.animationController,
-                    activePackageShimmer: ActivePackageShimmer(
-                        animationController: widget.animationController),
-                  );
-                }
-                if (state is HomeErrorState) {
-                  return Center(
-                    child: Text(state.error.toString()),
-                  );
-                }
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: CustomAppbar(
+            title: "Dashboard",
+            animationController: widget.animationController,
+          ),
+        ),
+        body: BlocBuilder<HomeBloc, HomeState>(
+          builder: (_, state) {
+            if (state is HomeLoadingState) {
+              return HomeBody(
+                animationController: widget.animationController,
+                activePackageShimmer: ActivePackageShimmer(
+                    animationController: widget.animationController),
+              );
+            }
+            if (state is HomeErrorState) {
+              return Center(
+                child: Text(state.error.toString()),
+              );
+            }
 
-                if (state is DataState) {
-                  return RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: HomeBody(
-                      animationController: widget.animationController,
-                      dailyTasks: state.dailyTasks,
-                    ),
-                  );
-                }
-                return Container();
-              },
-            )
-          ],
+            if (state is DataState) {
+              return HomeBody(
+                animationController: widget.animationController,
+                dailyTasks: state.dailyTasks,
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );

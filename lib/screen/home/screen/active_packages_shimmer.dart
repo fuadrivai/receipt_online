@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ActivePackageShimmer extends StatelessWidget {
   final AnimationController? animationController;
@@ -10,8 +11,8 @@ class ActivePackageShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 24,
-        right: 24,
+        left: 12,
+        right: 12,
         top: 16,
         bottom: 18,
       ),
@@ -38,38 +39,38 @@ class ActivePackageShimmer extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    bottom: 4,
+                  ),
                   child: Column(
-                    children: const [
-                      ExpeditionPackage(
-                        title: "",
-                        totalPackage: 0,
-                      ),
-                      ExpeditionPackage(
-                        title: "",
-                        totalPackage: 0,
-                      ),
-                      ExpeditionPackage(
-                        title: "",
-                        totalPackage: 0,
-                      ),
-                      ExpeditionPackage(
-                        title: "",
-                        totalPackage: 0,
-                      ),
-                    ],
+                    children: List.generate(4, (i) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: const ExpeditionPackage(
+                          title: "",
+                          totalPackage: 0,
+                        ),
+                      );
+                    }),
                   ),
                 ),
               ),
-              CircleTotalPackage(
-                totalPackage: 0,
-                animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  CurvedAnimation(
-                    parent: animationController!,
-                    curve: const Interval(
-                      (1 / 9) * 1,
-                      1.0,
-                      curve: Curves.fastOutSlowIn,
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: CircleTotalPackage(
+                  totalPackage: 0,
+                  animation: Tween<double>(begin: 0.0, end: 1.0).animate(
+                    CurvedAnimation(
+                      parent: animationController!,
+                      curve: const Interval(
+                        (1 / 9) * 1,
+                        1.0,
+                        curve: Curves.fastOutSlowIn,
+                      ),
                     ),
                   ),
                 ),

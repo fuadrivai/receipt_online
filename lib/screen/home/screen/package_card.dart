@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
-import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_screen.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'dart:math' as math;
 
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/theme/hexcolor.dart';
+
+import '../../daily_task/screen/daily_task_screen2.dart';
 
 class PackageCard extends StatelessWidget {
   final AnimationController? animationController;
@@ -35,8 +36,8 @@ class PackageCard extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.only(
-                left: 24,
-                right: 24,
+                left: 12,
+                right: 12,
                 top: 16,
                 bottom: 18,
               ),
@@ -79,7 +80,9 @@ class PackageCard extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (__) => DailyTaskScreen(
+                                          builder: (__) => DailyTaskScreen2(
+                                            animationController:
+                                                animationController,
                                             dailyTaskId: e.id!,
                                             platform: e.expedition?.alias ?? "",
                                           ),
@@ -220,7 +223,8 @@ class ExpeditionPackage extends StatelessWidget {
           height: 48,
           width: 2,
           decoration: BoxDecoration(
-            color: Colors.red.withOpacity(0.5),
+            color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                .withOpacity(0.5),
             borderRadius: const BorderRadius.all(Radius.circular(4.0)),
           ),
         ),

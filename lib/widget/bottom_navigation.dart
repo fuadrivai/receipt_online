@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen2.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
-import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen.dart';
+import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen2.dart';
 import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
@@ -70,11 +70,13 @@ class _BottomNavigationState extends State<BottomNavigation>
               fit: BoxFit.cover,
             ),
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             label: "Lazada",
-            icon: Icon(
-              Icons.fire_truck,
-              size: 23.0,
+            icon: Image.asset(
+              "assets/images/lazada.jpg",
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
             ),
           ),
         ],
@@ -87,7 +89,7 @@ class _BottomNavigationState extends State<BottomNavigation>
       case 0:
         return HomeScreen2(animationController: animationController);
       case 1:
-        return const ProductCheckerScreen();
+        return ProductCheckerScreen2(animationController: animationController);
       case 2:
         return const TiktokScreen();
       case 3:

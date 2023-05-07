@@ -8,12 +8,10 @@ import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart'
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_detail.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_header.dart';
-import 'package:receipt_online_shop/screen/daily_task/screen/search_daily_task.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
-import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DailyTaskScreen2 extends StatefulWidget {
@@ -33,7 +31,7 @@ class DailyTaskScreen2 extends StatefulWidget {
 
 class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
   late bool visible;
-  bool isSearching = true;
+  bool isSearching = false;
   late TextEditingController txtSearch = TextEditingController();
   late FocusNode searchNode = FocusNode();
   @override
@@ -63,6 +61,9 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                       enabled: true,
                       readOnly: false,
                       controller: txtSearch,
+                      onChanged: (text) {
+                        context.read<DailyTaskBloc>().add(SearchReceipt(text));
+                      },
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
@@ -208,7 +209,8 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                       ],
                                     ),
                                   ),
-                                  DailyTaskDetail(dailyTask: state.dailyTask!),
+                                  DailyTaskDetail(
+                                      dailyTask: state.tempDailyTask!),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 8),

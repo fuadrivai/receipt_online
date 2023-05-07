@@ -47,7 +47,7 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         isLoading: false,
       );
     } catch (e) {
-      emit(const DailyTaskState(isLoading: false));
+      emit(const DailyTaskState(isLoading: false, isError: true));
       return state.copyWith(isLoading: false);
     }
   }

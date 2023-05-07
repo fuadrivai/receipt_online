@@ -71,8 +71,8 @@ class _CustomAppbarState extends State<CustomAppbar> {
                           style: TextStyle(
                             fontFamily: AppTheme.fontName,
                             fontWeight: FontWeight.w700,
-                            fontSize: 18 + 6 - 6 * topBarOpacity,
-                            letterSpacing: 1.2,
+                            fontSize: 15 + 6 - 6 * topBarOpacity,
+                            // letterSpacing: 1.2,
                             color: AppTheme.dismissibleBackground,
                           ),
                         ),

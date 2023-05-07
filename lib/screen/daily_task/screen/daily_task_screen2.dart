@@ -1,4 +1,3 @@
-import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_listener/flutter_barcode_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +6,14 @@ import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
+import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_detail.dart';
+import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_header.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/search_daily_task.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
-import 'package:responsive_grid/responsive_grid.dart';
+import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DailyTaskScreen2 extends StatefulWidget {
@@ -32,6 +33,9 @@ class DailyTaskScreen2 extends StatefulWidget {
 
 class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
   late bool visible;
+  bool isSearching = true;
+  late TextEditingController txtSearch = TextEditingController();
+  late FocusNode searchNode = FocusNode();
   @override
   void initState() {
     context.read<DailyTaskBloc>().add(GetDailyTask(widget.dailyTaskId));
@@ -46,66 +50,95 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
-            CustomAppbar(
-              leading: IconButton(
-                padding: const EdgeInsets.all(0),
-                alignment: Alignment.topCenter,
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              title: "Tugas Harian",
-              animationController: widget.animationController,
-              actions: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  BlocBuilder<DailyTaskBloc, DailyTaskState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          padding: const EdgeInsets.all(0),
-                          alignment: Alignment.topCenter,
+            isSearching
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                      top: 40.0,
+                      left: 20,
+                      right: 8,
+                      bottom: 10,
+                    ),
+                    child: TextFormField(
+                      focusNode: searchNode,
+                      enabled: true,
+                      readOnly: false,
+                      controller: txtSearch,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        ),
+                        hintText: "Masukan Nomor Resi",
+                        contentPadding: const EdgeInsets.all(10),
+                        suffixIcon: IconButton(
                           onPressed: () {
-                            showSearch(
-                                context: context,
-                                delegate: SearchTaskDelegate(
-                                    state.dailyTask?.receipts ?? []));
+                            isSearching = false;
+                            setState(() {});
                           },
-                          icon: const Icon(Icons.search));
-                    },
-                  ),
-                  BlocBuilder<DailyTaskBloc, DailyTaskState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          padding: const EdgeInsets.all(0),
-                          alignment: Alignment.topCenter,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (__) => DailyPdfPreviewScreen(
-                                          dailyTask: state.dailyTask!,
-                                        )));
-                          },
-                          icon: const Icon(Icons.print));
-                    },
-                  ),
-                  IconButton(
-                    padding: const EdgeInsets.all(0),
-                    alignment: Alignment.topCenter,
-                    icon: const Icon(Icons.qr_code_scanner_outlined),
-                    onPressed: () {
-                      Common.scanBarcodeNormal(context,
-                          onSuccess: (barcodeScanner) {
-                        context.read<DailyTaskBloc>().add(PostReceipt(
-                            widget.dailyTaskId,
-                            widget.platform,
-                            barcodeScanner));
-                      });
-                    },
+                          icon: const FaIcon(FontAwesomeIcons.circleXmark),
+                        ),
+                      ),
+                    ),
                   )
-                ],
-              ),
-            ),
+                : CustomAppbar(
+                    leading: IconButton(
+                      padding: const EdgeInsets.all(0),
+                      alignment: Alignment.topCenter,
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    title: "Tugas Harian",
+                    animationController: widget.animationController,
+                    actions: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BlocBuilder<DailyTaskBloc, DailyTaskState>(
+                          builder: (context, state) {
+                            return IconButton(
+                                padding: const EdgeInsets.all(0),
+                                alignment: Alignment.topCenter,
+                                onPressed: () {
+                                  isSearching = true;
+                                  searchNode.requestFocus();
+                                  setState(() {});
+                                },
+                                icon: const Icon(Icons.search));
+                          },
+                        ),
+                        BlocBuilder<DailyTaskBloc, DailyTaskState>(
+                          builder: (context, state) {
+                            return IconButton(
+                                padding: const EdgeInsets.all(0),
+                                alignment: Alignment.topCenter,
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (__) =>
+                                              DailyPdfPreviewScreen(
+                                                dailyTask: state.dailyTask!,
+                                              )));
+                                },
+                                icon: const Icon(Icons.print));
+                          },
+                        ),
+                        IconButton(
+                          padding: const EdgeInsets.all(0),
+                          alignment: Alignment.topCenter,
+                          icon: const Icon(Icons.qr_code_scanner_outlined),
+                          onPressed: () {
+                            Common.scanBarcodeNormal(context,
+                                onSuccess: (barcodeScanner) {
+                              context.read<DailyTaskBloc>().add(PostReceipt(
+                                  widget.dailyTaskId,
+                                  widget.platform,
+                                  barcodeScanner));
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  ),
             Expanded(
               child: BlocBuilder<DailyTaskBloc, DailyTaskState>(
                 builder: (__, state) {
@@ -120,13 +153,10 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                           },
                           child: BarcodeKeyboardListener(
                             onBarcodeScanned: (barcode) {
-                              context.read<DailyTaskBloc>().add(
-                                    PostReceipt(
-                                        widget.dailyTaskId,
-                                        state.dailyTask?.expedition?.alias ??
-                                            "",
-                                        barcode),
-                                  );
+                              context.read<DailyTaskBloc>().add(PostReceipt(
+                                  widget.dailyTaskId,
+                                  state.dailyTask?.expedition?.alias ?? "",
+                                  barcode));
                             },
                             child: RefreshIndicator(
                               onRefresh: () async {
@@ -137,34 +167,16 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                               child: ListView(
                                 padding: const EdgeInsets.all(0),
                                 children: [
-                                  ResponsiveGridRow(
-                                    children: [
-                                      _gridCol(
-                                        title: "Expedisi",
-                                        data:
-                                            state.dailyTask?.expedition?.name ??
-                                                'Expedisi',
-                                      ),
-                                      _gridCol(
-                                        title: "Tanggal",
-                                        data:
-                                            Jiffy.parse(state.dailyTask!.date!)
-                                                .format(pattern: 'd MMMM yyyy'),
-                                      ),
-                                      _gridCol(
-                                        title: "Total Paket",
-                                        data:
-                                            (state.dailyTask?.totalPackage ?? 0)
-                                                .toString(),
-                                      ),
-                                      _gridCol(
-                                        title: "Data Scan",
-                                        data: (state.dailyTask?.receipts
-                                                    ?.length ??
-                                                0)
-                                            .toString(),
-                                      ),
-                                    ],
+                                  DailyTaskHeader(
+                                    title:
+                                        state.dailyTask?.expedition?.name ?? "",
+                                    date: Jiffy.parse(state.dailyTask!.date!)
+                                        .format(pattern: 'd MMMM yyyy'),
+                                    dataScan:
+                                        (state.dailyTask?.receipts?.length ??
+                                            0),
+                                    totalPackage:
+                                        (state.dailyTask?.totalPackage ?? 0),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
@@ -196,57 +208,10 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                       ],
                                     ),
                                   ),
+                                  DailyTaskDetail(dailyTask: state.dailyTask!),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6, left: 6, right: 6),
-                                    child: Column(
-                                      children:
-                                          (state.dailyTask?.receipts ?? [])
-                                              .map((e) {
-                                        return Card(
-                                          child: ListTile(
-                                            trailing: IconButton(
-                                                onPressed: () async {
-                                                  // ignore: use_build_context_synchronously
-                                                  if (await confirm(
-                                                    context,
-                                                    content: Text(
-                                                        'Yakin Ingin Menghapus Nomor Resi ${e.number}'),
-                                                    textOK: const Text('Yes'),
-                                                    textCancel:
-                                                        const Text('No'),
-                                                  )) {
-                                                    if (context.mounted) {
-                                                      context
-                                                          .read<DailyTaskBloc>()
-                                                          .add(RemoveReceipt(
-                                                              e.number!));
-                                                    }
-                                                  }
-                                                },
-                                                icon: const FaIcon(
-                                                  FontAwesomeIcons.trash,
-                                                  size: 20,
-                                                  color: Colors.red,
-                                                )),
-                                            title: Text(e.number ?? "--"),
-                                            subtitle: Text(
-                                                Jiffy.parseFromDateTime(
-                                                        DateTime.parse(
-                                                                e.createdAt!)
-                                                            .toLocal())
-                                                    .yMMMdjm),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 15,
-                                      left: 8,
-                                      right: 8,
-                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 8),
                                     child: Visibility(
                                       visible:
                                           !(state.dailyTask?.status ?? false),
@@ -306,38 +271,6 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  ResponsiveGridCol _gridCol({
-    required String title,
-    required String data,
-  }) {
-    return ResponsiveGridCol(
-      xs: 6,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                data,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.blue,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

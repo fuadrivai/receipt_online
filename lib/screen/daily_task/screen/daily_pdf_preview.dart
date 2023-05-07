@@ -39,7 +39,8 @@ class _DailyPdfPreviewScreenState extends State<DailyPdfPreviewScreen> {
         canChangeOrientation: false,
         allowSharing: false,
         canChangePageFormat: false,
-        pdfFileName: DateTime.now().millisecond.toString(),
+        pdfFileName:
+            "${widget.dailyTask.expedition?.name ?? "Expedition"} ${DateTime.now().millisecondsSinceEpoch}",
         // actions: actions,
         // onPrinted: _showPrintedToast,
         // onShared: _showSharedToast,

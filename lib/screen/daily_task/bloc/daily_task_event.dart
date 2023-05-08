@@ -14,6 +14,10 @@ class SearchReceipt extends DailyTaskEvent {
   SearchReceipt(this.number);
 }
 
+class ClearSearch extends DailyTaskEvent {
+  ClearSearch();
+}
+
 class RemoveReceipt extends DailyTaskEvent {
   String number;
   RemoveReceipt(this.number);

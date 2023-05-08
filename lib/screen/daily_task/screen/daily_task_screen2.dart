@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/library/string_uppercase.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_pdf_preview.dart';
 import 'package:receipt_online_shop/screen/daily_task/screen/daily_task_detail.dart';
@@ -62,7 +63,15 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                       readOnly: false,
                       controller: txtSearch,
                       onChanged: (text) {
-                        context.read<DailyTaskBloc>().add(SearchReceipt(text));
+                        List<String> listChar = [];
+                        for (var rune in text.runes) {
+                          var character = String.fromCharCode(rune);
+                          listChar.add(character.upperCase());
+                        }
+                        context
+                            .read<DailyTaskBloc>()
+                            .add(SearchReceipt(listChar.join()));
+                        setState(() {});
                       },
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
@@ -73,6 +82,8 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             isSearching = false;
+                            txtSearch.clear();
+                            context.read<DailyTaskBloc>().add(ClearSearch());
                             setState(() {});
                           },
                           icon: const FaIcon(FontAwesomeIcons.circleXmark),
@@ -171,7 +182,8 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                   DailyTaskHeader(
                                     title:
                                         state.dailyTask?.expedition?.name ?? "",
-                                    date: Jiffy.parse(state.dailyTask!.date!)
+                                    date: Jiffy.parse(state.dailyTask?.date ??
+                                            DateTime.now().toString())
                                         .format(pattern: 'd MMMM yyyy'),
                                     dataScan:
                                         (state.dailyTask?.receipts?.length ??
@@ -210,7 +222,8 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                     ),
                                   ),
                                   DailyTaskDetail(
-                                      dailyTask: state.tempDailyTask!),
+                                    dailyTask: state.tempDailyTask,
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 8),

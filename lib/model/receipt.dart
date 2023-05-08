@@ -21,4 +21,13 @@ class Receipt {
     data['updated_at'] = updatedAt;
     return data;
   }
+
+  factory Receipt.clone(Receipt receipt) {
+    return Receipt(
+      number: receipt.number,
+      id: receipt.id,
+      createdAt: receipt.createdAt,
+      updatedAt: receipt.updatedAt,
+    );
+  }
 }

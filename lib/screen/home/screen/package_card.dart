@@ -148,7 +148,7 @@ class _PackageCardState extends State<PackageCard> {
                             ButtonTask(
                               title: "Tambah Tugas",
                               width: 150,
-                              onTap: _formDialog(),
+                              onTap: _formDialog,
                             ),
                           ],
                         ),

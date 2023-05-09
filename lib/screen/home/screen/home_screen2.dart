@@ -44,6 +44,7 @@ class _HomeScreen2State extends State<HomeScreen2>
           builder: (_, state) {
             if (state is HomeLoadingState) {
               return HomeBody(
+                expeditions: const [],
                 animationController: widget.animationController,
                 activePackageShimmer: ActivePackageShimmer(
                     animationController: widget.animationController),
@@ -59,6 +60,7 @@ class _HomeScreen2State extends State<HomeScreen2>
               return HomeBody(
                 animationController: widget.animationController,
                 dailyTasks: state.dailyTasks,
+                expeditions: state.expeditions ?? [],
               );
             }
             return Container();

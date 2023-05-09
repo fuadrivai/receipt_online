@@ -1,37 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
 import 'dart:math' as math;
 
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/theme/hexcolor.dart';
+import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 import '../../daily_task/screen/daily_task_screen2.dart';
 
-class PackageCard extends StatelessWidget {
+class PackageCard extends StatefulWidget {
   final AnimationController? animationController;
   final Animation<double>? animation;
   final List<DailyTask>? dailyTasks;
+  final List<Expedition> expeditions;
 
   const PackageCard({
     Key? key,
     this.animationController,
     this.animation,
     this.dailyTasks,
+    required this.expeditions,
   }) : super(key: key);
+
+  @override
+  State<PackageCard> createState() => _PackageCardState();
+}
+
+class _PackageCardState extends State<PackageCard> {
+  final _formKey = GlobalKey<FormState>();
+  Expedition? expedition;
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: animationController!,
+      animation: widget.animationController!,
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
-          opacity: animation!,
+          opacity: widget.animation!,
           child: Transform(
             transform: Matrix4.translationValues(
               0.0,
-              30 * (1.0 - animation!.value),
+              30 * (1.0 - widget.animation!.value),
               0.0,
             ),
             child: Padding(
@@ -60,49 +72,84 @@ class PackageCard extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  child: (dailyTasks ?? []).isEmpty
-                      ? Center(
-                          child: CircleTotalPackage(
-                            totalPackage: 0,
-                            animation: animation!,
-                          ),
-                        )
-                      : Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8, right: 8, top: 4),
-                                child: Column(
-                                    children: (dailyTasks ?? []).map((e) {
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (__) => DailyTaskScreen2(
-                                            animationController:
-                                                animationController,
-                                            dailyTaskId: e.id!,
-                                            platform: e.expedition?.alias ?? "",
-                                          ),
-                                        ),
-                                      ).then((value) {
-                                        context.read<HomeBloc>().add(GetData());
-                                      });
-                                    },
-                                    child: ExpeditionPackage(
-                                      title: e.expedition?.name ?? "",
-                                      totalPackage: e.receipts?.length ?? 0,
-                                    ),
-                                  );
-                                }).toList()),
+                  child: (widget.dailyTasks ?? []).isEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: CircleTotalPackage(
+                                totalPackage: 0,
+                                animation: widget.animation!,
                               ),
                             ),
-                            CircleTotalPackage(
-                              totalPackage: getTotalPackage(),
-                              animation: animation!,
-                            )
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16.0),
+                              child: Text(
+                                "Tugas Harian Belum Dibuat",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: AppTheme.darkText.withOpacity(0.7),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            ButtonTask(
+                              title: "Buat Tugas",
+                              width: 120,
+                              onTap: _formDialog,
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 4),
+                                    child: Column(
+                                        children:
+                                            (widget.dailyTasks ?? []).map((e) {
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (__) => DailyTaskScreen2(
+                                                animationController:
+                                                    widget.animationController,
+                                                dailyTaskId: e.id!,
+                                                platform:
+                                                    e.expedition?.alias ?? "",
+                                              ),
+                                            ),
+                                          ).then((value) {
+                                            context
+                                                .read<HomeBloc>()
+                                                .add(GetData());
+                                          });
+                                        },
+                                        child: ExpeditionPackage(
+                                          title: e.expedition?.name ?? "",
+                                          totalPackage: e.receipts?.length ?? 0,
+                                        ),
+                                      );
+                                    }).toList()),
+                                  ),
+                                ),
+                                CircleTotalPackage(
+                                  totalPackage: getTotalPackage(),
+                                  animation: widget.animation!,
+                                )
+                              ],
+                            ),
+                            ButtonTask(
+                              title: "Tambah Tugas",
+                              width: 150,
+                              onTap: _formDialog(),
+                            ),
                           ],
                         ),
                 ),
@@ -116,10 +163,155 @@ class PackageCard extends StatelessWidget {
 
   int getTotalPackage() {
     int total = 0;
-    dailyTasks?.forEach((e) {
+    widget.dailyTasks?.forEach((e) {
       total = total + (e.receipts ?? []).length;
     });
     return total;
+  }
+
+  _formDialog() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Form Tugas Harian'),
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Icon(Icons.close),
+                      )
+                    ],
+                  ),
+                  const Divider(color: Colors.grey)
+                ],
+              ),
+              content: Stack(
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        DropdownButtonHideUnderline(
+                          child: DropdownButtonFormField(
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Item',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).hintColor,
+                              ),
+                            ),
+                            items: (widget.expeditions)
+                                .map((item) => DropdownMenuItem<Expedition>(
+                                      value: item,
+                                      child: Text(
+                                        item.name ?? "--",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            value: expedition,
+                            onChanged: (Expedition? value) {
+                              setState(() {
+                                context
+                                    .read<HomeBloc>()
+                                    .add(OnChangeExpedition(value!));
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                          decoration: TextFormDecoration.box("Total Paket"),
+                          onChanged: (value) {
+                            setState(() {
+                              int val = (value == "") ? 0 : int.parse(value);
+                              context.read<HomeBloc>().add(OnChangeTotal(val));
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                    child: const Text("Submit"),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<HomeBloc>().add(OnSaveDailyTask());
+                      }
+                    })
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class ButtonTask extends StatelessWidget {
+  const ButtonTask(
+      {super.key,
+      required this.title,
+      required this.width,
+      required this.onTap});
+  final String title;
+  final double width;
+  final GestureTapCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0, top: 3),
+        child: Container(
+          width: width,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: AppTheme.nearlyDarkBlue.withOpacity(0.7)),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Icon(
+                  Icons.add_circle_outline,
+                  color: AppTheme.white,
+                ),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppTheme.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

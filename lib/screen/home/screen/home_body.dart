@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/widget/title_view.dart';
 
@@ -10,9 +11,11 @@ class HomeBody extends StatelessWidget {
     this.animationController,
     this.dailyTasks,
     this.activePackageShimmer,
+    required this.expeditions,
   });
   final AnimationController? animationController;
   final List<DailyTask>? dailyTasks;
+  final List<Expedition> expeditions;
   final Widget? activePackageShimmer;
   static const int count = 9;
 
@@ -38,6 +41,7 @@ class HomeBody extends StatelessWidget {
         ),
         activePackageShimmer ??
             PackageCard(
+              expeditions: expeditions,
               dailyTasks: dailyTasks,
               animation: Tween<double>(begin: 0.0, end: 1.0).animate(
                 CurvedAnimation(

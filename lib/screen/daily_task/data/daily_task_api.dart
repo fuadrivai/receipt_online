@@ -15,7 +15,7 @@ class DailyTaskApi {
     return data;
   }
 
-  static Future<DailyTask> post(DailyTask dailyTask) async {
+  static Future post(DailyTask dailyTask) async {
     final client = await Api.restClient();
     var data = client.postDailyTask(dailyTask);
     return data;

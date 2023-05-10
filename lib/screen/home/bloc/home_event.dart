@@ -26,6 +26,8 @@ class OnChangeTotal extends HomeEvent {
 }
 
 class OnSaveDailyTask extends HomeEvent {
+  final List<Expedition> expeditions;
+  const OnSaveDailyTask(this.expeditions);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [expeditions];
 }

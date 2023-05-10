@@ -81,7 +81,7 @@ abstract class RestClient {
   Future<DailyTask> dailyTaskFindById(@Path() int id);
 
   @POST("daily-task")
-  Future<DailyTask> postDailyTask(@Body() DailyTask dailyTask);
+  Future postDailyTask(@Body() DailyTask dailyTask);
 
   @POST("daily-task/multiple")
   Future postMultipleDailyTask(@Body() List<DailyTask> tasks);

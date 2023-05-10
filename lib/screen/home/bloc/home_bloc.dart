@@ -71,19 +71,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   void _onSaveDailyTask(OnSaveDailyTask event, Emitter<HomeState> emit) async {
     try {
-      final state =
-          BlocProvider.of<HomeBloc>(_nav.navKey.currentContext!).state;
-      if (state is DataState) {
-        DailyTask dailyTask = state.dailyTask ?? DailyTask();
+      Navigator.pop(_nav.navKey.currentContext!);
+      emit(HomeLoadingState());
+      // final state =
+      //     BlocProvider.of<HomeBloc>(_nav.navKey.currentContext!).state;
+      List<Expedition> expeditions = event.expeditions;
+
+      for (Expedition e in expeditions) {
+        DailyTask dailyTask = DailyTask();
         dailyTask.date = Jiffy.now().format(pattern: "yyyy-MM-dd");
+        dailyTask.expedition = e;
         await DailyTaskApi.post(dailyTask);
-        Navigator.pop(_nav.navKey.currentContext!);
-        // List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();
-        emit(DataState(
-          dailyTasks: state.dailyTasks,
-          expeditions: state.expeditions,
-        ));
       }
+
+      List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();
+      List<Expedition> listExpedition = await ExpeditionApi.findAll();
+      emit(DataState(
+        dailyTasks: dailyTasks,
+        expeditions: listExpedition,
+      ));
     } catch (e) {
       emit(HomeErrorState(e.toString()));
       Navigator.pop(_nav.navKey.currentContext!);

@@ -1,5 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// ignore_for_file: non_constant_identifier_names
+
 part of 'restclient.dart';
 
 // **************************************************************************
@@ -243,9 +245,9 @@ class _RestClient implements RestClient {
 
   @override
   Future<dynamic> orderRts(
-    trackingNumber,
-    shipmentProvider,
-    orderItemIds,
+    tracking_number,
+    shipment_provider,
+    order_item_ids,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -259,7 +261,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'lazada-order/rts/${trackingNumber}/${shipmentProvider}/${orderItemIds}',
+          'lazada-order/rts/${tracking_number}/${shipment_provider}/${order_item_ids}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -503,26 +505,25 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<DailyTask> postDailyTask(dailyTask) async {
+  Future<dynamic> postDailyTask(dailyTask) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(dailyTask.toJson());
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<DailyTask>(Options(
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
-            .compose(
-              _dio.options,
-              'daily-task',
-              queryParameters: queryParameters,
-              data: _data,
-            )
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = DailyTask.fromJson(_result.data!);
+        .compose(
+          _dio.options,
+          'daily-task',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = _result.data;
     return value;
   }
 

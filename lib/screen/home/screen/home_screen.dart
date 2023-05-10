@@ -226,9 +226,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 TextButton(
                     child: const Text("Submit"),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<HomeBloc>().add(OnSaveDailyTask());
-                      }
+                      // if (_formKey.currentState!.validate()) {
+                      //   context.read<HomeBloc>().add(OnSaveDailyTask());
+                      // }
                     })
               ],
             );

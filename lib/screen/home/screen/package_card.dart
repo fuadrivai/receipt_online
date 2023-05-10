@@ -7,7 +7,6 @@ import 'dart:math' as math;
 
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/theme/hexcolor.dart';
-import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 import '../../daily_task/screen/daily_task_screen2.dart';
 
@@ -30,8 +29,19 @@ class PackageCard extends StatefulWidget {
 }
 
 class _PackageCardState extends State<PackageCard> {
-  final _formKey = GlobalKey<FormState>();
   Expedition? expedition;
+
+  List<Expedition> existExpedition = [];
+
+  @override
+  void initState() {
+    if ((widget.dailyTasks ?? []).isNotEmpty) {
+      for (DailyTask e in (widget.dailyTasks ?? [])) {
+        existExpedition.add(e.expedition!);
+      }
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +107,7 @@ class _PackageCardState extends State<PackageCard> {
                             ButtonTask(
                               title: "Buat Tugas",
                               width: 120,
-                              onTap: _formDialog,
+                              onTap: _showBottomDialog,
                             ),
                           ],
                         )
@@ -148,7 +158,7 @@ class _PackageCardState extends State<PackageCard> {
                             ButtonTask(
                               title: "Tambah Tugas",
                               width: 150,
-                              onTap: _formDialog,
+                              onTap: _showBottomDialog,
                             ),
                           ],
                         ),
@@ -169,114 +179,108 @@ class _PackageCardState extends State<PackageCard> {
     return total;
   }
 
-  _formDialog() {
-    return showDialog(
+  _showBottomDialog() {
+    showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Form Tugas Harian'),
-                      InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Icon(Icons.close),
-                      )
-                    ],
+      builder: (context) {
+        List<Expedition> expeditions = [];
+        return StatefulBuilder(builder: (context, setState) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: Text(
+                  "Pilih Expedisi",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.nearlyBlack,
                   ),
-                  const Divider(color: Colors.grey)
-                ],
+                ),
               ),
-              content: Stack(
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        DropdownButtonHideUnderline(
-                          child: DropdownButtonFormField(
-                            isExpanded: true,
-                            hint: Text(
-                              'Select Item',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).hintColor,
-                              ),
-                            ),
-                            items: (widget.expeditions)
-                                .map((item) => DropdownMenuItem<Expedition>(
-                                      value: item,
-                                      child: Text(
-                                        item.name ?? "--",
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ))
-                                .toList(),
-                            value: expedition,
-                            onChanged: (Expedition? value) {
-                              setState(() {
-                                context
-                                    .read<HomeBloc>()
-                                    .add(OnChangeExpedition(value!));
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                          decoration: TextFormDecoration.box("Total Paket"),
-                          onChanged: (value) {
-                            setState(() {
-                              int val = (value == "") ? 0 : int.parse(value);
-                              context.read<HomeBloc>().add(OnChangeTotal(val));
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Divider(
+                  height: 1,
+                  color: AppTheme.nearlyBlack,
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context, i) {
+                    Expedition e = widget.expeditions[i];
+                    bool enable = existExpedition.any((ee) => ee.id == e.id)
+                        ? false
+                        : true;
+
+                    return CheckboxListTile(
+                      value: expeditions.contains(e),
+                      enabled: enable,
+                      activeColor: AppTheme.nearlyBlue,
+                      title: Text(e.name ?? "Expedition"),
+                      visualDensity: const VisualDensity(vertical: -2),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      onChanged: (val) {
+                        setState(() {
+                          if (val ?? true) {
+                            expeditions.add(e);
+                          } else {
+                            expeditions.remove(e);
+                          }
+                        });
+                      },
+                    );
+                  },
+                  itemCount: widget.expeditions.length,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                child: Divider(
+                  height: 1,
+                  color: AppTheme.nearlyBlack,
+                ),
+              ),
+              Center(
+                child: ButtonTask(
+                  title: "Submit",
+                  width: 100,
+                  color: Colors.blue[900]!.withOpacity(0.7),
+                  icon: const Icon(
+                    Icons.save_alt,
+                    color: Colors.white,
                   ),
-                ],
+                  onTap: () {
+                    if (expeditions.isNotEmpty) {
+                      context
+                          .read<HomeBloc>()
+                          .add(OnSaveDailyTask(expeditions));
+                    }
+                  },
+                ),
               ),
-              actions: [
-                TextButton(
-                    child: const Text("Submit"),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<HomeBloc>().add(OnSaveDailyTask());
-                      }
-                    })
-              ],
-            );
-          },
-        );
+            ],
+          );
+        });
       },
     );
   }
 }
 
 class ButtonTask extends StatelessWidget {
-  const ButtonTask(
-      {super.key,
-      required this.title,
-      required this.width,
-      required this.onTap});
+  const ButtonTask({
+    super.key,
+    required this.title,
+    required this.width,
+    required this.onTap,
+    this.color,
+    this.icon,
+  });
   final String title;
   final double width;
+  final Color? color;
+  final Icon? icon;
   final GestureTapCallback onTap;
 
   @override
@@ -288,17 +292,19 @@ class ButtonTask extends StatelessWidget {
         child: Container(
           width: width,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppTheme.nearlyDarkBlue.withOpacity(0.7)),
+            borderRadius: BorderRadius.circular(5),
+            color: color ?? AppTheme.nearlyDarkBlue.withOpacity(0.7),
+          ),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Icon(
-                  Icons.add_circle_outline,
-                  color: AppTheme.white,
-                ),
+                icon ??
+                    const Icon(
+                      Icons.add_circle_outline,
+                      color: AppTheme.white,
+                    ),
                 Text(
                   title,
                   style: const TextStyle(

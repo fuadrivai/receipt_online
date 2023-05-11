@@ -153,9 +153,9 @@ class _JdIdDetailScreenState extends State<JdIdDetailScreen> {
                           width: MediaQuery.of(context).size.width,
                           constraints: const BoxConstraints(
                               minHeight: 300, maxHeight: 300),
-                          child: Column(
+                          child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
+                            children: [
                               Icon(
                                 FontAwesomeIcons.barcode,
                                 color: Colors.blueAccent,

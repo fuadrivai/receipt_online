@@ -59,6 +59,9 @@ dependencies:
   another_flushbar: ^1.12.29
   shimmer: ^2.0.0
   animations: ^2.0.7
+  google_mlkit_text_recognition: ^0.6.0
+  camera: ^0.10.5
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

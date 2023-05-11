@@ -25,9 +25,9 @@ class _ProductCheckerBodyState extends State<ProductCheckerBody> {
               child: Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
-                child: Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Icon(
                       FontAwesomeIcons.walkieTalkie,
                       color: Colors.blueAccent,

@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/library/seesion_manager.dart';
@@ -17,7 +19,14 @@ import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/screen/tiktok/bloc/tiktok_bloc.dart';
 import 'package:receipt_online_shop/widget/splash_screen.dart';
 
-void main() {
+late List<CameraDescription> listCamera;
+late bool cameraPermission;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameraPermission = await Common.requestCameraPermission();
+
+  listCamera = await availableCameras();
   setupLocator();
   runApp(const MyApp());
 }

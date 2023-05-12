@@ -13,6 +13,7 @@ import 'package:receipt_online_shop/screen/jdid/data/jdid_api.dart';
 import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
 import 'package:receipt_online_shop/screen/product_checker/data/product_checker_api.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
+import 'package:receipt_online_shop/screen/tiktok/data/tiktok_api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 
 part 'product_checker_event.dart';
@@ -74,6 +75,12 @@ class ProductCheckerBloc
         case "shopee":
           List<TransactionOnline> trans =
               await ShopeeApi.getShopeeOrderByNo(event.orderSn);
+          listTrans = trans;
+          break;
+        case "tiktok":
+          List<String> ordersn = [event.orderSn];
+          List<TransactionOnline> trans =
+              await TiktokApi.getorder(ordersn.join(","));
           listTrans = trans;
           break;
         default:

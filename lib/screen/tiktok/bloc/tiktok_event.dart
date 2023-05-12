@@ -9,3 +9,10 @@ class GetOrders extends TiktokEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GetOrder extends TiktokEvent {
+  final List<String> orderNumbers;
+  const GetOrder(this.orderNumbers);
+  @override
+  List<Object?> get props => [orderNumbers];
+}

@@ -9,12 +9,24 @@ part 'tiktok_state.dart';
 class TiktokBloc extends Bloc<TiktokEvent, TiktokState> {
   TiktokBloc() : super(TiktokLoadingState()) {
     on<GetOrders>(_onGetOrders);
+    on<GetOrder>(_onGetOrder);
   }
 
   void _onGetOrders(GetOrders event, Emitter<TiktokState> emit) async {
     try {
       emit(TiktokLoadingState());
       List<TransactionOnline> transactions = await TiktokApi.getorders();
+      emit(TiktokFullOrderState(transactions));
+    } catch (e) {
+      emit(TiktokErrorState());
+    }
+  }
+
+  void _onGetOrder(GetOrder event, Emitter<TiktokState> emit) async {
+    try {
+      emit(TiktokLoadingState());
+      List<TransactionOnline> transactions =
+          await TiktokApi.getorder(event.orderNumbers.join(","));
       emit(TiktokFullOrderState(transactions));
     } catch (e) {
       emit(TiktokErrorState());

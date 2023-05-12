@@ -7,4 +7,10 @@ class TiktokApi {
     var data = client.getTiktokOrders();
     return data;
   }
+
+  static Future<List<TransactionOnline>> getorder(String orderSn) async {
+    final client = await Api.restClient();
+    var data = client.getTiktokOrder(orderSn);
+    return data;
+  }
 }

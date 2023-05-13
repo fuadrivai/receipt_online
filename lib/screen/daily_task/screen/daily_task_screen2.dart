@@ -231,23 +231,30 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                       visible:
                                           !(state.dailyTask?.status ?? false),
                                       child: Row(
-                                        mainAxisAlignment: showDeleteBtn
-                                            ? MainAxisAlignment.spaceEvenly
-                                            : MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          SizedBox(
-                                            width: 150,
-                                            height: 45,
-                                            child: TextButton(
-                                              style: TextButton.styleFrom(
-                                                backgroundColor:
-                                                    DefaultColor.primary,
-                                              ),
-                                              onPressed: () {},
-                                              child: const Text(
-                                                "Selesaikan",
-                                                style: TextStyle(
-                                                  color: Color(0xffffffff),
+                                          Visibility(
+                                            visible: !showDeleteBtn,
+                                            child: SizedBox(
+                                              width: 150,
+                                              height: 45,
+                                              child: TextButton(
+                                                style: TextButton.styleFrom(
+                                                  backgroundColor:
+                                                      DefaultColor.primary,
+                                                ),
+                                                onPressed: () {
+                                                  context
+                                                      .read<DailyTaskBloc>()
+                                                      .add(FinishDailyTask(state
+                                                          .dailyTask!.id!));
+                                                },
+                                                child: const Text(
+                                                  "Selesaikan",
+                                                  style: TextStyle(
+                                                    color: Color(0xffffffff),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -263,7 +270,12 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                                                       const Color.fromARGB(
                                                           255, 190, 17, 4),
                                                 ),
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  context
+                                                      .read<DailyTaskBloc>()
+                                                      .add(RemoveDailyTask(state
+                                                          .dailyTask!.id!));
+                                                },
                                                 child: const Text(
                                                   "Hapus",
                                                   style: TextStyle(

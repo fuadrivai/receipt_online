@@ -44,6 +44,16 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         DailyTaskState dailyTaskState = await _clearSearch(event, emit);
         emit(dailyTaskState);
       }
+      if (event is RemoveDailyTask) {
+        // emit(const DailyTaskState(isLoading: true));
+        DailyTaskState dailyTaskState = await _removeDailyTask(event, emit);
+        emit(dailyTaskState);
+      }
+      if (event is FinishDailyTask) {
+        // emit(const DailyTaskState(isLoading: true));
+        DailyTaskState dailyTaskState = await _finishDailyTask(event, emit);
+        emit(dailyTaskState);
+      }
     });
   }
   Future<DailyTaskState> _clearSearch(
@@ -159,6 +169,30 @@ class DailyTaskBloc extends Bloc<DailyTaskEvent, DailyTaskState> {
         tempDailyTask: dailyTask,
         isLoading: false,
       );
+    }
+  }
+
+  Future<DailyTaskState> _removeDailyTask(
+      RemoveDailyTask event, Emitter<DailyTaskState> emit) async {
+    try {
+      emit(const DailyTaskState(isLoading: true));
+      await DailyTaskApi.deleteDailyTask(event.id);
+      Navigator.pop(_nav.navKey.currentContext!);
+      return state.copyWith();
+    } catch (e) {
+      return state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<DailyTaskState> _finishDailyTask(
+      FinishDailyTask event, Emitter<DailyTaskState> emit) async {
+    try {
+      emit(const DailyTaskState(isLoading: true));
+      await DailyTaskApi.finishDailyTask(event.id);
+      Navigator.pop(_nav.navKey.currentContext!);
+      return state.copyWith();
+    } catch (e) {
+      return state.copyWith(isLoading: false);
     }
   }
 

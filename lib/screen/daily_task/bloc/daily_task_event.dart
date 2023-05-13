@@ -23,6 +23,16 @@ class RemoveReceipt extends DailyTaskEvent {
   RemoveReceipt(this.number);
 }
 
+class RemoveDailyTask extends DailyTaskEvent {
+  int id;
+  RemoveDailyTask(this.id);
+}
+
+class FinishDailyTask extends DailyTaskEvent {
+  int id;
+  FinishDailyTask(this.id);
+}
+
 class ExpeditionOnChange extends DailyTaskEvent {
   Expedition expedition;
   ExpeditionOnChange(this.expedition);

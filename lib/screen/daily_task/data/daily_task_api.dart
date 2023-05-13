@@ -39,6 +39,18 @@ class DailyTaskApi {
     return data;
   }
 
+  static Future deleteDailyTask(int id) async {
+    final client = await Api.restClient();
+    var data = client.deleteDailyTask(id);
+    return data;
+  }
+
+  static Future finishDailyTask(int id) async {
+    final client = await Api.restClient();
+    var data = client.finishDailyTask(id);
+    return data;
+  }
+
   static Future multipleDailyTask(List<DailyTask> tasks) async {
     final client = await Api.restClient();
     var data = client.postMultipleDailyTask(tasks);

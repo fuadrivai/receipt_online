@@ -8,9 +8,11 @@ class DataState extends HomeState {
   final List<DailyTask>? dailyTasks;
   final DailyTask? dailyTask;
   final List<Expedition>? expeditions;
-  const DataState({this.dailyTasks, this.dailyTask, this.expeditions});
+  final List<Platform>? platforms;
+  const DataState(
+      {this.dailyTasks, this.dailyTask, this.expeditions, this.platforms});
   @override
-  List<Object?> get props => [dailyTasks, dailyTask, expeditions];
+  List<Object?> get props => [dailyTasks, dailyTask, expeditions, platforms];
 }
 
 class HomeLoadingState extends HomeState {

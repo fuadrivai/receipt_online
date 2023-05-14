@@ -17,8 +17,10 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
+  @GET("platform")
+  Future<List<Platform>> getPlatforms();
   @GET("platform/active")
-  Future<List<Platform>> getPlatform();
+  Future<List<Platform>> getActivePlatform();
 
   @POST("shopee-order/rts/{orderSn}")
   Future shopeeRts(@Path() String orderSn);

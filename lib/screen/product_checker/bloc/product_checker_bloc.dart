@@ -33,7 +33,7 @@ class ProductCheckerBloc
       Emitter<ProductCheckerState> emit) async {
     try {
       emit(ProductCheckerLoadingState());
-      List<Platform> platforms = await ProductCheckerApi.getPlatforms();
+      List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
       Platform platform = platforms.isEmpty ? Platform() : platforms[0];
       // emit(ProductCheckerDataState(platforms: platforms));
       emit(
@@ -59,7 +59,7 @@ class ProductCheckerBloc
 
   void _getOrder(GetOrderEvent event, Emitter<ProductCheckerState> emit) async {
     emit(ProductCheckerLoadingState());
-    List<Platform> platforms = await ProductCheckerApi.getPlatforms();
+    List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
     try {
       List<TransactionOnline> listTrans = [];
       switch (event.platform.name?.toLowerCase()) {
@@ -103,7 +103,7 @@ class ProductCheckerBloc
 
   void _rts(RtsEvent event, Emitter<ProductCheckerState> emit) async {
     emit(ProductCheckerLoadingState());
-    List<Platform> platforms = await ProductCheckerApi.getPlatforms();
+    List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
     try {
       List<TransactionOnline> listTrans = [];
       TransactionOnline order = event.dataOrder;

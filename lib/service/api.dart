@@ -5,6 +5,7 @@ import 'package:receipt_online_shop/service/restclient.dart';
 
 class Api {
   static const String baseUrl = "http://192.168.100.2:8000/api/";
+  // static const String baseUrl = "http://192.168.100.11:8002/api/";
 
   static restClient() async {
     final dio = Dio();

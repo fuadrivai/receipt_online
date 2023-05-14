@@ -4,10 +4,12 @@ import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition_api.dart';
+import 'package:receipt_online_shop/screen/home/data/home_api.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -26,7 +28,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoadingState());
       List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();
       List<Expedition> expeditions = await ExpeditionApi.findAll();
-      emit(DataState(dailyTasks: dailyTasks, expeditions: expeditions));
+      List<Platform> platforms = await HomeApi.getPlatforms();
+      emit(DataState(
+        dailyTasks: dailyTasks,
+        expeditions: expeditions,
+        platforms: platforms,
+      ));
     } catch (e) {
       emit(HomeErrorState(e.toString()));
     }

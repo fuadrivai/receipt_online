@@ -41,7 +41,7 @@ class _LazadaDetailOrderScreenState extends State<LazadaDetailOrderScreen> {
           if (state is PlatformOrder) {
             return ListView(
               children: [
-                CardOrder(order: state.transaction),
+                CardOrder(showStatus: false, order: state.transaction),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 5.0,

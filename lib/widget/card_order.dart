@@ -7,7 +7,9 @@ import 'package:receipt_online_shop/model/transaction_online.dart';
 class CardOrder extends StatelessWidget {
   final GestureTapCallback? onTap;
   final TransactionOnline order;
-  const CardOrder({super.key, this.onTap, required this.order});
+  final bool showStatus;
+  const CardOrder(
+      {super.key, this.onTap, required this.order, required this.showStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -83,8 +85,36 @@ class CardOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('No. Order : ${order.orderId}'),
-                    Text(
-                        'Tanggal : ${Jiffy.parse(order.createTimeOnline!, pattern: "yyyy-MM-dd HH:mm:ss").format(pattern: "dd MMMM yyyy HH:mm:ss")}'),
+                    Text('Tanggal : ${Jiffy.parse(
+                      order.createTimeOnline!,
+                      pattern: "yyyy-MM-dd HH:mm:ss",
+                    ).format(
+                      pattern: "dd MMMM yyyy HH:mm:ss",
+                    )}'),
+                    showStatus
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: badge.Badge(
+                              badgeStyle: badge.BadgeStyle(
+                                shape: badge.BadgeShape.square,
+                                badgeColor: (order.scanned ?? false)
+                                    ? Colors.green
+                                    : Colors.red,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              badgeContent: Text(
+                                ((order.scanned ?? false)
+                                        ? "Sudah Scan"
+                                        : "Belum Scan")
+                                    .toUpperCase(),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
                 trailing: Column(

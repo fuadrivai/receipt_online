@@ -6,6 +6,7 @@ import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_detail_screen.dart';
 import 'package:receipt_online_shop/screen/tiktok/bloc/tiktok_bloc.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
+import 'package:receipt_online_shop/widget/custom_badge.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -66,6 +67,35 @@ class _TiktokScreenState extends State<TiktokScreen> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: CustomeBadge(
+                    backgroundColor: Colors.green,
+                    text: "Semua",
+                    onTap: () {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: CustomeBadge(
+                    text: "Sudah Scan",
+                    onTap: () {},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 4.0),
+                  child: CustomeBadge(
+                    text: "Belum Scan",
+                    onTap: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
           Expanded(
             child: BlocBuilder<TiktokBloc, TiktokState>(
               builder: (context, state) {
@@ -93,6 +123,7 @@ class _TiktokScreenState extends State<TiktokScreen> {
                           itemBuilder: (__, i) {
                             TransactionOnline order = state.transactions[i];
                             return CardOrder(
+                              showStatus: true,
                               order: order,
                               onTap: () {
                                 Navigator.push(

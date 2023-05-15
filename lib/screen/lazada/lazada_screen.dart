@@ -168,6 +168,7 @@ class _LazadaScreenState extends State<LazadaScreen> {
                           itemBuilder: (__, i) {
                             TransactionOnline order = state.tempTransaction[i];
                             return CardOrder(
+                              showStatus: false,
                               order: order,
                               onTap: () {
                                 Navigator.push(

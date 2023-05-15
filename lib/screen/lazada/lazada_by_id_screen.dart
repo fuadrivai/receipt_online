@@ -116,7 +116,7 @@ class _LazadaByIdScreenState extends State<LazadaByIdScreen> {
                     if (state is ByIdOrderDetail) {
                       return ListView(
                         children: [
-                          CardOrder(order: state.listOrder),
+                          CardOrder(showStatus: false, order: state.listOrder),
                           Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 5.0,

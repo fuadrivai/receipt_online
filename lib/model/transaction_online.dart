@@ -16,6 +16,7 @@ class TransactionOnline {
   String? productPicture;
   String? packagePicture;
   bool? showRequest;
+  bool? scanned;
   List<Items>? items;
 
   TransactionOnline({
@@ -36,6 +37,7 @@ class TransactionOnline {
     this.packagePicture,
     this.items,
     this.shippingProviderType,
+    this.scanned = false,
     this.showRequest = false,
   });
 
@@ -56,6 +58,7 @@ class TransactionOnline {
     productPicture = json['product_picture'];
     packagePicture = json['package_picture'];
     showRequest = json['show_request'];
+    scanned = json['scanned'];
     shippingProviderType = json['shipping_provider_type'];
     if (json['items'] != null) {
       items = <Items>[];

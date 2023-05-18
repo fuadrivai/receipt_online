@@ -10,6 +10,13 @@ class GetOrders extends TiktokEvent {
   List<Object?> get props => [];
 }
 
+class OnTapScanned extends TiktokEvent {
+  final bool? scanned;
+  const OnTapScanned({this.scanned});
+  @override
+  List<Object?> get props => [scanned];
+}
+
 class GetOrder extends TiktokEvent {
   final List<String> orderNumbers;
   const GetOrder(this.orderNumbers);

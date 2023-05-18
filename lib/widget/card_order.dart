@@ -8,8 +8,13 @@ class CardOrder extends StatelessWidget {
   final GestureTapCallback? onTap;
   final TransactionOnline order;
   final bool showStatus;
+  final int? index;
   const CardOrder(
-      {super.key, this.onTap, required this.order, required this.showStatus});
+      {super.key,
+      this.onTap,
+      required this.order,
+      required this.showStatus,
+      this.index});
 
   @override
   Widget build(BuildContext context) {

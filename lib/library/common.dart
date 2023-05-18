@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:receipt_online_shop/model/transaction_online.dart';
 
 class Common {
   static modalInfo(BuildContext context,
@@ -70,5 +71,31 @@ class Common {
     } else {
       return false;
     }
+  }
+
+  static TransactionOnline mappingTempTransaction(TransactionOnline e) {
+    TransactionOnline transaction = TransactionOnline(
+      createTimeOnline: e.createTimeOnline,
+      updateTimeOnline: e.updateTimeOnline,
+      messageToSeller: e.messageToSeller,
+      orderNo: e.orderNo,
+      orderStatus: e.orderStatus,
+      trackingNumber: e.trackingNumber,
+      deliveryBy: e.deliveryBy,
+      pickupBy: e.pickupBy,
+      totalAmount: e.totalAmount,
+      totalQty: e.totalQty,
+      status: e.status,
+      onlineShopId: e.onlineShopId,
+      orderId: e.orderId,
+      productPicture: e.productPicture,
+      packagePicture: e.packagePicture,
+      items: e.items,
+      shippingProviderType: e.shippingProviderType,
+      scanned: e.scanned,
+      showRequest: e.showRequest,
+    );
+
+    return transaction;
   }
 }

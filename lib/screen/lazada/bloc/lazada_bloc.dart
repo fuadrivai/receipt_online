@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
@@ -21,6 +22,11 @@ class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
       emit(LazadaLoadingState());
       Session.set("sorting", event.sorting);
       List<TransactionOnline> transactions = await getOrders(event.tab);
+      List<TransactionOnline> tempTransactions = [];
+      for (var e in transactions) {
+        TransactionOnline transaction = Common.mappingTempTransaction(e);
+        tempTransactions.add(transaction);
+      }
       List<LogisticChannel> logistics = [];
       for (TransactionOnline order in transactions) {
         LogisticChannel exitingChannel = logistics.firstWhere(
@@ -36,7 +42,8 @@ class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
       }
       LazadaCount count = await LazadaApi.getCount();
       emit(LazadaOnChangeState(event.sorting, event.tab));
-      emit(LazadaFullOrderState(transactions, count, transactions, logistics));
+      emit(LazadaFullOrderState(
+          transactions, count, tempTransactions, logistics));
     } catch (e) {
       emit(LazadaErrorState());
     }
@@ -47,6 +54,11 @@ class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
       emit(LazadaLoadingState());
       LazadaCount count = await LazadaApi.getCount();
       List<TransactionOnline> transactions = await getOrders(event.tab);
+      List<TransactionOnline> tempTransactions = [];
+      for (var e in transactions) {
+        TransactionOnline transaction = Common.mappingTempTransaction(e);
+        tempTransactions.add(transaction);
+      }
       List<LogisticChannel> logistics = [];
       for (TransactionOnline order in transactions) {
         LogisticChannel exitingChannel = logistics.firstWhere(
@@ -60,7 +72,8 @@ class LazadaBloc extends Bloc<LazadaEvent, LazadaState> {
           exitingChannel.totalOrder = exitingChannel.totalOrder! + 1;
         }
       }
-      emit(LazadaFullOrderState(transactions, count, transactions, logistics));
+      emit(LazadaFullOrderState(
+          transactions, count, tempTransactions, logistics));
     } catch (e) {
       emit(LazadaErrorState());
     }

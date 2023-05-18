@@ -16,7 +16,8 @@ class TiktokErrorState extends TiktokState {
 
 class TiktokFullOrderState extends TiktokState {
   final List<TransactionOnline> transactions;
-  const TiktokFullOrderState(this.transactions);
+  final List<TransactionOnline> tempTransactions;
+  const TiktokFullOrderState(this.transactions, this.tempTransactions);
   @override
-  List<Object?> get props => [transactions];
+  List<Object?> get props => [transactions, tempTransactions];
 }

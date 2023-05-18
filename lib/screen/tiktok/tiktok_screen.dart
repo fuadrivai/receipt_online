@@ -7,6 +7,7 @@ import 'package:receipt_online_shop/screen/lazada/lazada_detail_screen.dart';
 import 'package:receipt_online_shop/screen/tiktok/bloc/tiktok_bloc.dart';
 import 'package:receipt_online_shop/widget/card_order.dart';
 import 'package:receipt_online_shop/widget/custom_badge.dart';
+import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -20,6 +21,7 @@ class TiktokScreen extends StatefulWidget {
 class _TiktokScreenState extends State<TiktokScreen> {
   late bool visible;
   int allTotal = 0;
+  int selectedTab = 0;
   @override
   void initState() {
     context.read<TiktokBloc>().add(const GetOrders());
@@ -67,35 +69,10 @@ class _TiktokScreenState extends State<TiktokScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: CustomeBadge(
-                    backgroundColor: Colors.green,
-                    text: "Semua",
-                    onTap: () {},
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: CustomeBadge(
-                    text: "Sudah Scan",
-                    onTap: () {},
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 4.0),
-                  child: CustomeBadge(
-                    text: "Belum Scan",
-                    onTap: () {},
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TopTabar(tapCallback: (int selected) {
+            selectedTab = selected;
+            setState(() {});
+          }),
           Expanded(
             child: BlocBuilder<TiktokBloc, TiktokState>(
               builder: (context, state) {
@@ -121,7 +98,7 @@ class _TiktokScreenState extends State<TiktokScreen> {
                         },
                         child: ListView.builder(
                           itemBuilder: (__, i) {
-                            TransactionOnline order = state.transactions[i];
+                            TransactionOnline order = state.tempTransactions[i];
                             return CardOrder(
                               showStatus: true,
                               order: order,
@@ -137,7 +114,7 @@ class _TiktokScreenState extends State<TiktokScreen> {
                               },
                             );
                           },
-                          itemCount: state.transactions.length,
+                          itemCount: state.tempTransactions.length,
                         ),
                       ),
                     ),
@@ -171,5 +148,141 @@ class _TiktokScreenState extends State<TiktokScreen> {
       Common.modalInfo(context,
           title: "Error", message: "Nomor resi $barcode Tidak Valid");
     }
+  }
+}
+
+class TopTabar extends StatefulWidget {
+  final Function(int selected)? tapCallback;
+  const TopTabar({super.key, this.tapCallback});
+
+  @override
+  State<TopTabar> createState() => _TopTabarState();
+}
+
+class _TopTabarState extends State<TopTabar> {
+  int selectedTab = 0;
+  int allTotal = 0, allScanned = 0, allUnScanned = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: BlocBuilder<TiktokBloc, TiktokState>(builder: (context, state) {
+          if (state is TiktokFullOrderState) {
+            allTotal = state.transactions.length;
+            allScanned = state.transactions
+                .where((e) => e.scanned == true)
+                .toList()
+                .length;
+            allUnScanned = state.transactions
+                .where((e) => e.scanned == false)
+                .toList()
+                .length;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
+                  backgroundColor:
+                      selectedTab == 0 ? DefaultColor.primary : null,
+                  text: 'Semua ($allTotal)',
+                  onTap: () {
+                    if (selectedTab != 0) {
+                      selectedTab = 0;
+                      widget.tapCallback!(selectedTab);
+                      context.read<TiktokBloc>().add(const OnTapScanned());
+                      setState(() {});
+                    }
+                  },
+                ),
+                CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
+                  backgroundColor:
+                      selectedTab == 1 ? DefaultColor.primary : null,
+                  text: 'Sudah Scan ($allScanned)',
+                  onTap: () {
+                    if (selectedTab != 1) {
+                      selectedTab = 1;
+                      widget.tapCallback!(selectedTab);
+                      context
+                          .read<TiktokBloc>()
+                          .add(const OnTapScanned(scanned: true));
+                      setState(() {});
+                    }
+                  },
+                ),
+                CustomeBadge(
+                  width: MediaQuery.of(context).size.width * 30 / 100,
+                  backgroundColor:
+                      selectedTab == 2 ? DefaultColor.primary : null,
+                  text: 'Belum Scan ($allUnScanned)',
+                  onTap: () {
+                    if (selectedTab != 2) {
+                      selectedTab = 2;
+                      widget.tapCallback!(selectedTab);
+                      context
+                          .read<TiktokBloc>()
+                          .add(const OnTapScanned(scanned: false));
+                      setState(() {});
+                    }
+                  },
+                ),
+              ],
+            );
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
+                backgroundColor: selectedTab == 0 ? DefaultColor.primary : null,
+                text: 'Semua ($allTotal)',
+                onTap: () {
+                  if (selectedTab != 0) {
+                    selectedTab = 0;
+                    widget.tapCallback!(selectedTab);
+                    context.read<TiktokBloc>().add(const OnTapScanned());
+                    setState(() {});
+                  }
+                },
+              ),
+              CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
+                backgroundColor: selectedTab == 1 ? DefaultColor.primary : null,
+                text: 'Sudah Scan ($allScanned)',
+                onTap: () {
+                  if (selectedTab != 1) {
+                    selectedTab = 1;
+                    widget.tapCallback!(selectedTab);
+                    context
+                        .read<TiktokBloc>()
+                        .add(const OnTapScanned(scanned: true));
+                    setState(() {});
+                  }
+                },
+              ),
+              CustomeBadge(
+                width: MediaQuery.of(context).size.width * 30 / 100,
+                backgroundColor: selectedTab == 2 ? DefaultColor.primary : null,
+                text: 'Belum Scan ($allUnScanned)',
+                onTap: () {
+                  if (selectedTab != 2) {
+                    selectedTab = 2;
+                    widget.tapCallback!(selectedTab);
+                    context
+                        .read<TiktokBloc>()
+                        .add(const OnTapScanned(scanned: false));
+                    setState(() {});
+                  }
+                },
+              ),
+            ],
+          );
+        }));
   }
 }

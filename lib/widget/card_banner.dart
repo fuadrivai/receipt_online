@@ -4,6 +4,7 @@ import 'package:receipt_online_shop/screen/theme/hexcolor.dart';
 
 class CardBanner extends StatelessWidget {
   final String subtitle;
+  final String? subtitle2;
   final String title;
   final Widget? trailing;
   final Widget? leading;
@@ -13,6 +14,7 @@ class CardBanner extends StatelessWidget {
     required this.title,
     this.trailing,
     this.leading,
+    this.subtitle2,
   }) : super(key: key);
 
   @override
@@ -50,17 +52,26 @@ class CardBanner extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                   children: [
                     TextSpan(
-                      text: "$subtitle\n",
+                      text: "$title\n",
                       style: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 19,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(
-                      text: title,
+                      text:
+                          subtitle2 != null ? "Order Id : $subtitle2\n" : null,
                       style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(
+                      text: subtitle,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: -1,
                       ),
                     ),
                   ],

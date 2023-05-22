@@ -108,6 +108,7 @@ class Items {
   int? productId;
   int? orderId;
   String? orderType;
+  String? trackingNumber;
 
   Items({
     this.imageUrl,
@@ -123,6 +124,7 @@ class Items {
     this.orderType,
     this.skuId,
     this.orderStatus,
+    this.trackingNumber,
   });
 
   Items.fromJson(Map<String, dynamic> json) {
@@ -138,6 +140,7 @@ class Items {
     discountedPrice = json['discounted_price'];
     productId = json['product_id'];
     orderId = json['order_id'];
+    trackingNumber = json['tracking_number'];
     orderType = json['order_type'];
   }
 
@@ -155,7 +158,7 @@ class Items {
     data['discounted_price'] = discountedPrice;
     data['product_id'] = productId;
     data['order_id'] = orderId;
-    data['order_type'] = orderType;
+    data['tracking_number'] = trackingNumber;
     return data;
   }
 }

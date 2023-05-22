@@ -31,6 +31,7 @@ class _DailyTaskDetailState extends State<DailyTaskDetail> {
             Receipt e = (widget.dailyTask?.receipts ?? [])[i];
             return CardBanner(
               title: e.number ?? "--",
+              subtitle2: e.orderId ?? "--",
               subtitle: Jiffy.parseFromDateTime(
                       DateTime.parse(e.createdAt!).toLocal())
                   .yMMMdjm,

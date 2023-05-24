@@ -51,12 +51,6 @@ class DailyTaskApi {
     return data;
   }
 
-  static Future multipleDailyTask(List<DailyTask> tasks) async {
-    final client = await Api.restClient();
-    var data = client.postMultipleDailyTask(tasks);
-    return data;
-  }
-
   static Future<Receipt> receiptByDailyTaskId(int id) async {
     final client = await Api.restClient();
     var data = client.receiptByDailyTaskId(id);

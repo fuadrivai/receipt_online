@@ -17,37 +17,37 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET("platform")
+  @GET("/platform")
   Future<List<Platform>> getPlatforms();
-  @GET("platform/active")
+  @GET("/platform/active")
   Future<List<Platform>> getActivePlatform();
 
-  @POST("shopee-order/rts/{orderSn}")
+  @POST("/shopee-order/rts/{orderSn}")
   Future shopeeRts(@Path() String orderSn);
 
-  @GET("jd-order/rts/{id}")
+  @GET("/jd-order/rts/{id}")
   Future jdIdRts(@Path() String id);
 
-  @POST("transaction-online")
+  @POST("/transaction-online")
   Future<TransactionOnline> postTransactionOnline(
       @Body() TransactionOnline dataOnline);
 
-  @GET("lazada/order/{status}/{sorting}")
+  @GET("/lazada/order/{status}/{sorting}")
   Future<List<TransactionOnline>> lazadaGetFullOrder(
       @Path() String status, @Path() String sorting);
 
-  @GET("jd-order/{orderSn}")
+  @GET("/jd-order/{orderSn}")
   Future<TransactionOnline> getJdIdOrderByNo(@Path() String orderSn);
-  @GET("shopee-order")
+  @GET("/shopee-order")
   Future<List<TransactionOnline>> getShopeeOrders();
 
-  @GET("tiktok-order/get")
+  @GET("/tiktok-order/get")
   Future<List<TransactionOnline>> getTiktokOrders();
 
-  @GET("tiktok-order/get/{orderSn}")
+  @GET("/tiktok-order/get/{orderSn}")
   Future<List<TransactionOnline>> getTiktokOrder(@Path() String orderSn);
 
-  @GET("shopee-order/order/v2/{orderSn}")
+  @GET("/shopee-order/order/v2/{orderSn}")
   Future<List<TransactionOnline>> getShopeeOrderByNo(@Path() String orderSn);
 
   @POST(
@@ -55,66 +55,63 @@ abstract class RestClient {
   Future<dynamic> orderRts(@Path() String tracking_number,
       @Path() String shipment_provider, @Path() List<int>? order_item_ids);
 
-  @GET("lazada-order/count")
+  @GET("/lazada-order/count")
   Future<LazadaCount> lazadaGetCount();
 
-  @GET("lazada-order/{orderId}")
+  @GET("/lazada-order/{orderId}")
   Future<TransactionOnline> getOrder(@Path() String orderId);
 
-  @GET("lazada-order/pending/{sorting}")
+  @GET("/lazada-order/pending/{sorting}")
   Future<FullOrder> getPendingOrder(@Path() String sorting);
 
-  @GET("lazada-order/rts/{sorting}")
+  @GET("/lazada-order/rts/{sorting}")
   Future<FullOrder> getRtsOrder(@Path() String sorting);
 
-  @GET("lazada-order/packed/{sorting}")
+  @GET("/lazada-order/packed/{sorting}")
   Future<FullOrder> getPackedOrder(@Path() String sorting);
 
-  @GET("daily-task/receipt/{id}")
+  @GET("/daily-task/receipt/{id}")
   Future<Receipt> receiptByDailyTaskId(@Path() int id);
 
-  @POST("daily-task/receipt/{id}")
+  @POST("/daily-task/receipt/{id}")
   Future<dynamic> dailyTaskPostReceipt(@Path() int id, @Body() Receipt receipt);
 
-  @DELETE("daily-task/receipt/{number}")
+  @DELETE("/daily-task/receipt/{number}")
   Future<dynamic> deleteReceipt(@Path() String number);
 
-  @DELETE("daily-task/{id}")
+  @DELETE("/daily-task/{id}")
   Future<dynamic> deleteDailyTask(@Path() int id);
 
-  @GET("daily-task/current")
+  @GET("/daily-task/current")
   Future<List<DailyTask>> findCurrentDailyTask();
 
-  @GET("daily-task/{id}")
+  @GET("/daily-task/{id}")
   Future<DailyTask> dailyTaskFindById(@Path() int id);
 
-  @PATCH("daily-task/finish/{id}")
+  @PATCH("/daily-task/finish/{id}")
   Future<dynamic> finishDailyTask(@Path() int id);
 
-  @POST("daily-task")
-  Future postDailyTask(@Body() DailyTask dailyTask);
+  @POST("/daily-task")
+  Future<void> postDailyTask(@Body() DailyTask dailyTask);
 
-  @POST("daily-task/multiple")
-  Future postMultipleDailyTask(@Body() List<DailyTask> tasks);
-
-  @GET("expedition")
+  @GET("/expedition")
   Future<List<Expedition>> findAllExpedition();
 
-  @GET("expedition/{id}")
+  @GET("/expedition/{id}")
   Future<Expedition> expeditionFindById(@Path() int id);
 
-  @POST("expedition")
+  @POST("/expedition")
   Future<Expedition> postExpedition(@Body() Expedition expedition);
 
-  @PUT("expedition/{id}")
+  @PUT("/expedition/{id}")
   Future expeditionEdit(@Path() int id, @Body() Expedition cst);
 
-  // @GET("sales/{id}")
+  // @GET("/sales/{id}")
   // Future<Salesman> salesmanFindById(@Path() String id);
 
-  // @GET("customer")
+  // @GET("/customer")
   // Future<List<Customer>> findAllCustomer();
 
-  // @GET("customer/{id}")
+  // @GET("/customer/{id}")
   // Future<Customer> customerFindById(@Path() String id);
 }

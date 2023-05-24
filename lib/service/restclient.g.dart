@@ -34,7 +34,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'platform',
+              '/platform',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -59,7 +59,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'platform/active',
+              '/platform/active',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -83,7 +83,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'shopee-order/rts/${orderSn}',
+          '/shopee-order/rts/${orderSn}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -105,7 +105,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'jd-order/rts/${id}',
+          '/jd-order/rts/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -129,7 +129,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'transaction-online',
+              '/transaction-online',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -155,7 +155,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada/order/${status}/${sorting}',
+              '/lazada/order/${status}/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -181,7 +181,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'jd-order/${orderSn}',
+              '/jd-order/${orderSn}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -204,7 +204,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'shopee-order',
+              '/shopee-order',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -230,7 +230,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'tiktok-order/get',
+              '/tiktok-order/get',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -256,7 +256,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'tiktok-order/get/${orderSn}',
+              '/tiktok-order/get/${orderSn}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -282,7 +282,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'shopee-order/order/v2/${orderSn}',
+              '/shopee-order/order/v2/${orderSn}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -335,7 +335,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/count',
+              '/lazada-order/count',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -358,7 +358,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/${orderId}',
+              '/lazada-order/${orderId}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -381,7 +381,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/pending/${sorting}',
+              '/lazada-order/pending/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -404,7 +404,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/rts/${sorting}',
+              '/lazada-order/rts/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -427,7 +427,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'lazada-order/packed/${sorting}',
+              '/lazada-order/packed/${sorting}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -450,7 +450,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'daily-task/receipt/${id}',
+              '/daily-task/receipt/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -476,7 +476,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'daily-task/receipt/${id}',
+          '/daily-task/receipt/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -498,7 +498,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'daily-task/receipt/${number}',
+          '/daily-task/receipt/${number}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -520,7 +520,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'daily-task/${id}',
+          '/daily-task/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -543,7 +543,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'daily-task/current',
+              '/daily-task/current',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -568,7 +568,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'daily-task/${id}',
+              '/daily-task/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -590,7 +590,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'daily-task/finish/${id}',
+          '/daily-task/finish/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -600,48 +600,25 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<dynamic> postDailyTask(dailyTask) async {
+  Future<void> postDailyTask(dailyTask) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(dailyTask.toJson());
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    await _dio.fetch<void>(_setStreamType<void>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          'daily-task',
+          '/daily-task',
           queryParameters: queryParameters,
           data: _data,
         )
         .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
-    return value;
-  }
-
-  @override
-  Future<dynamic> postMultipleDailyTask(tasks) async {
-    const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = tasks.map((e) => e.toJson()).toList();
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'POST',
-      headers: _headers,
-      extra: _extra,
-    )
-        .compose(
-          _dio.options,
-          'daily-task/multiple',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
-    return value;
+    return;
   }
 
   @override
@@ -658,7 +635,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'expedition',
+              '/expedition',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -683,7 +660,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'expedition/${id}',
+              '/expedition/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -707,7 +684,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              'expedition',
+              '/expedition',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -733,7 +710,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          'expedition/${id}',
+          '/expedition/${id}',
           queryParameters: queryParameters,
           data: _data,
         )

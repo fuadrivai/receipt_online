@@ -17,12 +17,12 @@ class PackageCard extends StatefulWidget {
   final List<Expedition> expeditions;
 
   const PackageCard({
-    Key? key,
+    super.key,
     this.animationController,
     this.animation,
     this.dailyTasks,
     required this.expeditions,
-  }) : super(key: key);
+  });
 
   @override
   State<PackageCard> createState() => _PackageCardState();

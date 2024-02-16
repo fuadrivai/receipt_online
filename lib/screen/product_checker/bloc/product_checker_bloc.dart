@@ -40,7 +40,7 @@ class ProductCheckerBloc
           ProductCheckerStandByState(platforms: platforms, platform: platform));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ProductCheckerErrorState(message: message));
     }
   }
@@ -52,7 +52,7 @@ class ProductCheckerBloc
           platform: event.platform, platforms: event.platforms));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ProductCheckerErrorState(message: message));
     }
   }
@@ -92,7 +92,7 @@ class ProductCheckerBloc
       ));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ProductCheckerErrorState(
         message: message,
         platforms: platforms,
@@ -162,7 +162,7 @@ class ProductCheckerBloc
       ));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ProductCheckerErrorState(
         message: message,
         platforms: platforms,

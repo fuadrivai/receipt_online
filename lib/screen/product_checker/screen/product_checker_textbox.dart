@@ -6,7 +6,10 @@ import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class ProductCheckerTextBox extends StatelessWidget {
   final TextEditingController barcodeController;
-  ProductCheckerTextBox({super.key, required this.barcodeController});
+  final VoidCallback? onPressed;
+  final String? title;
+  ProductCheckerTextBox(
+      {super.key, required this.barcodeController, this.title, this.onPressed});
 
   final _formKey = GlobalKey<FormState>();
 
@@ -30,24 +33,25 @@ class ProductCheckerTextBox extends StatelessWidget {
             },
             controller: barcodeController,
             decoration: TextFormDecoration.box(
-              "Masukan No Pesanan",
+              title ?? "Masukan No Pesanan",
               suffixIcon: IconButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    if (state is ProductCheckerDataState) {
-                      context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                          state.platform!, barcodeController.text));
-                    }
-                    if (state is ProductCheckerErrorState) {
-                      context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                          state.platform!, barcodeController.text));
-                    }
-                    if (state is ProductCheckerStandByState) {
-                      context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                          state.platform!, barcodeController.text));
-                    }
-                  }
-                },
+                onPressed: onPressed ??
+                    () {
+                      if (_formKey.currentState!.validate()) {
+                        if (state is ProductCheckerDataState) {
+                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
+                              state.platform!, barcodeController.text));
+                        }
+                        if (state is ProductCheckerErrorState) {
+                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
+                              state.platform!, barcodeController.text));
+                        }
+                        if (state is ProductCheckerStandByState) {
+                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
+                              state.platform!, barcodeController.text));
+                        }
+                      }
+                    },
                 icon: const Icon(
                   FontAwesomeIcons.searchengin,
                   color: Colors.blue,

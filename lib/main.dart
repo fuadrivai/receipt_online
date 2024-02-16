@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,9 +26,11 @@ late bool cameraPermission;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameraPermission = await Common.requestCameraPermission();
+  if (!Platform.isWindows) {
+    cameraPermission = await Common.requestCameraPermission();
 
-  listCamera = await availableCameras();
+    listCamera = await availableCameras();
+  }
   setupLocator();
   runApp(const MyApp());
 }

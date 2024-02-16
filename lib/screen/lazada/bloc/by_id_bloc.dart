@@ -31,7 +31,7 @@ class ByIdBloc extends Bloc<ByIdEvent, ByIdState> {
       emit(ByIdOrderDetail(listOrder));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ByIdDetailError(message));
     }
   }
@@ -62,7 +62,7 @@ class ByIdBloc extends Bloc<ByIdEvent, ByIdState> {
       emit(ByIdOrderDetail(newOrder));
     } catch (e) {
       String message =
-          e is DioError ? e.response?.data['message'] : e.toString();
+          e is DioException ? e.response?.data['message'] : e.toString();
       emit(ByIdDetailError(message));
     }
   }

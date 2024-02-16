@@ -20,30 +20,32 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    cameraController = CameraController(
-      listCamera[0],
-      ResolutionPreset.max,
-      enableAudio: false,
-    );
+    if (listCamera.isNotEmpty) {
+      WidgetsBinding.instance.addObserver(this);
+      cameraController = CameraController(
+        listCamera[0],
+        ResolutionPreset.max,
+        enableAudio: false,
+      );
 
-    cameraController?.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        switch (e.code) {
-          case 'CameraAccessDenied':
-            // Handle access errors here.
-            break;
-          default:
-            // Handle other errors here.
-            break;
+      cameraController?.initialize().then((_) {
+        if (!mounted) {
+          return;
         }
-      }
-    });
+        setState(() {});
+      }).catchError((Object e) {
+        if (e is CameraException) {
+          switch (e.code) {
+            case 'CameraAccessDenied':
+              // Handle access errors here.
+              break;
+            default:
+              // Handle other errors here.
+              break;
+          }
+        }
+      });
+    }
     super.initState();
   }
 
@@ -112,17 +114,19 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
   }
 
   _startCamera() async {
-    if (cameraController != null) {
-      cameraController = CameraController(
-        listCamera[0],
-        ResolutionPreset.max,
-        enableAudio: false,
-      );
-      await cameraController?.initialize();
-      if (!mounted) {
-        return;
+    if (listCamera.isNotEmpty) {
+      if (cameraController != null) {
+        cameraController = CameraController(
+          listCamera[0],
+          ResolutionPreset.max,
+          enableAudio: false,
+        );
+        await cameraController?.initialize();
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
       }
-      setState(() {});
     }
   }
 
@@ -142,8 +146,10 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
       final recognizeText = textRecognation.processImage(inputImage);
       navigator.pop(recognizeText);
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Kamera Error")));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Kamera Error")));
+      }
     }
   }
 }

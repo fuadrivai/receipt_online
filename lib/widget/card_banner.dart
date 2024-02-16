@@ -9,13 +9,13 @@ class CardBanner extends StatelessWidget {
   final Widget? trailing;
   final Widget? leading;
   const CardBanner({
-    Key? key,
+    super.key,
     required this.subtitle,
     required this.title,
     this.trailing,
     this.leading,
     this.subtitle2,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

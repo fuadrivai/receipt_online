@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/screen/home/screen/home_screen2.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen2.dart';
+import 'package:receipt_online_shop/screen/product_report/screen/product_report_form.dart';
+import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+  const BottomNavigation({super.key});
 
   @override
   State<BottomNavigation> createState() => _BottomNavigationState();
@@ -79,6 +82,14 @@ class _BottomNavigationState extends State<BottomNavigation>
               fit: BoxFit.cover,
             ),
           ),
+          BottomNavigationBarItem(
+            label: "Report",
+            icon: Icon(
+              FontAwesomeIcons.folderTree,
+              color: AppTheme.nearlyDarkBlue.withOpacity(0.7),
+              size: 20,
+            ),
+          ),
         ],
       ),
     );
@@ -95,8 +106,10 @@ class _BottomNavigationState extends State<BottomNavigation>
       case 3:
         return const LazadaScreen();
       // return const LazadaScreen();
-      case 4:
+      case 5:
         return const JdIdDetailScreen();
+      case 4:
+        return ProductReportForm(animationController: animationController);
       default:
         return HomeScreen2(animationController: animationController);
     }

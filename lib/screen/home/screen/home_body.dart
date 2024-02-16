@@ -75,51 +75,6 @@ class HomeBody extends StatelessWidget {
           titleTxt: "Platform",
         ),
         platformShimmer ?? PlatformBody(platforms: platforms),
-        // TitleView(
-        //   animationController: animationController,
-        //   animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-        //     CurvedAnimation(
-        //       parent: animationController!,
-        //       curve: const Interval(
-        //         (1 / count) * 0,
-        //         1.0,
-        //         curve: Curves.fastOutSlowIn,
-        //       ),
-        //     ),
-        //   ),
-        //   titleTxt: "Expedisi",
-        // ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        //   child: Card(
-        //     child: Padding(
-        //       padding: const EdgeInsets.all(8.0),
-        //       child: DataTable(
-        //         border: TableBorder.all(
-        //           width: 0.5,
-        //           color: AppTheme.dark_grey.withOpacity(0.5),
-        //           borderRadius: BorderRadius.circular(5),
-        //         ),
-        //         columns: const [
-        //           DataColumn(
-        //             label: Text("No"),
-        //           ),
-        //           DataColumn(
-        //             label: Text("Expedisi"),
-        //           ),
-        //         ],
-        //         rows: List.generate(expeditions.length, (i) {
-        //           return DataRow(
-        //             cells: [
-        //               DataCell(Text("${i + 1}")),
-        //               DataCell(Text(expeditions[i].name ?? "")),
-        //             ],
-        //           );
-        //         }),
-        //       ),
-        //     ),
-        //   ),
-        // )
       ],
     );
   }

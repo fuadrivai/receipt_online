@@ -4,8 +4,7 @@ class LoadingScreen extends StatelessWidget {
   final String? title;
   final Color? backgroundColor;
 
-  const LoadingScreen({Key? key, this.title, this.backgroundColor})
-      : super(key: key);
+  const LoadingScreen({super.key, this.title, this.backgroundColor});
   @override
   Widget build(BuildContext context) {
     return Container(

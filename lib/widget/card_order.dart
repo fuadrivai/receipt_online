@@ -49,8 +49,11 @@ class CardOrder extends StatelessWidget {
       ),
       child: InkWell(
         onTap: onTap,
-        child: Card(
-          shadowColor: Colors.black,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: ListView(
             shrinkWrap: true,
             physics: const ScrollPhysics(),
@@ -123,13 +126,13 @@ class CardOrder extends StatelessWidget {
                   ],
                 ),
                 trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const Text(
                       'Total Qty',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 2),
                     badge.Badge(
                       badgeStyle: badge.BadgeStyle(
                         shape: badge.BadgeShape.square,
@@ -140,7 +143,7 @@ class CardOrder extends StatelessWidget {
                         order.totalQty.toString(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 19,
+                          fontSize: 18,
                         ),
                       ),
                     ),

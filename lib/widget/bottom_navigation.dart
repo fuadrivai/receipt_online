@@ -4,7 +4,7 @@ import 'package:receipt_online_shop/screen/home/screen/home_screen2.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen2.dart';
-import 'package:receipt_online_shop/screen/product_report/screen/product_report_form.dart';
+import 'package:receipt_online_shop/screen/product_report/screen/report_form.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';
 
@@ -17,24 +17,7 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation>
     with TickerProviderStateMixin {
-  AnimationController? animationController;
   int _currentIndex = 0;
-  @override
-  void initState() {
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    animationController?.forward();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    animationController?.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,20 +81,19 @@ class _BottomNavigationState extends State<BottomNavigation>
   Widget callPage(int index) {
     switch (index) {
       case 0:
-        return HomeScreen2(animationController: animationController);
+        return const HomeScreen2();
       case 1:
-        return ProductCheckerScreen2(animationController: animationController);
+        return const ProductCheckerScreen2();
       case 2:
         return const TiktokScreen();
       case 3:
         return const LazadaScreen();
-      // return const LazadaScreen();
       case 5:
         return const JdIdDetailScreen();
       case 4:
-        return ProductReportForm(animationController: animationController);
+        return const ProductReportForm();
       default:
-        return HomeScreen2(animationController: animationController);
+        return const HomeScreen2();
     }
   }
 }

@@ -45,129 +45,105 @@ class _PackageCardState extends State<PackageCard> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: widget.animationController!,
-      builder: (BuildContext context, Widget? child) {
-        return FadeTransition(
-          opacity: widget.animation!,
-          child: Transform(
-            transform: Matrix4.translationValues(
-              0.0,
-              30 * (1.0 - widget.animation!.value),
-              0.0,
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 12,
+        right: 12,
+        top: 16,
+        bottom: 18,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(8.0),
+            bottomLeft: Radius.circular(8.0),
+            bottomRight: Radius.circular(8.0),
+            topRight: Radius.circular(68.0),
+          ),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: AppTheme.grey.withOpacity(0.2),
+              offset: const Offset(1.1, 1.1),
+              blurRadius: 10.0,
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 12,
-                right: 12,
-                top: 16,
-                bottom: 18,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppTheme.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8.0),
-                    bottomLeft: Radius.circular(8.0),
-                    bottomRight: Radius.circular(8.0),
-                    topRight: Radius.circular(68.0),
-                  ),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: AppTheme.grey.withOpacity(0.2),
-                      offset: const Offset(1.1, 1.1),
-                      blurRadius: 10.0,
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+          child: (widget.dailyTasks ?? []).isEmpty
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Center(
+                      child: CircleTotalPackage(
+                        totalPackage: 0,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        "Tugas Harian Belum Dibuat",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppTheme.darkText.withOpacity(0.7),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    ButtonTask(
+                      title: "Buat Tugas",
+                      width: 120,
+                      onTap: _showBottomDialog,
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 4),
+                            child: Column(
+                                children: (widget.dailyTasks ?? []).map((e) {
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (__) => DailyTaskScreen2(
+                                        dailyTaskId: e.id!,
+                                        platform: e.expedition?.alias ?? "",
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    context.read<HomeBloc>().add(GetData());
+                                  });
+                                },
+                                child: ExpeditionPackage(
+                                  title: e.expedition?.name ?? "",
+                                  totalPackage: e.receipts?.length ?? 0,
+                                ),
+                              );
+                            }).toList()),
+                          ),
+                        ),
+                        CircleTotalPackage(
+                          totalPackage: getTotalPackage(),
+                        )
+                      ],
+                    ),
+                    ButtonTask(
+                      title: "Tambah Tugas",
+                      width: 150,
+                      onTap: _showBottomDialog,
                     ),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  child: (widget.dailyTasks ?? []).isEmpty
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: CircleTotalPackage(
-                                totalPackage: 0,
-                                animation: widget.animation!,
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16.0),
-                              child: Text(
-                                "Tugas Harian Belum Dibuat",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppTheme.darkText.withOpacity(0.7),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            ButtonTask(
-                              title: "Buat Tugas",
-                              width: 120,
-                              onTap: _showBottomDialog,
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 8, right: 8, top: 4),
-                                    child: Column(
-                                        children:
-                                            (widget.dailyTasks ?? []).map((e) {
-                                      return InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (__) => DailyTaskScreen2(
-                                                animationController:
-                                                    widget.animationController,
-                                                dailyTaskId: e.id!,
-                                                platform:
-                                                    e.expedition?.alias ?? "",
-                                              ),
-                                            ),
-                                          ).then((value) {
-                                            context
-                                                .read<HomeBloc>()
-                                                .add(GetData());
-                                          });
-                                        },
-                                        child: ExpeditionPackage(
-                                          title: e.expedition?.name ?? "",
-                                          totalPackage: e.receipts?.length ?? 0,
-                                        ),
-                                      );
-                                    }).toList()),
-                                  ),
-                                ),
-                                CircleTotalPackage(
-                                  totalPackage: getTotalPackage(),
-                                  animation: widget.animation!,
-                                )
-                              ],
-                            ),
-                            ButtonTask(
-                              title: "Tambah Tugas",
-                              width: 150,
-                              onTap: _showBottomDialog,
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -323,9 +299,7 @@ class ButtonTask extends StatelessWidget {
 
 class CircleTotalPackage extends StatelessWidget {
   final int totalPackage;
-  final Animation<double> animation;
-  const CircleTotalPackage(
-      {super.key, required this.totalPackage, required this.animation});
+  const CircleTotalPackage({super.key, required this.totalPackage});
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +328,7 @@ class CircleTotalPackage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '${(totalPackage * animation.value).toInt()}',
+                      '${(totalPackage).toInt()}',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontFamily: AppTheme.fontName,

@@ -15,8 +15,7 @@ import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProductCheckerScreen2 extends StatefulWidget {
-  const ProductCheckerScreen2({super.key, this.animationController});
-  final AnimationController? animationController;
+  const ProductCheckerScreen2({super.key});
 
   @override
   State<ProductCheckerScreen2> createState() => _ProductCheckerScreen2State();
@@ -36,7 +35,6 @@ class _ProductCheckerScreen2State extends State<ProductCheckerScreen2>
         preferredSize: const Size.fromHeight(70),
         child: CustomAppbar(
           title: "Product Checker",
-          animationController: widget.animationController,
           actions: IconButton(
             alignment: Alignment.topCenter,
             padding: const EdgeInsets.all(0),
@@ -49,9 +47,7 @@ class _ProductCheckerScreen2State extends State<ProductCheckerScreen2>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CameraPreviewScreen(
-                            animationController: widget.animationController,
-                          )),
+                      builder: (context) => const CameraPreviewScreen()),
                 ).then((value) {
                   RecognizedText text = value;
                   String textBlock = "";

@@ -8,8 +8,7 @@ import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'home_body.dart';
 
 class HomeScreen2 extends StatefulWidget {
-  const HomeScreen2({super.key, this.animationController});
-  final AnimationController? animationController;
+  const HomeScreen2({super.key});
   @override
   State<HomeScreen2> createState() => _HomeScreen2State();
 }
@@ -45,20 +44,16 @@ class _HomeScreen2State extends State<HomeScreen2>
               child: Image.asset("assets/images/logo.png"),
             ),
             title: "SSMART10",
-            animationController: widget.animationController,
           ),
         ),
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (_, state) {
             if (state is HomeLoadingState) {
-              return HomeBody(
-                expeditions: const [],
-                platforms: const [],
-                animationController: widget.animationController,
-                activePackageShimmer: ActivePackageShimmer(
-                  animationController: widget.animationController,
-                ),
-                platformShimmer: const PlatformShimmer(),
+              return const HomeBody(
+                expeditions: [],
+                platforms: [],
+                activePackageShimmer: ActivePackageShimmer(),
+                platformShimmer: PlatformShimmer(),
               );
             }
             if (state is HomeErrorState) {
@@ -69,7 +64,6 @@ class _HomeScreen2State extends State<HomeScreen2>
 
             if (state is DataState) {
               return HomeBody(
-                animationController: widget.animationController,
                 dailyTasks: state.dailyTasks,
                 expeditions: state.expeditions ?? [],
                 platforms: state.platforms ?? [],

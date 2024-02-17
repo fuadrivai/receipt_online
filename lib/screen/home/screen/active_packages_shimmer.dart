@@ -61,18 +61,8 @@ class ActivePackageShimmer extends StatelessWidget {
               Shimmer.fromColors(
                 baseColor: Colors.grey[300]!,
                 highlightColor: Colors.grey[100]!,
-                child: CircleTotalPackage(
+                child: const CircleTotalPackage(
                   totalPackage: 0,
-                  animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                    CurvedAnimation(
-                      parent: animationController!,
-                      curve: const Interval(
-                        (1 / 9) * 1,
-                        1.0,
-                        curve: Curves.fastOutSlowIn,
-                      ),
-                    ),
-                  ),
                 ),
               )
             ],

@@ -10,14 +10,12 @@ import 'package:receipt_online_shop/widget/title_view.dart';
 class HomeBody extends StatelessWidget {
   const HomeBody({
     super.key,
-    this.animationController,
     this.dailyTasks,
     this.activePackageShimmer,
     required this.expeditions,
     required this.platforms,
     this.platformShimmer,
   });
-  final AnimationController? animationController;
   final List<DailyTask>? dailyTasks;
   final List<Expedition> expeditions;
   final List<Platform> platforms;
@@ -30,17 +28,6 @@ class HomeBody extends StatelessWidget {
     return ListView(
       children: [
         TitleView(
-          animationController: animationController,
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: animationController!,
-              curve: const Interval(
-                (1 / count) * 0,
-                1.0,
-                curve: Curves.fastOutSlowIn,
-              ),
-            ),
-          ),
           titleTxt: "Paket Aktif",
           subTxt: Jiffy.now().format(pattern: "dd MMM yyyy"),
         ),
@@ -48,32 +35,8 @@ class HomeBody extends StatelessWidget {
             PackageCard(
               expeditions: expeditions,
               dailyTasks: dailyTasks,
-              animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-                CurvedAnimation(
-                  parent: animationController!,
-                  curve: const Interval(
-                    (1 / count) * 1,
-                    1.0,
-                    curve: Curves.fastOutSlowIn,
-                  ),
-                ),
-              ),
-              animationController: animationController!,
             ),
-        TitleView(
-          animationController: animationController,
-          animation: Tween<double>(begin: 0.0, end: 1.0).animate(
-            CurvedAnimation(
-              parent: animationController!,
-              curve: const Interval(
-                (1 / count) * 0,
-                1.0,
-                curve: Curves.fastOutSlowIn,
-              ),
-            ),
-          ),
-          titleTxt: "Platform",
-        ),
+        const TitleView(titleTxt: "Platform"),
         platformShimmer ?? PlatformBody(platforms: platforms),
       ],
     );

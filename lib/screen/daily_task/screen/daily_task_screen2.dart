@@ -18,11 +18,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 class DailyTaskScreen2 extends StatefulWidget {
   const DailyTaskScreen2({
     super.key,
-    this.animationController,
     required this.dailyTaskId,
     required this.platform,
   });
-  final AnimationController? animationController;
   final int dailyTaskId;
   final String platform;
 
@@ -99,7 +97,6 @@ class _DailyTaskScreen2State extends State<DailyTaskScreen2> {
                       icon: const Icon(Icons.arrow_back),
                     ),
                     title: "Tugas Harian",
-                    animationController: widget.animationController,
                     actions: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,

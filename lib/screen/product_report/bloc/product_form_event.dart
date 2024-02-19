@@ -10,3 +10,28 @@ class OnGetProduct extends ProductFormEvent {
   final String barcode;
   const OnGetProduct(this.barcode);
 }
+
+class OnChangedAge extends ProductFormEvent {
+  final String val;
+  const OnChangedAge(this.val);
+}
+
+class OnChangedTaste extends ProductFormEvent {
+  final String val;
+  const OnChangedTaste(this.val);
+}
+
+class OnChangedSize extends ProductFormEvent {
+  final String val;
+  const OnChangedSize(this.val);
+}
+
+class OnChangedQty extends ProductFormEvent {
+  final int val;
+  const OnChangedQty(this.val);
+}
+
+class OnChangedQtyCarton extends ProductFormEvent {
+  final int val;
+  const OnChangedQtyCarton(this.val);
+}

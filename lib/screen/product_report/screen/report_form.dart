@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/screen/product_form.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
@@ -36,57 +38,83 @@ class _ProductReportFormState extends State<ProductReportForm> {
                 context,
                 onSuccess: (barcodeScanner) {
                   barcodeController.text = barcodeScanner;
-                  // context
-                  //     .read<ProductCheckerBloc>()
-                  //     .add(GetOrderEvent(platform!, barcodeScanner));
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return ProductFormScreen(
+                        barcode: barcodeScanner,
+                      );
+                    },
+                  )).then((value) {
+                    if (value != null) {
+                      context.read<ReportBloc>().add(OnGetReportDetail(value));
+                      setState(() {});
+                    }
+                  });
                 },
               );
             },
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Form(
-                key: _formKey,
-                child: TextFormField(
-                  // enabled: disable,
-                  // readOnly: !disable,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                  controller: barcodeController,
-                  decoration: TextFormDecoration.box(
-                    "Masukan Kode Barang",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ProductFormScreen(
-                                barcode: barcodeController.text,
-                              );
-                            },
-                          ));
-                        }
-                      },
-                      icon: const Icon(
-                        FontAwesomeIcons.searchengin,
-                        color: Colors.blue,
-                      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Form(
+              key: _formKey,
+              child: TextFormField(
+                // enabled: disable,
+                // readOnly: !disable,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+                controller: barcodeController,
+                decoration: TextFormDecoration.box(
+                  "Masukan Kode Barang",
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return ProductFormScreen(
+                              barcode: barcodeController.text,
+                            );
+                          },
+                        )).then((value) {
+                          if (value != null) {
+                            context
+                                .read<ReportBloc>()
+                                .add(OnGetReportDetail(value));
+                            setState(() {});
+                          }
+                        });
+                      }
+                    },
+                    icon: const Icon(
+                      FontAwesomeIcons.searchengin,
+                      color: Colors.blue,
                     ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: BlocBuilder<ReportBloc, ReportState>(
+              builder: (context, state) {
+                return ListView.builder(
+                  itemCount: (state.details ?? []).length,
+                  itemBuilder: (context, index) {
+                    return const Text("ok");
+                  },
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }

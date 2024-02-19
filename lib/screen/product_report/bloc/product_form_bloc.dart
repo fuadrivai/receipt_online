@@ -11,6 +11,64 @@ part 'product_form_state.dart';
 class ProductFormBloc extends Bloc<ProductFormEvent, ProductFormState> {
   ProductFormBloc() : super(const ProductFormState()) {
     on<OnGetProduct>(_onGetProduct);
+    on<OnChangedAge>(_onChangedAge);
+    on<OnChangedTaste>(_onChangedTaste);
+    on<OnChangedSize>(_onChangedSize);
+    on<OnChangedQty>(_onChangedQty);
+    on<OnChangedQtyCarton>(_onChangedQtyCarton);
+  }
+
+  void _onChangedQtyCarton(
+      OnChangedQtyCarton event, Emitter<ProductFormState> emit) {
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail.qtyCarton = event.val;
+    if (detail.qtyCarton == 0) {
+      detail.totalCarton = 0;
+    } else {
+      if (detail.qty == 0) {
+        detail.totalCarton = 0;
+      } else {
+        detail.totalCarton =
+            ((detail.qty ?? 0) / (detail.qtyCarton ?? 0)).floor();
+      }
+    }
+    emit(state.copyWith(detail: detail));
+  }
+
+  void _onChangedQty(OnChangedQty event, Emitter<ProductFormState> emit) {
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail.qty = event.val;
+    if (detail.qty == 0) {
+      detail.totalCarton = 0;
+      detail.subTotal = 0;
+    } else {
+      if (detail.qtyCarton == 0) {
+        detail.totalCarton = 0;
+      } else {
+        detail.totalCarton = (event.val / (detail.qtyCarton ?? 0)).floor();
+      }
+      detail.subTotal =
+          ((detail.product?.price ?? 0) * (detail.qty ?? 0)).toDouble();
+    }
+    emit(state.copyWith(detail: detail));
+  }
+
+  void _onChangedSize(OnChangedSize event, Emitter<ProductFormState> emit) {
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail.size = event.val;
+    emit(state.copyWith(detail: detail));
+  }
+
+  void _onChangedAge(OnChangedAge event, Emitter<ProductFormState> emit) {
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail.age = event.val;
+    emit(state.copyWith(detail: detail));
+  }
+
+  void _onChangedTaste(OnChangedTaste event, Emitter<ProductFormState> emit) {
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail.taste = event.val;
+    emit(state.copyWith(detail: detail));
   }
 
   void _onGetProduct(OnGetProduct event, Emitter<ProductFormState> emit) async {

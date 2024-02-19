@@ -16,25 +16,34 @@ class PlatformBody extends StatelessWidget {
           Platform platform = platforms[i];
           return ResponsiveGridCol(
               xs: 4,
-              child: Card(
-                shadowColor: AppTheme.dark_grey.withOpacity(0.8),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Image.network(
-                        platform.logo!,
-                        height: 60,
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        platform.name ?? "",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: [
+                      BoxShadow(color: AppTheme.dark_grey.withOpacity(0.8))
                     ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Image.network(
+                          platform.logo!,
+                          height: 60,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          platform.name ?? "",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ));

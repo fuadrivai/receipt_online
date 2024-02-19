@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/product_form_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+import 'package:receipt_online_shop/screen/product_report/data/report_detail.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
@@ -16,7 +18,7 @@ class ProductFormScreen extends StatefulWidget {
 }
 
 class _ProductFormScreenState extends State<ProductFormScreen> {
-  String? taste, age, size;
+  final oCcy = NumberFormat("#,##0", "en_US");
   @override
   void initState() {
     context.read<ProductFormBloc>().add(OnGetProduct(widget.barcode));
@@ -73,36 +75,44 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           children: [
                             Text(
                                 'Barcode : ${product.barcode ?? "Barcode : --"}'),
-                            Text("Harga Satuan : Rp. ${product.price ?? '0'}"),
+                            Text(
+                                "Harga Satuan : Rp. ${oCcy.format(product.price ?? '0')}"),
                           ],
                         ),
                       ),
                       const Divider(height: 2),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
+                        value: state.detail?.age,
                         items: const [
                           DropdownMenuItem(value: "1+", child: Text("1+")),
                           DropdownMenuItem(value: "3+", child: Text("3+")),
                         ],
                         onChanged: (data) {
-                          age = data;
+                          context
+                              .read<ProductFormBloc>()
+                              .add(OnChangedAge(data!));
                         },
                         decoration: TextFormDecoration.box("Usia"),
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
+                        value: state.detail?.taste,
                         items: const [
                           DropdownMenuItem(value: "madu", child: Text("Madu")),
                           DropdownMenuItem(
                               value: "vanila", child: Text("Vanila")),
                         ],
                         onChanged: (data) {
-                          taste = data;
+                          context
+                              .read<ProductFormBloc>()
+                              .add(OnChangedTaste(data!));
                         },
                         decoration: TextFormDecoration.box("Rasa"),
                       ),
                       const SizedBox(height: 20),
                       DropdownButtonFormField<String>(
+                        value: state.detail?.size,
                         items: const [
                           DropdownMenuItem(
                               value: "300gr", child: Text("300gr")),
@@ -111,17 +121,67 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           DropdownMenuItem(value: "1 KG", child: Text("1 KG")),
                         ],
                         onChanged: (data) {
-                          size = data;
+                          context
+                              .read<ProductFormBloc>()
+                              .add(OnChangedSize(data!));
                         },
                         decoration: TextFormDecoration.box("Kemasan"),
                       ),
                       const SizedBox(height: 20),
-                      TextFormField(decoration: TextFormDecoration.box("Qty")),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              onChanged: (value) {
+                                int val = value == "" ? 0 : int.parse(value);
+                                context
+                                    .read<ProductFormBloc>()
+                                    .add(OnChangedQty(val));
+                                setState(() {});
+                              },
+                              decoration: TextFormDecoration.box("Qty"),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: TextFormField(
+                              onChanged: (value) {
+                                int val = value == "" ? 0 : int.parse(value);
+                                context
+                                    .read<ProductFormBloc>()
+                                    .add(OnChangedQtyCarton(val));
+                                setState(() {});
+                              },
+                              decoration:
+                                  TextFormDecoration.box("Qty per Karton"),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Total Karton"),
+                          Text((state.detail?.totalCarton ?? 0).toString()),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Total"),
+                          Text(
+                              "Rp. ${oCcy.format(state.detail?.subTotal ?? 0)}"),
+                        ],
+                      ),
                       const SizedBox(height: 20),
                       ButtonTask(
                         title: "Simpan",
                         width: 100,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pop<ReportDetail>(context, state.detail);
+                        },
                       ),
                     ],
                   ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
+import 'package:receipt_online_shop/screen/product_report/data/report.dart';
 import 'package:receipt_online_shop/screen/product_report/screen/product_form.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
@@ -107,8 +108,104 @@ class _ProductReportFormState extends State<ProductReportForm> {
               builder: (context, state) {
                 return ListView.builder(
                   itemCount: (state.details ?? []).length,
-                  itemBuilder: (context, index) {
-                    return const Text("ok");
+                  itemBuilder: (c, i) {
+                    Report report = state.details![i];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            report.age ?? "",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Column(
+                            children: (report.sizes ?? []).map((e) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: const EdgeInsets.all(8),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(child: Text(e.size ?? "")),
+                                      const Divider(),
+                                      Column(
+                                        children: (e.tastes ?? []).map((t) {
+                                          return Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(t.product?.name ??
+                                                          ""),
+                                                      Text(
+                                                          "Harga : Rp. ${t.price ?? 0}"),
+                                                      Text(
+                                                          "Satuan Karton : ${t.qtyCarton ?? 0} pcs"),
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.end,
+                                                    children: [
+                                                      const Text("Total Qty"),
+                                                      Text((t.qty ?? 0)
+                                                          .toString()),
+                                                      const Text("Total"),
+                                                      Text(
+                                                          "Rp. ${(t.qty ?? 0) * (t.price ?? 0)}"),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                              const Divider()
+                                            ],
+                                          );
+                                        }).toList(),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text("Total Qty"),
+                                          Text((e.totalQty ?? 0).toString()),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Text("Total Harga"),
+                                          Text("Rp. ${e.totalPrice ?? 0}"),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          )
+                        ],
+                      ),
+                    );
                   },
                 );
               },

@@ -28,36 +28,40 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
               totalQty: event.detail.qty,
               tastes: [
                 Tastes(
-                  price: event.detail.product?.price ?? 0,
-                  qty: event.detail.qty,
-                  qtyCarton: event.detail.qtyCarton,
-                  taste: event.detail.taste,
-                )
+                    price: event.detail.product?.price ?? 0,
+                    qty: event.detail.qty,
+                    qtyCarton: event.detail.qtyCarton,
+                    taste: event.detail.taste,
+                    product: event.detail.product)
               ],
             ),
           );
         } else {
+          int totalQty = 0;
+          int totalPrice = 0;
           for (var s in sizes) {
             List<Tastes> tastes = (s.tastes ?? [])
                 .where((t) => t.taste == event.detail.taste)
                 .toList();
             if (tastes.isEmpty) {
               (s.tastes ?? []).add(Tastes(
-                price: event.detail.product?.price ?? 0,
-                qty: event.detail.qty,
-                qtyCarton: event.detail.qtyCarton,
-                taste: event.detail.taste,
-              ));
+                  price: event.detail.product?.price ?? 0,
+                  qty: event.detail.qty,
+                  qtyCarton: event.detail.qtyCarton,
+                  taste: event.detail.taste,
+                  product: event.detail.product));
             } else {
               for (var t in tastes) {
                 t.qty = event.detail.qty;
                 t.qtyCarton = event.detail.qtyCarton;
               }
             }
-            s.totalQty = 0;
-            for (var st in tastes) {
-              s.totalQty = (s.totalQty ?? 0) + (st.qty ?? 0);
+            for (Tastes st in s.tastes ?? []) {
+              totalQty = totalQty + (st.qty ?? 0);
+              totalPrice = totalPrice + ((st.qty ?? 0) * (st.price ?? 0));
             }
+            s.totalQty = totalQty;
+            s.totalPrice = totalPrice;
           }
         }
       }
@@ -74,11 +78,11 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
           totalQty: detail.qty,
           tastes: [
             Tastes(
-              price: detail.product?.price ?? 0,
-              qty: detail.qty,
-              qtyCarton: detail.qtyCarton,
-              taste: detail.taste,
-            )
+                price: detail.product?.price ?? 0,
+                qty: detail.qty,
+                qtyCarton: detail.qtyCarton,
+                taste: detail.taste,
+                product: detail.product)
           ],
         ),
       ],

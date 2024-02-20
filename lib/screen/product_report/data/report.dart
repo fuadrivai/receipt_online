@@ -1,3 +1,5 @@
+import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+
 class Report {
   String? age;
   List<Sizes>? sizes;
@@ -27,9 +29,10 @@ class Report {
 class Sizes {
   String? size;
   int? totalQty;
+  int? totalPrice;
   List<Tastes>? tastes;
 
-  Sizes({this.size, this.totalQty, this.tastes});
+  Sizes({this.size, this.totalQty, this.tastes, this.totalPrice});
 
   Sizes.fromJson(Map<String, dynamic> json) {
     size = json['size'];
@@ -55,17 +58,20 @@ class Sizes {
 
 class Tastes {
   String? taste;
+  Product? product;
   int? qty;
   int? qtyCarton;
   int? price;
 
-  Tastes({this.taste, this.qty, this.qtyCarton, this.price});
+  Tastes({this.taste, this.qty, this.qtyCarton, this.price, this.product});
 
   Tastes.fromJson(Map<String, dynamic> json) {
     taste = json['taste'];
     qty = json['qty'];
     qtyCarton = json['qtyCarton'];
     price = json['price'];
+    product =
+        json['product'] != null ? Product.fromJson(json['product']) : null;
   }
 
   Map<String, dynamic> toJson() {

@@ -76,7 +76,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                             Text(
                                 'Barcode : ${product.barcode ?? "Barcode : --"}'),
                             Text(
-                                "Harga Satuan : Rp. ${oCcy.format(product.price ?? '0')}"),
+                                "Harga Satuan : Rp. ${oCcy.format(product.price ?? 0)}"),
                           ],
                         ),
                       ),

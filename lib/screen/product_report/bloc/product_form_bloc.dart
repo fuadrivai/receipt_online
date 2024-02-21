@@ -72,7 +72,7 @@ class ProductFormBloc extends Bloc<ProductFormEvent, ProductFormState> {
   }
 
   void _onGetProduct(OnGetProduct event, Emitter<ProductFormState> emit) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, detail: ReportDetail()));
     try {
       Product product = await ProductApi.getByBarcode(event.barcode);
       ReportDetail detail = state.detail ?? ReportDetail();

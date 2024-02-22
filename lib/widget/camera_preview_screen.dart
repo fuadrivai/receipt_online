@@ -146,10 +146,9 @@ class _CameraPreviewScreenState extends State<CameraPreviewScreen>
       final recognizeText = textRecognation.processImage(inputImage);
       navigator.pop(recognizeText);
     } catch (e) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Kamera Error")));
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Kamera Error")));
     }
   }
 }

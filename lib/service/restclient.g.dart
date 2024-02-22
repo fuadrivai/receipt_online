@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: non_constant_identifier_names
-
 part of 'restclient.dart';
 
 // **************************************************************************
@@ -863,13 +861,13 @@ class _RestClient implements RestClient {
   }
 
   @override
-  Future<List<Product>> getProducts() async {
+  Future<ServerSide> getProducts() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _result =
-        await _dio.fetch<List<dynamic>>(_setStreamType<List<Product>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ServerSide>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -885,9 +883,7 @@ class _RestClient implements RestClient {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    var value = _result.data!
-        .map((dynamic i) => Product.fromJson(i as Map<String, dynamic>))
-        .toList();
+    final value = ServerSide.fromJson(_result.data!);
     return value;
   }
 

@@ -1,4 +1,4 @@
-import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
 
 class ReportDetail {
   Product? product;

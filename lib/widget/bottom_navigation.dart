@@ -4,7 +4,7 @@ import 'package:receipt_online_shop/screen/home/screen/home_screen2.dart';
 import 'package:receipt_online_shop/screen/jdid/jdid_detail_screen.dart';
 import 'package:receipt_online_shop/screen/lazada/lazada_screen.dart';
 import 'package:receipt_online_shop/screen/product_checker/screen/product_checker_screen2.dart';
-import 'package:receipt_online_shop/screen/product_report/screen/report_form.dart';
+import 'package:receipt_online_shop/screen/product_report/screen/report_detail_screen.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/screen/tiktok/tiktok_screen.dart';
 
@@ -91,7 +91,7 @@ class _BottomNavigationState extends State<BottomNavigation>
       case 5:
         return const JdIdDetailScreen();
       case 4:
-        return const ProductReportForm();
+        return const ReportDetailScreen();
       default:
         return const HomeScreen2();
     }

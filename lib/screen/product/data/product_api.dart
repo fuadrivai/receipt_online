@@ -1,9 +1,10 @@
-import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+import 'package:receipt_online_shop/model/serverside.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
 import 'package:receipt_online_shop/service/api.dart';
 
 class ProductApi {
-  static Future<List<Product>> get() async {
-    final client = await Api.restClient();
+  static Future<ServerSide> get({Map<String, dynamic>? params}) async {
+    final client = await Api.restClient(params: params);
     var data = client.getProducts();
     return data;
   }

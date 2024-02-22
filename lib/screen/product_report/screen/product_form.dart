@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/product_form_bloc.dart';
-import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report_detail.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
@@ -21,7 +21,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final oCcy = NumberFormat("#,##0", "en_US");
   @override
   void initState() {
-    context.read<ProductFormBloc>().add(OnGetProduct(widget.barcode));
+    context.read<ProductFormBloc>().add(OnGetProductByBarcode(widget.barcode));
     super.initState();
   }
 
@@ -180,7 +180,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         title: "Simpan",
                         width: 100,
                         onTap: () {
-                          Navigator.pop<ReportDetail>(context, state.detail);
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          // Navigator.pop<ReportDetail>(context, state.detail);
                         },
                       ),
                     ],

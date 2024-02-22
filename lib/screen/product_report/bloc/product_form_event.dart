@@ -6,9 +6,9 @@ abstract class ProductFormEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class OnGetProduct extends ProductFormEvent {
+class OnGetProductByBarcode extends ProductFormEvent {
   final String barcode;
-  const OnGetProduct(this.barcode);
+  const OnGetProductByBarcode(this.barcode);
 }
 
 class OnChangedAge extends ProductFormEvent {

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:receipt_online_shop/screen/product_report/data/product.dart';
-import 'package:receipt_online_shop/screen/product_report/data/product_api.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
+import 'package:receipt_online_shop/screen/product/data/product_api.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report_detail.dart';
 
 part 'product_form_event.dart';
@@ -10,7 +10,7 @@ part 'product_form_state.dart';
 
 class ProductFormBloc extends Bloc<ProductFormEvent, ProductFormState> {
   ProductFormBloc() : super(const ProductFormState()) {
-    on<OnGetProduct>(_onGetProduct);
+    on<OnGetProductByBarcode>(_onGetProduct);
     on<OnChangedAge>(_onChangedAge);
     on<OnChangedTaste>(_onChangedTaste);
     on<OnChangedSize>(_onChangedSize);
@@ -71,7 +71,8 @@ class ProductFormBloc extends Bloc<ProductFormEvent, ProductFormState> {
     emit(state.copyWith(detail: detail));
   }
 
-  void _onGetProduct(OnGetProduct event, Emitter<ProductFormState> emit) async {
+  void _onGetProduct(
+      OnGetProductByBarcode event, Emitter<ProductFormState> emit) async {
     emit(state.copyWith(isLoading: true, detail: ReportDetail()));
     try {
       Product product = await ProductApi.getByBarcode(event.barcode);

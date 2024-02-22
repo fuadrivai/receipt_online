@@ -5,9 +5,10 @@ import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
+import 'package:receipt_online_shop/model/serverside.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
-import 'package:receipt_online_shop/screen/product_report/data/product.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
 import 'package:retrofit/http.dart';
 
 import '../model/lazada/full_order.dart';
@@ -110,7 +111,7 @@ abstract class RestClient {
   @GET("/product/{barcode}")
   Future<Product> getProductByBarcode(@Path() String barcode);
   @GET("/product")
-  Future<List<Product>> getProducts();
+  Future<ServerSide> getProducts();
 
   // @GET("/sales/{id}")
   // Future<Salesman> salesmanFindById(@Path() String id);

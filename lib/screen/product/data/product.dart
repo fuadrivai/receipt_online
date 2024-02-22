@@ -1,4 +1,4 @@
-import 'package:receipt_online_shop/screen/product_report/data/uom.dart';
+import 'package:receipt_online_shop/screen/product/data/uom.dart';
 
 class Product {
   int? id;

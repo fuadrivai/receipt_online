@@ -7,10 +7,11 @@ class Api {
   // static const String baseUrl = "http://192.168.100.2:8000/api/";
   static const String baseUrl = "http://192.168.100.11:3000/api/";
 
-  static restClient() async {
+  static restClient({Map<String, dynamic>? params}) async {
     final dio = Dio();
     dio.interceptors.clear();
     dio.interceptors.add(DioInterceptors(dio));
+    dio.options.queryParameters = params ?? {};
     // dio.options.headers["Authorization"] = await Session.get("authorization");
     return RestClient(dio, baseUrl: baseUrl);
   }

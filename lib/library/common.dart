@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 
 class Common {
+  static final oCcy = NumberFormat("#,##0", "en_US");
   static modalInfo(BuildContext context,
       {String? message, required String title, Icon? icon}) {
     showDialog(

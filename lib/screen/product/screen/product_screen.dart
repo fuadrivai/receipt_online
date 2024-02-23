@@ -87,11 +87,12 @@ class _ProductScreenState extends State<ProductScreen> {
                             horizontal: 8.0, vertical: 4),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: AppTheme.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color: AppTheme.nearlyDarkBlue
-                                      .withOpacity(0.2))),
+                            color: AppTheme.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppTheme.nearlyDarkBlue.withOpacity(0.2),
+                            ),
+                          ),
                           child: ListTile(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
@@ -100,7 +101,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                     barcode: product.barcode!,
                                   );
                                 },
-                              ));
+                              )).then((value) {
+                                if (value != null) {
+                                  Navigator.pop(context, value);
+                                }
+                              });
                             },
                             leading: Image.asset("assets/images/logo.png"),
                             title: Text(

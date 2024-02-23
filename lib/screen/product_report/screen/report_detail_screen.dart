@@ -7,6 +7,7 @@ import 'package:receipt_online_shop/screen/product_report/data/report_detail.dar
 import 'package:receipt_online_shop/screen/product_report/screen/product_form.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
+import 'package:badges/badges.dart' as badge;
 
 class ReportDetailScreen extends StatefulWidget {
   const ReportDetailScreen({super.key});
@@ -35,7 +36,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                       return const ProductScreen();
                     },
                   )).then((value) {
-                    print(value);
+                    context.read<ReportBloc>().add(OnPushReportDetail(value));
+                    setState(() {});
                   });
                 },
                 icon: const Icon(
@@ -65,7 +67,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         if (value != null) {
                           context
                               .read<ReportBloc>()
-                              .add(OnGetReportDetail(value));
+                              .add(OnPushReportDetail(value));
                           setState(() {});
                         }
                       });
@@ -84,9 +86,10 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                 ? const CardData(data: "Tidak Ada Transaksi")
                 : Column(
                     children: [
-                      const CardData(
+                      CardData(
                         title: "Total Transaksi",
-                        data: "RP. 50.000.000",
+                        data:
+                            "RP. ${Common.oCcy.format(state.report?.amount ?? 0)}",
                       ),
                       ListView.builder(
                         shrinkWrap: true,
@@ -95,8 +98,98 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         itemBuilder: (c, i) {
                           ReportDetail detail =
                               (state.report?.details ?? [])[i];
-                          return ListTile(
-                            title: Text(detail.product?.name ?? ""),
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 4,
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppTheme.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color:
+                                      AppTheme.nearlyDarkBlue.withOpacity(0.2),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    dense: true,
+                                    leading:
+                                        Image.asset("assets/images/logo.png"),
+                                    title: Text((detail.product?.name ?? "")
+                                        .toUpperCase()),
+                                    subtitle: Text(
+                                        "Rp. ${Common.oCcy.format(detail.product?.price ?? 0)}"),
+                                    trailing: SizedBox(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const Text("Total Qty"),
+                                          badge.Badge(
+                                            badgeStyle: badge.BadgeStyle(
+                                              shape: badge.BadgeShape.square,
+                                              badgeColor: Colors.deepPurple,
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            badgeContent: Text(
+                                              Common.oCcy.format(detail.qty),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 30, 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("Total Karton"),
+                                        Text(
+                                          Common.oCcy.format(
+                                              ((detail.qty ?? 0) /
+                                                      (detail.qtyCarton ?? 0))
+                                                  .floor()),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 25, 4),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text("Total Rupiah"),
+                                        Text(
+                                          "Rp. ${Common.oCcy.format((detail.qty ?? 0) * (detail.product?.price ?? 0))}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       ),

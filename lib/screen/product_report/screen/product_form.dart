@@ -179,11 +179,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ButtonTask(
                         title: "Simpan",
                         width: 100,
-                        onTap: () {
-                          Navigator.of(context)
-                              .popUntil((route) => route.isFirst);
-                          // Navigator.pop<ReportDetail>(context, state.detail);
-                        },
+                        onTap: () =>
+                            Navigator.pop<ReportDetail>(context, state.detail),
                       ),
                     ],
                   ),

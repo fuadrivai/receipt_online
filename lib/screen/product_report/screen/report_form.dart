@@ -6,7 +6,6 @@ import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report_total.dart';
-import 'package:receipt_online_shop/screen/product_report/screen/product_form.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
@@ -52,26 +51,26 @@ class _ProductReportFormState extends State<ProductReportForm> {
                 color: AppTheme.nearlyDarkBlue,
               ),
               onPressed: () {
-                Common.scanBarcodeNormal(
-                  context,
-                  onSuccess: (barcodeScanner) {
-                    barcodeController.text = barcodeScanner;
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return ProductFormScreen(
-                          barcode: barcodeScanner,
-                        );
-                      },
-                    )).then((value) {
-                      if (value != null) {
-                        context
-                            .read<ReportBloc>()
-                            .add(OnGetReportDetail(value));
-                        setState(() {});
-                      }
-                    });
-                  },
-                );
+                // Common.scanBarcodeNormal(
+                //   context,
+                //   onSuccess: (barcodeScanner) {
+                //     barcodeController.text = barcodeScanner;
+                //     Navigator.push(context, MaterialPageRoute(
+                //       builder: (context) {
+                //         return ProductFormScreen(
+                //           barcode: barcodeScanner,
+                //         );
+                //       },
+                //     )).then((value) {
+                //       if (value != null) {
+                //         context
+                //             .read<ReportBloc>()
+                //             .add(OnGetReportDetail(value));
+                //         setState(() {});
+                //       }
+                //     });
+                //   },
+                // );
               },
             ),
           ),
@@ -96,22 +95,22 @@ class _ProductReportFormState extends State<ProductReportForm> {
                     "Masukan Kode Barang",
                     suffixIcon: IconButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.push(context, MaterialPageRoute(
-                            builder: (context) {
-                              return ProductFormScreen(
-                                barcode: barcodeController.text,
-                              );
-                            },
-                          )).then((value) {
-                            if (value != null) {
-                              context
-                                  .read<ReportBloc>()
-                                  .add(OnGetReportDetail(value));
-                              setState(() {});
-                            }
-                          });
-                        }
+                        // if (_formKey.currentState!.validate()) {
+                        //   Navigator.push(context, MaterialPageRoute(
+                        //     builder: (context) {
+                        //       return ProductFormScreen(
+                        //         barcode: barcodeController.text,
+                        //       );
+                        //     },
+                        //   )).then((value) {
+                        //     if (value != null) {
+                        //       context
+                        //           .read<ReportBloc>()
+                        //           .add(OnGetReportDetail(value));
+                        //       setState(() {});
+                        //     }
+                        //   });
+                        // }
                       },
                       icon: const Icon(
                         FontAwesomeIcons.searchengin,

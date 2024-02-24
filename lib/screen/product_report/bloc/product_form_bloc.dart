@@ -16,6 +16,15 @@ class ProductFormBloc extends Bloc<ProductFormEvent, ProductFormState> {
     on<OnChangedSize>(_onChangedSize);
     on<OnChangedQty>(_onChangedQty);
     on<OnChangedQtyCarton>(_onChangedQtyCarton);
+    on<OnInitReportDetail>(_onInitReportDetail);
+  }
+
+  void _onInitReportDetail(
+      OnInitReportDetail event, Emitter<ProductFormState> emit) {
+    emit(state.copyWith(isLoading: true, detail: ReportDetail()));
+    ReportDetail detail = state.detail ?? ReportDetail();
+    detail = event.detail;
+    emit(state.copyWith(isLoading: false, detail: detail));
   }
 
   void _onChangedQtyCarton(

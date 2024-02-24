@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/product_form_bloc.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
@@ -10,8 +11,8 @@ import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class ProductFormScreen extends StatefulWidget {
-  final String barcode;
-  const ProductFormScreen({super.key, required this.barcode});
+  final ReportDetail reportDetail;
+  const ProductFormScreen({super.key, required this.reportDetail});
 
   @override
   State<ProductFormScreen> createState() => _ProductFormScreenState();
@@ -21,7 +22,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final oCcy = NumberFormat("#,##0", "en_US");
   @override
   void initState() {
-    context.read<ProductFormBloc>().add(OnGetProductByBarcode(widget.barcode));
+    context
+        .read<ProductFormBloc>()
+        .add(OnInitReportDetail(widget.reportDetail));
     super.initState();
   }
 
@@ -31,7 +34,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: CustomAppbar(
-          title: "Report Group",
+          title: "Produk Form",
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -119,6 +122,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           DropdownMenuItem(
                               value: "700gr", child: Text("700gr")),
                           DropdownMenuItem(value: "1 KG", child: Text("1 KG")),
+                          DropdownMenuItem(value: null, child: Text("")),
                         ],
                         onChanged: (data) {
                           context
@@ -132,6 +136,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         children: [
                           Expanded(
                             child: TextFormField(
+                              initialValue:
+                                  Common.oCcy.format(state.detail?.qty ?? 0),
                               onChanged: (value) {
                                 int val = value == "" ? 0 : int.parse(value);
                                 context
@@ -145,6 +151,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           const SizedBox(width: 5),
                           Expanded(
                             child: TextFormField(
+                              initialValue: Common.oCcy
+                                  .format(state.detail?.qtyCarton ?? 0),
                               onChanged: (value) {
                                 int val = value == "" ? 0 : int.parse(value);
                                 context

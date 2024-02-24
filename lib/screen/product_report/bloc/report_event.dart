@@ -13,6 +13,11 @@ class OnGetReportDetail extends ReportEvent {
 }
 
 class OnPushReportDetail extends ReportEvent {
+  final List<ReportDetail> details;
+  const OnPushReportDetail(this.details);
+}
+
+class OnMapReportDetail extends ReportEvent {
   final ReportDetail detail;
-  const OnPushReportDetail(this.detail);
+  const OnMapReportDetail(this.detail);
 }

@@ -11,52 +11,40 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
   ReportBloc() : super(const ReportState()) {
     on<OnGetReportDetail>(_onGetReportDetail);
     on<OnPushReportDetail>(_onPushReportDetail);
+    on<OnMapReportDetail>(_onMapReportDetail);
   }
 
-  void _onPushReportDetail(
-      OnPushReportDetail event, Emitter<ReportState> emit) {
-    bool isError = false;
-    String errorMessage = "";
+  void _onMapReportDetail(OnMapReportDetail event, Emitter<ReportState> emit) {
     Report report = state.report ?? Report();
-    List<ReportDetail> details = report.details ?? [];
-    ReportDetail detail = event.detail;
+    List<ReportDetail> filter = (report.details ?? [])
+        .where((e) => e.product?.barcode == event.detail.product?.barcode)
+        .toList();
 
-    if (details.isEmpty) {
-      details.add(event.detail);
-    } else {
-      bool isAny =
-          details.any((s) => s.product?.barcode == detail.product?.barcode);
-      if (!isAny) {
-        bool isExist = details.any((e) =>
-            (e.age == event.detail.age) &&
-            (e.size == event.detail.size) &&
-            (e.taste == event.detail.taste));
-        if (isExist) {
-          isError = true;
-          errorMessage = "Usia, Rasa dan Kemasan yang sama sudah di input";
-        } else {
-          details.add(event.detail);
-        }
-      } else {
-        for (var i = 0; i < details.length; i++) {
-          var e = details[i];
-          if (e.product?.barcode == event.detail.product?.barcode) {
-            e = event.detail;
-          }
-        }
+    if (filter.isNotEmpty) {
+      for (var e in filter) {
+        e = event.detail;
+        e.isChecked = true;
       }
     }
-    report.details = details;
+
     report.amount = 0;
     for (var d in (report.details ?? [])) {
       report.amount =
           ((d.qty ?? 0) * (d.product?.price ?? 0) ?? 0) + (report.amount);
     }
-    emit(state.copyWith(
-      report: report,
-      isError: isError,
-      errorMessage: errorMessage,
-    ));
+    emit(state.copyWith(report: report));
+  }
+
+  void _onPushReportDetail(
+      OnPushReportDetail event, Emitter<ReportState> emit) {
+    Report report = state.report ?? Report();
+    report.details = event.details;
+    report.amount = 0;
+    for (var d in (report.details ?? [])) {
+      report.amount =
+          ((d.qty ?? 0) * (d.product?.price ?? 0) ?? 0) + (report.amount);
+    }
+    emit(state.copyWith(report: report));
   }
 
   void _onGetReportDetail(OnGetReportDetail event, Emitter<ReportState> emit) {

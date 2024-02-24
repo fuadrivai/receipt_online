@@ -15,3 +15,9 @@ class OnGetProduct extends ProductEvent {
 class OnLoadMore extends ProductEvent {
   const OnLoadMore();
 }
+
+class OnTapProduct extends ProductEvent {
+  final bool value;
+  final Product product;
+  const OnTapProduct(this.value, this.product);
+}

@@ -11,6 +11,11 @@ class OnGetProductByBarcode extends ProductFormEvent {
   const OnGetProductByBarcode(this.barcode);
 }
 
+class OnInitReportDetail extends ProductFormEvent {
+  final ReportDetail detail;
+  const OnInitReportDetail(this.detail);
+}
+
 class OnChangedAge extends ProductFormEvent {
   final String val;
   const OnChangedAge(this.val);

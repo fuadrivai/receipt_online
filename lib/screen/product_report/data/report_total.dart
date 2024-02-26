@@ -1,4 +1,5 @@
 import 'package:pdf/widgets.dart' as pw;
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
 
 class ReportTotal {
@@ -27,25 +28,66 @@ class ReportTotal {
   }
 
   pw.Widget getIndex2(int row, int index) {
+    Sizes _sizes = Sizes();
+    Tastes _taste = Tastes();
+    if (age == null) {
+      _sizes = (sizes ?? [])[0];
+      _taste = (_sizes.tastes ?? [])[0];
+    }
     switch (index) {
       case 0:
         return pw.Text((row + 1).toString());
       case 1:
-        return pw.Text(age!);
+        if (age == null) {
+          String productName = _taste.product?.name ?? "";
+          return pw.Text(productName);
+        } else {
+          return pw.Text(age ?? "");
+        }
       case 2:
+        if (age == null) {
+          return pw.Text("");
+        } else {
+          return pw.Column(
+            children: (sizes ?? []).map((e) {
+              return pw.Text(e.size ?? "");
+            }).toList(),
+          );
+        }
+      // return pw.Text(age ?? "");
+      case 3:
+        if (age == null) {
+          return pw.Text("");
+        } else {
+          return pw.Column(
+            children: (sizes ?? []).map((e) {
+              return pw.Text(((e.tastes ?? [])[0].qty ?? 0).toString());
+            }).toList(),
+          );
+        }
+      case 4:
+        if (age == null) {
+          return pw.Text("");
+        } else {
+          return pw.Column(
+            children: (sizes ?? []).map((e) {
+              return pw.Text(((e.tastes ?? [])[1].qty ?? 0).toString());
+            }).toList(),
+          );
+        }
+      case 5:
         return pw.Column(
           children: (sizes ?? []).map((e) {
-            return pw.Text(e.size ?? "");
+            return pw.Text((e.totalCarton ?? 0).toString());
           }).toList(),
         );
-      case 3:
-        return pw.Text((row + 1).toString());
-      case 4:
-        return pw.Text((row + 1).toString());
-      case 5:
-        return pw.Text((row + 1).toString());
       case 6:
-        return pw.Text((row + 1).toString());
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.end,
+          children: (sizes ?? []).map((e) {
+            return pw.Text(Common.oCcy.format((e.totalPrice ?? 0)));
+          }).toList(),
+        );
     }
     return pw.SizedBox.shrink();
   }

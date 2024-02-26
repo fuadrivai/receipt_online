@@ -7,7 +7,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report.dart';
-import 'package:receipt_online_shop/screen/product_report/data/report_total.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
@@ -96,7 +95,7 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
     final font1 = await PdfGoogleFonts.tinosRegular();
     final font2 = await PdfGoogleFonts.tinosBold();
     final image = await imageFromAssetBundle('assets/images/logo.png');
-    appenColumn(data.totals ?? []);
+
     pdf.addPage(pw.MultiPage(
       pageFormat: format.copyWith(
         marginBottom: 1.5 * PdfPageFormat.cm,
@@ -158,6 +157,7 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
       },
       build: (context) {
         return [
+          //Table Detail
           pw.SizedBox(height: 20),
           pw.TableHelper.fromTextArray(
             cellPadding: const pw.EdgeInsets.all(3),
@@ -189,47 +189,45 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
             },
             columnWidths: {},
           ),
+
+          //Table Rekap
           pw.SizedBox(height: 20),
-          pw.Column(children: columnBody),
+          pw.TableHelper.fromTextArray(
+            cellPadding: const pw.EdgeInsets.all(3),
+            oddRowDecoration: const pw.BoxDecoration(color: PdfColors.grey100),
+            headers: List<pw.Widget>.generate(
+              tableHeader2.length,
+              (col) {
+                return pw.Text(
+                  tableHeader2[col],
+                  style: pw.TextStyle(
+                    fontWeight: pw.FontWeight.bold,
+                  ),
+                );
+              },
+            ),
+            data: List<List<pw.Widget>>.generate(
+              (data.totals ?? []).length,
+              (row) => List<pw.Widget>.generate(
+                tableHeader2.length,
+                (col) => (data.totals ?? [])[row].getIndex2(row, col),
+              ),
+            ),
+            cellAlignments: {
+              0: pw.Alignment.centerRight,
+              1: pw.Alignment.center,
+              2: pw.Alignment.center,
+              3: pw.Alignment.center,
+              4: pw.Alignment.center,
+              5: pw.Alignment.center,
+              6: pw.Alignment.centerRight,
+            },
+          ),
+          pw.SizedBox(height: 20),
         ];
       },
     ));
     return pdf.save();
-  }
-
-  appenColumn(List<ReportTotal> totals) {
-    if (columnBody.isEmpty) {
-      pw.Widget header = pw.Container(
-        child: pw.Row(
-          children: [
-            container("NO", width: 40, height: 50),
-            container("TAHAP", width: 60, height: 50),
-            container("KEMASAN", width: 80, height: 50),
-            pw.Container(
-              decoration: pw.BoxDecoration(
-                border: pw.Border.all(color: PdfColors.black),
-              ),
-              child: pw.Column(
-                children: [
-                  pw.Container(height: 20, child: pw.Text("QTY")),
-                  pw.Row(
-                    children: [
-                      container("VANILA", width: 60),
-                      container("MADU", width: 60),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            container("KARTON", width: 100, height: 50),
-            container("RUPIAH", width: 120, height: 50),
-          ],
-        ),
-      );
-      columnBody.add(header);
-    } else {
-      for (var i = 0; i < totals.length; i++) {}
-    }
   }
 
   pw.Widget container(String data, {double? width, double? height}) {

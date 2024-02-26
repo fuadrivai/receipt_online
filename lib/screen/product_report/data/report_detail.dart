@@ -30,7 +30,7 @@ class ReportDetail {
       case 2:
         return Common.oCcy.format(qty ?? 0);
       case 3:
-        return Common.oCcy.format(qtyCarton ?? 0);
+        return Common.oCcy.format(((qty ?? 0) / (qtyCarton ?? 0)).floor());
       case 4:
         return Common.oCcy.format(subTotal ?? 0);
     }

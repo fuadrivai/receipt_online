@@ -17,7 +17,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
 
   void _onMapReport(OnMapReport event, Emitter<ReportState> emit) {
     Report report = state.report ?? Report();
-    List<ReportTotal> totals = report.totals ?? [];
+    List<ReportTotal> totals = [];
     List<ReportDetail> details = report.details ?? [];
     report.periode = event.periode;
 

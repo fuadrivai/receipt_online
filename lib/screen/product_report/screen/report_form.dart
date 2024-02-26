@@ -11,7 +11,8 @@ import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class ProductReportForm extends StatefulWidget {
-  const ProductReportForm({super.key});
+  final String periode;
+  const ProductReportForm({super.key, required this.periode});
 
   @override
   State<ProductReportForm> createState() => _ProductReportFormState();

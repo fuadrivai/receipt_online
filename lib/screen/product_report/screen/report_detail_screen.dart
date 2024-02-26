@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/product/screen/product_screen.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report_detail.dart';
+import 'package:receipt_online_shop/screen/product_report/screen/card_product.dart';
 import 'package:receipt_online_shop/screen/product_report/screen/product_form.dart';
+import 'package:receipt_online_shop/screen/product_report/screen/report_pdf_preview.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
-import 'package:badges/badges.dart' as badge;
 import 'package:receipt_online_shop/widget/loading_screen.dart';
+import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class ReportDetailScreen extends StatefulWidget {
   const ReportDetailScreen({super.key});
@@ -20,41 +24,168 @@ class ReportDetailScreen extends StatefulWidget {
 class _ReportDetailScreenState extends State<ReportDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: CustomAppbar(
-          title: "Report Group",
-          actions: IconButton(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(0),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return const ProductScreen();
+    return BlocBuilder<ReportBloc, ReportState>(
+      builder: (context, state) {
+        if (state.isLoading ?? false) {
+          return Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(70),
+              child: CustomAppbar(
+                title: "Report Group",
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.arrow_back),
+                ),
+              ),
+            ),
+            body: const LoadingScreen(),
+          );
+        }
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: CustomAppbar(
+              title: "Report Group",
+              actions: IconButton(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.all(0),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const ProductScreen();
+                    },
+                  )).then((value) {
+                    if (value != null) {
+                      context.read<ReportBloc>().add(OnPushReportDetail(value));
+                      setState(() {});
+                    }
+                  });
                 },
-              )).then((value) {
-                if (value != null) {
-                  context.read<ReportBloc>().add(OnPushReportDetail(value));
-                  setState(() {});
-                }
-              });
-            },
-            icon: const Icon(
-              Icons.add,
-              color: AppTheme.nearlyDarkBlue,
-              size: 30,
+                icon: const Icon(
+                  Icons.add,
+                  color: AppTheme.nearlyDarkBlue,
+                  size: 30,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      body: BlocBuilder<ReportBloc, ReportState>(
-        builder: (context, state) {
-          if (state.isLoading ?? false) {
-            const LoadingScreen();
-          }
-          return SingleChildScrollView(
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: (state.report?.details ?? []).isNotEmpty
+              ? FloatingActionButton.extended(
+                  elevation: 5,
+                  backgroundColor: AppTheme.nearlyDarkBlue.withOpacity(0.8),
+                  foregroundColor: Colors.white,
+                  onPressed: () {
+                    int idx = 0;
+                    for (ReportDetail e in (state.report?.details ?? [])) {
+                      if (!(e.isChecked ?? false)) {
+                        idx = idx + 1;
+                      }
+                    }
+                    if (idx > 0) {
+                      Common.modalInfo(
+                        context,
+                        title: "Error",
+                        message: "Check Semua Produk !",
+                        icon: const Padding(
+                          padding: EdgeInsets.only(top: 5.0),
+                          child: Icon(
+                            FontAwesomeIcons.circleXmark,
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    } else {
+                      DateTime idx = DateTime.now();
+                      String month = Common.months[idx.month - 1];
+                      int year = idx.year;
+                      showGeneralDialog(
+                        context: context,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return AlertDialog(
+                            title: const Text("Masukan Periode Report"),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 15),
+                                  DropdownButtonFormField<String>(
+                                    value: month,
+                                    items: Common.months.map((e) {
+                                      return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: TextStyle(
+                                            color: month == e
+                                                ? AppTheme.nearlyDarkBlue
+                                                : null,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (data) {
+                                      month = data!;
+                                      setState(() {});
+                                    },
+                                    decoration: TextFormDecoration.box("Bulan"),
+                                  ),
+                                  const SizedBox(height: 15),
+                                  DropdownButtonFormField<int>(
+                                    value: year,
+                                    items: Common.years.map((e) {
+                                      return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e.toString(),
+                                          style: TextStyle(
+                                            color: year == e
+                                                ? AppTheme.nearlyDarkBlue
+                                                : null,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (data) {
+                                      year = data!;
+                                      setState(() {});
+                                    },
+                                    decoration: TextFormDecoration.box("Tahun"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              Center(
+                                child: ButtonTask(
+                                  title: "Simpan",
+                                  width: 100,
+                                  onTap: () {
+                                    String periode = "$month $year";
+                                    Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) {
+                                        return ReportPDFPreview(
+                                          periode: periode,
+                                        );
+                                      },
+                                    ));
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  label: const Text('Generate Report'),
+                  icon: const Icon(FontAwesomeIcons.paperPlane),
+                )
+              : const SizedBox.shrink(),
+          body: SingleChildScrollView(
             child: (state.report?.details ?? []).isEmpty
                 ? const CardData(data: "Tidak Ada Transaksi")
                 : Column(
@@ -73,7 +204,8 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         itemBuilder: (c, i) {
                           ReportDetail detail =
                               (state.report?.details ?? [])[i];
-                          return InkWell(
+                          return CardProduct(
+                            detail: detail,
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                 builder: (context) {
@@ -89,114 +221,14 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                                 }
                               });
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 4,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: (detail.isChecked ?? false)
-                                      ? AppTheme.white
-                                      : Colors.redAccent.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: AppTheme.nearlyDarkBlue
-                                        .withOpacity(0.2),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    ListTile(
-                                      dense: true,
-                                      leading:
-                                          Image.asset("assets/images/logo.png"),
-                                      title: Text(
-                                        (detail.product?.name ?? "")
-                                            .toUpperCase(),
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                          "Rp. ${Common.oCcy.format(detail.product?.price ?? 0)}"),
-                                      trailing: SizedBox(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            const Text("Total Qty"),
-                                            badge.Badge(
-                                              badgeStyle: badge.BadgeStyle(
-                                                shape: badge.BadgeShape.square,
-                                                badgeColor: Colors.deepPurple,
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                              ),
-                                              badgeContent: Text(
-                                                Common.oCcy.format(detail.qty),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const Divider(),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 30, 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text("Total Karton"),
-                                          Text(
-                                            Common.oCcy.format(
-                                                ((detail.qty ?? 0) /
-                                                        (detail.qtyCarton ?? 0))
-                                                    .floor()),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          20, 0, 25, 4),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          const Text("Total Rupiah"),
-                                          Text(
-                                            "Rp. ${Common.oCcy.format((detail.qty ?? 0) * (detail.product?.price ?? 0))}",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 15,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
                           );
                         },
                       ),
                     ],
                   ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

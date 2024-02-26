@@ -9,7 +9,7 @@ import 'package:receipt_online_shop/model/transaction_online.dart';
 class Common {
   static final oCcy = NumberFormat("#,##0", "en_US");
   static modalInfo(BuildContext context,
-      {String? message, required String title, Icon? icon}) {
+      {String? message, required String title, Widget? icon}) {
     showDialog(
       context: context,
       builder: (__) {
@@ -43,6 +43,33 @@ class Common {
         );
       },
     );
+  }
+
+  static List<String> get months => [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember"
+      ];
+
+  static List<int> get years {
+    List<int> years = [];
+    int now = DateTime.now().year;
+    int last = now - 10;
+
+    for (var i = 0; i < 20; i++) {
+      years.add(last + i);
+    }
+
+    return years;
   }
 
   static Future<void> scanBarcodeNormal(BuildContext context,

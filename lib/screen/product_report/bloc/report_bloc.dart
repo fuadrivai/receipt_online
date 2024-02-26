@@ -12,6 +12,87 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     on<OnGetReportDetail>(_onGetReportDetail);
     on<OnPushReportDetail>(_onPushReportDetail);
     on<OnMapReportDetail>(_onMapReportDetail);
+    on<OnMapReport>(_onMapReport);
+  }
+
+  void _onMapReport(OnMapReport event, Emitter<ReportState> emit) {
+    Report report = state.report ?? Report();
+    List<ReportTotal> totals = report.totals ?? [];
+    List<ReportDetail> details = report.details ?? [];
+    report.periode = event.periode;
+
+    for (var detail in details) {
+      if (totals.isEmpty) {
+        totals.add(reportMapping(detail));
+      } else if (detail.age == null) {
+        totals.add(reportMapping(detail));
+      } else {
+        List<ReportTotal> isTotal =
+            totals.where((e) => e.age == detail.age).toList();
+        if (isTotal.isNotEmpty) {
+          for (var total in isTotal) {
+            List<Sizes> sizes = (total.sizes ?? [])
+                .where((s) => s.size == detail.size)
+                .toList();
+            if (sizes.isEmpty) {
+              (total.sizes ?? []).add(
+                Sizes(
+                  size: detail.size,
+                  totalQty: detail.qty,
+                  tastes: [
+                    Tastes(
+                      price: detail.product?.price ?? 0,
+                      qty: detail.qty,
+                      qtyCarton: detail.qtyCarton,
+                      taste: detail.taste,
+                      product: detail.product,
+                    )
+                  ],
+                ),
+              );
+            } else {
+              int totalQty = 0;
+              int totalPrice = 0;
+              int qtyCarton = 0;
+              for (var s in sizes) {
+                List<Tastes> tastes = (s.tastes ?? [])
+                    .where((t) => t.taste == detail.taste)
+                    .toList();
+                if (tastes.isEmpty) {
+                  (s.tastes ?? []).add(Tastes(
+                    price: detail.product?.price ?? 0,
+                    qty: detail.qty,
+                    qtyCarton: detail.qtyCarton,
+                    taste: detail.taste,
+                    product: detail.product,
+                  ));
+                } else {
+                  for (var t in tastes) {
+                    t.qty = detail.qty;
+                    t.qtyCarton = detail.qtyCarton;
+                  }
+                }
+                for (Tastes st in s.tastes ?? []) {
+                  qtyCarton = st.qtyCarton ?? 0;
+                  totalQty = totalQty + (st.qty ?? 0);
+                  totalPrice = totalPrice + ((st.qty ?? 0) * (st.price ?? 0));
+                }
+                s.totalQty = totalQty;
+                s.totalCarton = (totalQty / qtyCarton).floor();
+                s.totalPrice = totalPrice;
+              }
+            }
+          }
+        } else {
+          totals.add(reportMapping(detail));
+        }
+      }
+    }
+    report.totals = totals;
+
+    emit(state.copyWith(
+      report: report,
+    ));
   }
 
   void _onMapReportDetail(OnMapReportDetail event, Emitter<ReportState> emit) {

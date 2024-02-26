@@ -21,3 +21,8 @@ class OnMapReportDetail extends ReportEvent {
   final ReportDetail detail;
   const OnMapReportDetail(this.detail);
 }
+
+class OnMapReport extends ReportEvent {
+  final String periode;
+  const OnMapReport(this.periode);
+}

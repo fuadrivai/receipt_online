@@ -1,3 +1,4 @@
+import 'package:pdf/widgets.dart' as pw;
 import 'package:receipt_online_shop/screen/product/data/product.dart';
 
 class ReportTotal {
@@ -23,6 +24,30 @@ class ReportTotal {
       data['sizes'] = sizes!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  pw.Widget getIndex2(int row, int index) {
+    switch (index) {
+      case 0:
+        return pw.Text((row + 1).toString());
+      case 1:
+        return pw.Text(age!);
+      case 2:
+        return pw.Column(
+          children: (sizes ?? []).map((e) {
+            return pw.Text(e.size ?? "");
+          }).toList(),
+        );
+      case 3:
+        return pw.Text((row + 1).toString());
+      case 4:
+        return pw.Text((row + 1).toString());
+      case 5:
+        return pw.Text((row + 1).toString());
+      case 6:
+        return pw.Text((row + 1).toString());
+    }
+    return pw.SizedBox.shrink();
   }
 }
 

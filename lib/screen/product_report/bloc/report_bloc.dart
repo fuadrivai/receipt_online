@@ -125,6 +125,9 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
       report.amount =
           ((d.qty ?? 0) * (d.product?.price ?? 0) ?? 0) + (report.amount);
     }
+    (report.details ?? []).sort((a, b) {
+      return (a.size ?? "").compareTo(b.size ?? "");
+    });
     emit(state.copyWith(report: report));
   }
 

@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/service/api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
@@ -14,7 +14,6 @@ class ShopeeListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = NumberFormat("#,##0", "en_US");
     return ListView.builder(
       itemCount: orders.length,
       itemBuilder: (context, i) {
@@ -184,7 +183,7 @@ class ShopeeListView extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Rp. ${currency.format(e.originalPrice)}",
+                                    "Rp. ${Common.oCcy.format(e.originalPrice)}",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),

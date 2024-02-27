@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/product_form_bloc.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
@@ -18,7 +18,6 @@ class ProductFormScreen extends StatefulWidget {
 }
 
 class _ProductFormScreenState extends State<ProductFormScreen> {
-  final oCcy = NumberFormat("#,##0", "en_US");
   TextEditingController qtyControler = TextEditingController();
   TextEditingController qtyCartonControler = TextEditingController();
   @override
@@ -85,7 +84,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                               Text(
                                   'Barcode : ${product.barcode ?? "Barcode : --"}'),
                               Text(
-                                  "Harga Satuan : Rp. ${oCcy.format(product.price ?? 0)}"),
+                                  "Harga Satuan : Rp. ${Common.oCcy.format(product.price ?? 0)}"),
                             ],
                           ),
                         ),
@@ -186,7 +185,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           children: [
                             const Text("Total"),
                             Text(
-                                "Rp. ${oCcy.format(state.detail?.subTotal ?? 0)}"),
+                                "Rp. ${Common.oCcy.format(state.detail?.subTotal ?? 0)}"),
                           ],
                         ),
                         const SizedBox(height: 20),

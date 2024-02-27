@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:pdf/widgets.dart' as pw;
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';

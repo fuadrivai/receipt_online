@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 
 class CardOrder extends StatelessWidget {
@@ -18,7 +18,6 @@ class CardOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = NumberFormat("#,##0", "en_US");
     List<Items> listItem = [];
     Color deliveryTpeColor = Colors.redAccent;
     for (Items e in (order.items ?? [])) {
@@ -164,7 +163,7 @@ class CardOrder extends StatelessWidget {
                             ? Text(e.variation ?? "")
                             : const SizedBox(),
                         Text(
-                          "Rp. ${currency.format(e.discountedPrice)}",
+                          "Rp. ${Common.oCcy.format(e.discountedPrice)}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         listItem.last == e
@@ -203,7 +202,7 @@ class CardOrder extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Total Rp. ${currency.format(order.totalAmount ?? "0")}",
+                      "Total Rp. ${Common.oCcy.format(order.totalAmount ?? "0")}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,

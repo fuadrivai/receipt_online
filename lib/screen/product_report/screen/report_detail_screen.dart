@@ -107,7 +107,7 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                         context: context,
                         pageBuilder: (context, animation, secondaryAnimation) {
                           return AlertDialog(
-                            title: const Text("Masukan Periode Report"),
+                            title: const Text("Masukan Periode"),
                             content: SingleChildScrollView(
                               child: Column(
                                 children: [
@@ -159,21 +159,35 @@ class _ReportDetailScreenState extends State<ReportDetailScreen> {
                               ),
                             ),
                             actions: [
-                              Center(
-                                child: ButtonTask(
-                                  title: "Simpan",
-                                  width: 100,
-                                  onTap: () {
-                                    String periode = "$month $year";
-                                    Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {
-                                        return ReportPDFPreview(
-                                          periode: periode,
-                                        );
-                                      },
-                                    ));
-                                  },
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ButtonTask(
+                                    title: "Submit",
+                                    width: 100,
+                                    onTap: () {
+                                      String periode = "$month $year";
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) {
+                                          return ReportPDFPreview(
+                                            periode: periode,
+                                          );
+                                        },
+                                      ));
+                                    },
+                                  ),
+                                  const SizedBox(width: 3),
+                                  ButtonTask(
+                                    title: "Tutup",
+                                    width: 100,
+                                    color: Colors.redAccent,
+                                    icon: const Icon(
+                                      FontAwesomeIcons.circleXmark,
+                                      color: Colors.white,
+                                    ),
+                                    onTap: () => Navigator.pop(context),
+                                  ),
+                                ],
                               ),
                             ],
                           );

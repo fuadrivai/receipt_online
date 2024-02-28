@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product_report/bloc/report_bloc.dart';
 import 'package:receipt_online_shop/screen/product_report/data/report.dart';
+import 'package:receipt_online_shop/screen/product_report/data/report_total.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
@@ -25,8 +27,8 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
     "NO",
     "TAHAP",
     "KEMASAN",
-    "VANILA",
     "MADU",
+    "VANILA",
     "KARTON",
     "RUPIAH"
   ];
@@ -39,31 +41,40 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: CustomAppbar(
-          title: "Report Group",
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          actions: IconButton(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(0),
-            icon: const Icon(
-              Icons.print,
-              color: AppTheme.nearlyDarkBlue,
+    return BlocBuilder<ReportBloc, ReportState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: CustomAppbar(
+              title: "Report Group",
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back),
+              ),
+              actions: IconButton(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.all(0),
+                icon: const Icon(
+                  Icons.print,
+                  color: AppTheme.nearlyDarkBlue,
+                ),
+                onPressed: () async {
+                  await Printing.layoutPdf(
+                    onLayout: (format) {
+                      return _generatePdf(
+                        format: format,
+                        data: state.report ?? Report(),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-            onPressed: () {},
           ),
-        ),
-      ),
-      body: BlocBuilder<ReportBloc, ReportState>(
-        builder: (context, state) {
-          return PdfPreview(
+          body: PdfPreview(
             maxPageWidth: 700,
             build: (format) => _generatePdf(
               format: format,
@@ -77,12 +88,9 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
             loadingWidget: const LoadingScreen(),
             pdfFileName:
                 "product_report_${DateTime.now().millisecondsSinceEpoch}",
-            // actions: actions,
-            // onPrinted: _showPrintedToast,
-            // onShared: _showSharedToast,
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -95,6 +103,10 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
     final font1 = await PdfGoogleFonts.tinosRegular();
     final font2 = await PdfGoogleFonts.tinosBold();
     final image = await imageFromAssetBundle('assets/images/logo.png');
+    List<ReportTotal> totals =
+        (data.totals ?? []).where((e) => e.age != null).toList();
+    List<ReportTotal> emptyTotals =
+        (data.totals ?? []).where((e) => e.age == null).toList();
 
     pdf.addPage(pw.MultiPage(
       pageFormat: format.copyWith(
@@ -139,13 +151,13 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
                       'Report Product',
                       style: pw.TextStyle(
                         fontWeight: pw.FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 17,
                       ),
                     ),
                     pw.Text(
                       "Periode : ${data.periode}",
                       style: const pw.TextStyle(
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                   ],
@@ -187,43 +199,91 @@ class _ReportPDFPreviewState extends State<ReportPDFPreview> {
               3: pw.Alignment.center,
               4: pw.Alignment.centerRight,
             },
-            columnWidths: {},
           ),
 
           //Table Rekap
           pw.SizedBox(height: 20),
-          pw.TableHelper.fromTextArray(
-            cellPadding: const pw.EdgeInsets.all(3),
-            oddRowDecoration: const pw.BoxDecoration(color: PdfColors.grey100),
-            headers: List<pw.Widget>.generate(
-              tableHeader2.length,
-              (col) {
-                return pw.Text(
-                  tableHeader2[col],
-                  style: pw.TextStyle(
-                    fontWeight: pw.FontWeight.bold,
+          totals.isNotEmpty
+              ? pw.TableHelper.fromTextArray(
+                  cellPadding: const pw.EdgeInsets.all(3),
+                  oddRowDecoration:
+                      const pw.BoxDecoration(color: PdfColors.grey100),
+                  headers: List<pw.Widget>.generate(
+                    tableHeader2.length,
+                    (col) {
+                      return pw.Text(
+                        tableHeader2[col],
+                        style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-            data: List<List<pw.Widget>>.generate(
-              (data.totals ?? []).length,
-              (row) => List<pw.Widget>.generate(
-                tableHeader2.length,
-                (col) => (data.totals ?? [])[row].getIndex2(row, col),
+                  data: List<List<pw.Widget>>.generate(
+                    totals.length,
+                    (row) => List<pw.Widget>.generate(
+                      tableHeader2.length,
+                      (col) => totals[row].getIndex2(row, col),
+                    ),
+                  ),
+                  cellAlignments: {
+                    0: pw.Alignment.centerRight,
+                    1: pw.Alignment.center,
+                    2: pw.Alignment.center,
+                    3: pw.Alignment.center,
+                    4: pw.Alignment.center,
+                    5: pw.Alignment.center,
+                    6: pw.Alignment.centerRight,
+                  },
+                )
+              : pw.SizedBox.shrink(),
+          emptyTotals.isNotEmpty
+              ? pw.TableHelper.fromTextArray(
+                  cellPadding: const pw.EdgeInsets.all(3),
+                  oddRowDecoration:
+                      const pw.BoxDecoration(color: PdfColors.grey100),
+                  data: List<List<pw.Widget>>.generate(
+                    emptyTotals.length,
+                    (row) => List<pw.Widget>.generate(
+                      5,
+                      (col) => emptyTotals[row]
+                          .getEmptyIndex(row, col, totals.length),
+                    ),
+                  ),
+                  columnWidths: {
+                    0: const pw.FractionColumnWidth(11),
+                    1: const pw.FractionColumnWidth(53),
+                    2: const pw.FractionColumnWidth(44),
+                    3: const pw.FractionColumnWidth(27),
+                    4: const pw.FractionColumnWidth(27),
+                  },
+                  cellAlignments: {
+                    0: pw.Alignment.centerRight,
+                    1: pw.Alignment.center,
+                    2: pw.Alignment.center,
+                    3: pw.Alignment.center,
+                    4: pw.Alignment.centerRight,
+                  },
+                )
+              : pw.SizedBox.shrink(),
+          pw.SizedBox(height: 10),
+          pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [
+              pw.Text(
+                "Total :",
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
               ),
-            ),
-            cellAlignments: {
-              0: pw.Alignment.centerRight,
-              1: pw.Alignment.center,
-              2: pw.Alignment.center,
-              3: pw.Alignment.center,
-              4: pw.Alignment.center,
-              5: pw.Alignment.center,
-              6: pw.Alignment.centerRight,
-            },
+              pw.Text(
+                "Rp. ${Common.oCcy.format(data.amount ?? 0)}",
+                style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+              ),
+            ],
           ),
-          pw.SizedBox(height: 20),
+          pw.Spacer(),
+          pw.Text("Administrator"),
+          pw.SizedBox(height: 100),
+          pw.Text("(............................)")
         ];
       },
     ));

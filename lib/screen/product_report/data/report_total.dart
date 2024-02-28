@@ -2,6 +2,7 @@
 
 import 'package:pdf/widgets.dart' as pw;
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/library/string_uppercase.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
 
 class ReportTotal {
@@ -30,53 +31,29 @@ class ReportTotal {
   }
 
   pw.Widget getIndex2(int row, int index) {
-    Sizes _sizes = Sizes();
-    Tastes _taste = Tastes();
-    if (age == null) {
-      _sizes = (sizes ?? [])[0];
-      _taste = (_sizes.tastes ?? [])[0];
-    }
     switch (index) {
       case 0:
         return pw.Text((row + 1).toString());
       case 1:
-        if (age == null) {
-          String productName = _taste.product?.name ?? "";
-          return pw.Text(productName);
-        } else {
-          return pw.Text(age ?? "");
-        }
+        return pw.Text(age ?? "");
       case 2:
-        if (age == null) {
-          return pw.Text("");
-        } else {
-          return pw.Column(
-            children: (sizes ?? []).map((e) {
-              return pw.Text(e.size ?? "");
-            }).toList(),
-          );
-        }
-      // return pw.Text(age ?? "");
+        return pw.Column(
+          children: (sizes ?? []).map((e) {
+            return pw.Text(e.size ?? "");
+          }).toList(),
+        );
       case 3:
-        if (age == null) {
-          return pw.Text("");
-        } else {
-          return pw.Column(
-            children: (sizes ?? []).map((e) {
-              return pw.Text(((e.tastes ?? [])[0].qty ?? 0).toString());
-            }).toList(),
-          );
-        }
+        return pw.Column(
+          children: (sizes ?? []).map((e) {
+            return pw.Text(((e.tastes ?? [])[0].qty ?? 0).toString());
+          }).toList(),
+        );
       case 4:
-        if (age == null) {
-          return pw.Text("");
-        } else {
-          return pw.Column(
-            children: (sizes ?? []).map((e) {
-              return pw.Text(((e.tastes ?? [])[1].qty ?? 0).toString());
-            }).toList(),
-          );
-        }
+        return pw.Column(
+          children: (sizes ?? []).map((e) {
+            return pw.Text(((e.tastes ?? [])[1].qty ?? 0).toString());
+          }).toList(),
+        );
       case 5:
         return pw.Column(
           children: (sizes ?? []).map((e) {
@@ -90,6 +67,24 @@ class ReportTotal {
             return pw.Text(Common.oCcy.format((e.totalPrice ?? 0)));
           }).toList(),
         );
+    }
+    return pw.SizedBox.shrink();
+  }
+
+  pw.Widget getEmptyIndex(int row, int index, int start) {
+    Sizes _sizes = (sizes ?? [])[0];
+    Tastes _taste = (_sizes.tastes ?? [])[0];
+    switch (index) {
+      case 0:
+        return pw.Text((row + start + 1).toString());
+      case 1:
+        return pw.Text((_taste.product?.name ?? "").firstUpperCase());
+      case 2:
+        return pw.Text(Common.oCcy.format(_taste.qty ?? 0));
+      case 3:
+        return pw.Text(Common.oCcy.format(_sizes.totalCarton ?? 0));
+      case 4:
+        return pw.Text(Common.oCcy.format(_sizes.totalPrice ?? 0));
     }
     return pw.SizedBox.shrink();
   }

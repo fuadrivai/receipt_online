@@ -17,17 +17,17 @@ class OnInitReportDetail extends ProductFormEvent {
 }
 
 class OnChangedAge extends ProductFormEvent {
-  final String val;
+  final String? val;
   const OnChangedAge(this.val);
 }
 
 class OnChangedTaste extends ProductFormEvent {
-  final String val;
+  final String? val;
   const OnChangedTaste(this.val);
 }
 
 class OnChangedSize extends ProductFormEvent {
-  final String val;
+  final String? val;
   const OnChangedSize(this.val);
 }
 

@@ -95,11 +95,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           items: const [
                             DropdownMenuItem(value: "1+", child: Text("1+")),
                             DropdownMenuItem(value: "3+", child: Text("3+")),
+                            DropdownMenuItem(value: null, child: Text("Bebas")),
                           ],
                           onChanged: (data) {
                             context
                                 .read<ProductFormBloc>()
-                                .add(OnChangedAge(data!));
+                                .add(OnChangedAge(data));
                           },
                           decoration: TextFormDecoration.box("Usia"),
                         ),
@@ -108,14 +109,19 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           value: state.detail?.taste,
                           items: const [
                             DropdownMenuItem(
-                                value: "madu", child: Text("Madu")),
+                              value: "madu",
+                              child: Text("Madu"),
+                            ),
                             DropdownMenuItem(
-                                value: "vanila", child: Text("Vanila")),
+                              value: "vanila",
+                              child: Text("Vanila"),
+                            ),
+                            DropdownMenuItem(value: null, child: Text("Bebas")),
                           ],
                           onChanged: (data) {
                             context
                                 .read<ProductFormBloc>()
-                                .add(OnChangedTaste(data!));
+                                .add(OnChangedTaste(data));
                           },
                           decoration: TextFormDecoration.box("Rasa"),
                         ),
@@ -124,17 +130,23 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                           value: state.detail?.size,
                           items: const [
                             DropdownMenuItem(
-                                value: "300gr", child: Text("300gr")),
+                              value: "300gr",
+                              child: Text("300gr"),
+                            ),
                             DropdownMenuItem(
-                                value: "700gr", child: Text("700gr")),
+                              value: "700gr",
+                              child: Text("700gr"),
+                            ),
                             DropdownMenuItem(
-                                value: "1 KG", child: Text("1 KG")),
-                            DropdownMenuItem(value: null, child: Text("")),
+                              value: "1 KG",
+                              child: Text("1 KG"),
+                            ),
+                            DropdownMenuItem(value: null, child: Text("Bebas")),
                           ],
                           onChanged: (data) {
                             context
                                 .read<ProductFormBloc>()
-                                .add(OnChangedSize(data!));
+                                .add(OnChangedSize(data));
                           },
                           decoration: TextFormDecoration.box("Kemasan"),
                         ),

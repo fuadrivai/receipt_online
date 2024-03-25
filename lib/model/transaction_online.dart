@@ -16,6 +16,7 @@ class TransactionOnline {
   String? productPicture;
   String? packagePicture;
   bool? showRequest;
+  bool? showButton;
   bool? scanned;
   List<Items>? items;
 
@@ -39,6 +40,7 @@ class TransactionOnline {
     this.shippingProviderType,
     this.scanned = false,
     this.showRequest = false,
+    this.showButton = false,
   });
 
   TransactionOnline.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,7 @@ class TransactionOnline {
     productPicture = json['product_picture'];
     packagePicture = json['package_picture'];
     showRequest = json['show_request'];
+    showButton = json['show_button'];
     scanned = json['scanned'];
     shippingProviderType = json['shipping_provider_type'];
     if (json['items'] != null) {
@@ -87,6 +90,7 @@ class TransactionOnline {
     data['order_id'] = orderId;
     data['product_picture'] = productPicture;
     data['package_picture'] = packagePicture;
+    data['show_button'] = showButton;
     if (items != null) {
       data['items'] = items!.map((v) => v.toJson()).toList();
     }

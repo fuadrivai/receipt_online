@@ -141,7 +141,7 @@ class ShopeeListView extends StatelessWidget {
                               order.totalQty.toString(),
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 15,
                               ),
                             ),
                           ),
@@ -293,7 +293,7 @@ class ShopeeListView extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: order.showRequest ?? false,
+                      visible: order.showButton ?? false,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5.0,
@@ -303,7 +303,7 @@ class ShopeeListView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Visibility(
-                              visible: true,
+                              visible: order.showRequest ?? false,
                               child: SizedBox(
                                 width: 150,
                                 height: 45,
@@ -324,7 +324,7 @@ class ShopeeListView extends StatelessWidget {
                               ),
                             ),
                             Visibility(
-                              visible: false,
+                              visible: !(order.showRequest ?? false),
                               child: SizedBox(
                                 width: 150,
                                 height: 45,

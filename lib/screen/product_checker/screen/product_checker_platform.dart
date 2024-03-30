@@ -7,9 +7,7 @@ import 'package:receipt_online_shop/widget/default_color.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ListPlatform extends StatefulWidget {
-  final Function(Platform)? getPlatform;
-  final Function(Platform)? onTap;
-  const ListPlatform({super.key, this.getPlatform, this.onTap});
+  const ListPlatform({super.key});
 
   @override
   State<ListPlatform> createState() => _ListPlatformState();
@@ -28,7 +26,7 @@ class _ListPlatformState extends State<ListPlatform> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductCheckerBloc, ProductCheckerState>(
       builder: (context, state) {
-        if (state is ProductCheckerLoadingState) {
+        if (state.isLoading ?? false) {
           return Padding(
             padding: const EdgeInsets.all(6.0),
             child: SizedBox(
@@ -53,43 +51,16 @@ class _ListPlatformState extends State<ListPlatform> {
             ),
           );
         }
-        if (state is ProductCheckerStandByState) {
-          platforms = (state.platforms ?? []);
-          widget.getPlatform!(state.platform!);
-          return PlatformList(
-            platforms: platforms,
-            onTap: (pl) {
-              widget.onTap!(pl);
-              setState(() {});
-            },
-            state: state.platform!,
-          );
-        }
-        if (state is ProductCheckerDataState) {
-          platforms = (state.platforms ?? []);
-          widget.getPlatform!(state.platform!);
-          return PlatformList(
-            platforms: platforms,
-            onTap: (pl) {
-              widget.onTap!(pl);
-              setState(() {});
-            },
-            state: state.platform!,
-          );
-        }
-        if (state is ProductCheckerErrorState) {
-          platforms = (state.platforms ?? []);
-          widget.getPlatform!(state.platform!);
-          return PlatformList(
-            platforms: platforms,
-            onTap: (pl) {
-              widget.onTap!(pl);
-              setState(() {});
-            },
-            state: state.platform!,
-          );
-        }
-        return const Center(child: Text('Data Tidak Tersedia'));
+        return PlatformList(
+          platforms: state.platforms ?? [],
+          onTap: (pl) {
+            context
+                .read<ProductCheckerBloc>()
+                .add(ProductCheckerOnTabEvent(pl));
+            setState(() {});
+          },
+          state: state.platform ?? Platform(),
+        );
       },
     );
   }
@@ -129,9 +100,6 @@ class PlatformList extends StatelessWidget {
                 ),
                 text: "${platform.name}",
                 onTap: () {
-                  context
-                      .read<ProductCheckerBloc>()
-                      .add(ProductCheckerOnTabEvent(platform, platforms));
                   onTap(platform);
                 },
                 backgroundColor:

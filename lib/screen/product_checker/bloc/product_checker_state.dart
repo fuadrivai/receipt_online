@@ -1,43 +1,46 @@
 part of 'product_checker_bloc.dart';
 
-abstract class ProductCheckerState extends Equatable {
-  const ProductCheckerState();
-}
-
-class ProductCheckerStandByState extends ProductCheckerState {
+final class ProductCheckerState extends Equatable {
   final List<Platform>? platforms;
-  final Platform? platform;
-  const ProductCheckerStandByState({this.platforms, this.platform});
-  @override
-  List<Object?> get props => [platforms, platform];
-}
-
-class ProductCheckerDataState extends ProductCheckerState {
-  final List<Platform>? platforms;
+  final bool? isLoading;
+  final bool? isError;
   final List<TransactionOnline>? data;
   final Platform? platform;
-  const ProductCheckerDataState({this.platforms, this.data, this.platform});
+  final String? errorMessage;
+  const ProductCheckerState({
+    this.platforms,
+    this.platform,
+    this.errorMessage,
+    this.isError,
+    this.isLoading = true,
+    this.data,
+  });
+
+  ProductCheckerState copyWith({
+    List<Platform>? platforms,
+    bool? isLoading,
+    bool? isError,
+    Platform? platform,
+    String? errorMessage,
+    List<TransactionOnline>? data,
+  }) {
+    return ProductCheckerState(
+      platforms: platforms ?? this.platforms,
+      isLoading: isLoading ?? this.isLoading,
+      data: data ?? this.data,
+      platform: platform ?? this.platform,
+      isError: isError ?? this.isError,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object?> get props => [platforms, data];
-}
-
-class ProductCheckerLoadingState extends ProductCheckerState {
-  @override
-  List<Object?> get props => [];
-}
-
-class ProductCheckerInitialState extends ProductCheckerState {
-  @override
-  List<Object?> get props => [];
-}
-
-class ProductCheckerErrorState extends ProductCheckerState {
-  final String message;
-  final List<Platform>? platforms;
-  final Platform? platform;
-  const ProductCheckerErrorState(
-      {required this.message, this.platforms, this.platform});
-  @override
-  List<Object?> get props => [message, platforms, platform];
+  List<Object?> get props => [
+        platforms,
+        isLoading,
+        data,
+        platform,
+        isError,
+        errorMessage,
+      ];
 }

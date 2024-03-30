@@ -7,7 +7,7 @@ import 'package:receipt_online_shop/screen/shopee/bloc/list_shopee_bloc.dart';
 import 'package:receipt_online_shop/screen/shopee/bloc/shopee_bloc.dart';
 import 'package:receipt_online_shop/widget/custom_badge.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
-import 'package:receipt_online_shop/widget/shopee_list_view.dart';
+import 'package:receipt_online_shop/widget/detail_order.dart';
 import 'package:receipt_online_shop/widget/shopee_widget_screen.dart';
 
 class ShopeeScreen extends StatefulWidget {
@@ -65,8 +65,9 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
                     ),
                   ),
                   Expanded(
-                      child: ShopeeListView(
+                      child: DetailOrder(
                     orders: state.listOrder,
+                    onCreateOrder: (order) {},
                     onPressed: (order) async {
                       bool isConfirm = await confirm(
                         context,

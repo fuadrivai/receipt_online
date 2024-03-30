@@ -26,7 +26,6 @@ class _ProductCheckerScreen2State extends State<ProductCheckerScreen2>
   TextEditingController barcodeController = TextEditingController();
   late bool visible;
   Platform? platform;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,14 +105,7 @@ class _ProductCheckerScreen2State extends State<ProductCheckerScreen2>
           },
           child: Column(
             children: [
-              ListPlatform(
-                getPlatform: (p0) => platform = p0,
-                onTap: (p0) {
-                  setState(() {
-                    platform = p0;
-                  });
-                },
-              ),
+              const ListPlatform(),
               ProductCheckerTextBox(
                 barcodeController: barcodeController,
               ),

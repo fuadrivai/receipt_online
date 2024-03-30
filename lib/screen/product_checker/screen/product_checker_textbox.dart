@@ -17,7 +17,7 @@ class ProductCheckerTextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProductCheckerBloc, ProductCheckerState>(
         builder: (context, state) {
-      bool disable = (state is ProductCheckerLoadingState) ? false : true;
+      bool disable = (state.isLoading ?? false) ? false : true;
       return Padding(
         padding: const EdgeInsets.all(8),
         child: Form(
@@ -38,18 +38,8 @@ class ProductCheckerTextBox extends StatelessWidget {
                 onPressed: onPressed ??
                     () {
                       if (_formKey.currentState!.validate()) {
-                        if (state is ProductCheckerDataState) {
-                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                              state.platform!, barcodeController.text));
-                        }
-                        if (state is ProductCheckerErrorState) {
-                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                              state.platform!, barcodeController.text));
-                        }
-                        if (state is ProductCheckerStandByState) {
-                          context.read<ProductCheckerBloc>().add(GetOrderEvent(
-                              state.platform!, barcodeController.text));
-                        }
+                        context.read<ProductCheckerBloc>().add(GetOrderEvent(
+                            state.platform!, barcodeController.text));
                       }
                     },
                 icon: const Icon(

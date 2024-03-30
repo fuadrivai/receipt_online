@@ -21,10 +21,9 @@ class ProductCheckerLoadingEvent extends ProductCheckerEvent {
 
 class ProductCheckerOnTabEvent extends ProductCheckerEvent {
   final Platform platform;
-  final List<Platform> platforms;
-  const ProductCheckerOnTabEvent(this.platform, this.platforms);
+  const ProductCheckerOnTabEvent(this.platform);
   @override
-  List<Object?> get props => [platform, platforms];
+  List<Object?> get props => [platform];
 }
 
 class GetOrderEvent extends ProductCheckerEvent {
@@ -39,6 +38,14 @@ class RtsEvent extends ProductCheckerEvent {
   final Platform platform;
   final TransactionOnline dataOrder;
   const RtsEvent(this.platform, this.dataOrder);
+  @override
+  List<Object?> get props => [platform, dataOrder];
+}
+
+class CreateOrderEvent extends ProductCheckerEvent {
+  final Platform platform;
+  final TransactionOnline dataOrder;
+  const CreateOrderEvent(this.platform, this.dataOrder);
   @override
   List<Object?> get props => [platform, dataOrder];
 }

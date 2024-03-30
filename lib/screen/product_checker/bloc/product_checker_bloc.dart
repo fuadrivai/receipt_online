@@ -20,44 +20,50 @@ part 'product_checker_state.dart';
 class ProductCheckerBloc
     extends Bloc<ProductCheckerEvent, ProductCheckerState> {
   final NavigationService _nav = locator<NavigationService>();
-  ProductCheckerBloc() : super(ProductCheckerInitialState()) {
+  ProductCheckerBloc() : super(const ProductCheckerState()) {
     on<ProductCheckerStandByEvent>(_standBy);
     on<ProductCheckerOnTabEvent>(_onTabPlatform);
     on<GetOrderEvent>(_getOrder);
     on<RtsEvent>(_rts);
+    on<CreateOrderEvent>(_createOrder);
   }
 
   void _standBy(ProductCheckerStandByEvent event,
       Emitter<ProductCheckerState> emit) async {
     try {
-      emit(ProductCheckerLoadingState());
+      emit(state.copyWith(
+          isLoading: true, isError: false, data: [], platform: Platform()));
       List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
       Platform platform = platforms.isEmpty ? Platform() : platforms[0];
-      // emit(ProductCheckerDataState(platforms: platforms));
-      emit(
-          ProductCheckerStandByState(platforms: platforms, platform: platform));
+
+      emit(state.copyWith(
+        platforms: platforms,
+        platform: platform,
+        isLoading: false,
+        isError: false,
+      ));
     } catch (e) {
       String message =
           e is DioException ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(message: message));
+      emit(state.copyWith(
+        errorMessage: message,
+        isLoading: false,
+        isError: true,
+      ));
     }
   }
 
   void _onTabPlatform(
       ProductCheckerOnTabEvent event, Emitter<ProductCheckerState> emit) async {
-    try {
-      emit(ProductCheckerStandByState(
-          platform: event.platform, platforms: event.platforms));
-    } catch (e) {
-      String message =
-          e is DioException ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(message: message));
-    }
+    emit(state.copyWith(
+      platform: event.platform,
+      data: [],
+      isError: false,
+    ));
   }
 
   void _getOrder(GetOrderEvent event, Emitter<ProductCheckerState> emit) async {
-    emit(ProductCheckerLoadingState());
-    List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
+    emit(state.copyWith(isLoading: true, isError: false));
     try {
       List<TransactionOnline> listTrans = [];
       switch (event.platform.name?.toLowerCase()) {
@@ -83,25 +89,61 @@ class ProductCheckerBloc
           break;
         default:
       }
-      emit(ProductCheckerDataState(
-        platforms: platforms,
+      emit(state.copyWith(
         platform: event.platform,
         data: listTrans,
+        isLoading: false,
       ));
     } catch (e) {
       String message =
           e is DioException ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(
-        message: message,
-        platforms: platforms,
-        platform: event.platform,
+      emit(state.copyWith(
+        errorMessage: message,
+        isError: true,
+        isLoading: false,
+        data: state.data,
+        platform: state.platform,
       ));
     }
   }
 
+  void _createOrder(
+      CreateOrderEvent event, Emitter<ProductCheckerState> emit) async {
+    try {
+      TransactionOnline order = event.dataOrder;
+      switch (event.platform.name?.toLowerCase()) {
+        case "lazada":
+          print(
+              "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");
+          break;
+        case "jdid":
+          print(
+              "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");
+          break;
+
+        case "shopee":
+          print(
+              "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");
+          break;
+        case "tiktok":
+          print(
+              "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");
+          break;
+        default:
+      }
+    } catch (e) {
+      // String message =
+      //     e is DioException ? e.response?.data['message'] : e.toString();
+      // emit(ProductCheckerErrorState(
+      //   message: message,
+      //   platforms: platforms,
+      //   platform: event.platform,
+      // ));
+    }
+  }
+
   void _rts(RtsEvent event, Emitter<ProductCheckerState> emit) async {
-    emit(ProductCheckerLoadingState());
-    List<Platform> platforms = await ProductCheckerApi.getActivePlatform();
+    emit(state.copyWith(isLoading: true, isError: false));
     try {
       List<TransactionOnline> listTrans = [];
       TransactionOnline order = event.dataOrder;
@@ -153,18 +195,21 @@ class ProductCheckerBloc
           break;
         default:
       }
-      emit(ProductCheckerDataState(
-        platforms: platforms,
-        platform: event.platform,
+      emit(state.copyWith(
+        isLoading: false,
+        isError: false,
         data: listTrans,
       ));
     } catch (e) {
       String message =
           e is DioException ? e.response?.data['message'] : e.toString();
-      emit(ProductCheckerErrorState(
-        message: message,
-        platforms: platforms,
+      emit(state.copyWith(
+        errorMessage: message,
+        platforms: state.platforms,
         platform: event.platform,
+        data: state.data,
+        isLoading: false,
+        isError: true,
       ));
     }
   }

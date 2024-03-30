@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
-import 'package:receipt_online_shop/service/api.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
 
-class ShopeeListView extends StatelessWidget {
+class DetailOrder extends StatelessWidget {
   final List<TransactionOnline> orders;
   final Function(TransactionOnline order) onPressed;
-  const ShopeeListView(
-      {super.key, required this.orders, required this.onPressed});
+  final Function(TransactionOnline order) onCreateOrder;
+  const DetailOrder(
+      {super.key,
+      required this.orders,
+      required this.onPressed,
+      required this.onCreateOrder});
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +58,11 @@ class ShopeeListView extends StatelessWidget {
             horizontal: 5.0,
             vertical: 3,
           ),
-          child: Card(
-            shadowColor: Colors.black,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
             child: Column(
               children: [
                 order.pickupBy == ""
@@ -293,7 +299,8 @@ class ShopeeListView extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: order.showButton ?? false,
+                      // visible: order.showButton ?? false,
+                      visible: true,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5.0,
@@ -324,6 +331,7 @@ class ShopeeListView extends StatelessWidget {
                               ),
                             ),
                             Visibility(
+                              // visible: !(order.showRequest ?? false),
                               visible: !(order.showRequest ?? false),
                               child: SizedBox(
                                 width: 150,
@@ -333,14 +341,7 @@ class ShopeeListView extends StatelessWidget {
                                     backgroundColor: Colors.blueAccent,
                                   ),
                                   onPressed: () {
-                                    // order.totalQty = totalQty;
-                                    Api.postOrder(order).then((value) {
-                                      // ignore: avoid_print
-                                      print(value);
-                                    }).catchError((e) {
-                                      // ignore: avoid_print
-                                      print(e);
-                                    });
+                                    onCreateOrder(order);
                                   },
                                   child: const Text(
                                     "Buat Paket",

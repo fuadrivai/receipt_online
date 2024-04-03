@@ -34,7 +34,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/platform',
+              '/platform-api',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -63,7 +63,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/platform/active',
+              '/platform-api/active',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -519,7 +519,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/daily-task/receipt/${id}',
+              '/daily-task-api/receipt/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -549,7 +549,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/daily-task/receipt/${id}',
+          '/daily-task-api/receipt/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -575,7 +575,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/daily-task/receipt/${number}',
+          '/daily-task-api/receipt/${number}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -601,7 +601,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/daily-task/${id}',
+          '/daily-task-api/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -628,7 +628,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/daily-task/current',
+              '/daily-task-api/current',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -657,7 +657,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/daily-task/${id}',
+              '/daily-task-api/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -683,7 +683,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/daily-task/finish/${id}',
+          '/daily-task-api/finish/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -710,7 +710,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/daily-task',
+          '/daily-task-api',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -735,7 +735,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/expedition',
+              '/expedition-api',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -764,7 +764,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/expedition/${id}',
+              '/expedition-api/${id}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -792,7 +792,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/expedition',
+              '/expedition-api',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -822,7 +822,7 @@ class _RestClient implements RestClient {
     )
         .compose(
           _dio.options,
-          '/expedition/${id}',
+          '/expedition-api/${id}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -849,7 +849,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/product/${barcode}',
+              '/product-api/${barcode}',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -876,7 +876,7 @@ class _RestClient implements RestClient {
     )
             .compose(
               _dio.options,
-              '/product',
+              '/product-api',
               queryParameters: queryParameters,
               data: _data,
             )

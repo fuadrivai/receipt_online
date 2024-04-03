@@ -1,5 +1,5 @@
 import 'package:receipt_online_shop/model/platform.dart';
-import 'package:receipt_online_shop/model/receipt_detail_SKU.dart';
+import 'package:receipt_online_shop/model/receipt_sku.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
 
 class Receipt {

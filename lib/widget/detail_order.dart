@@ -181,7 +181,7 @@ class DetailOrder extends StatelessWidget {
                               e.itemSku == ""
                                   ? const SizedBox()
                                   : Text(
-                                      "Seller SKU : ${e.itemSku ?? '--'}",
+                                      "SKU : ${e.itemSku ?? '--'}",
                                       style: style,
                                     ),
                               Row(
@@ -215,6 +215,45 @@ class DetailOrder extends StatelessWidget {
                                           ),
                                         )
                                       : const SizedBox(),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.blueAccent,
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(3.0),
+                                      child: Text(
+                                        "Tidak Sesuai?",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color:
+                                          const Color.fromARGB(255, 69, 146, 75)
+                                              .withOpacity(0.7),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(3.0),
+                                      child: Text(
+                                        "Input Hadiah",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                               listItem.last == e

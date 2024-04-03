@@ -1,3 +1,7 @@
+import 'package:receipt_online_shop/model/platform.dart';
+import 'package:receipt_online_shop/model/receipt_detail_product.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
+
 class TransactionOnline {
   String? createTimeOnline;
   String? updateTimeOnline;
@@ -18,6 +22,7 @@ class TransactionOnline {
   bool? showRequest;
   bool? showButton;
   bool? scanned;
+  Platform? platform;
   List<Items>? items;
 
   TransactionOnline({
@@ -38,6 +43,7 @@ class TransactionOnline {
     this.packagePicture,
     this.items,
     this.shippingProviderType,
+    this.platform,
     this.scanned = false,
     this.showRequest = false,
     this.showButton = false,
@@ -69,6 +75,8 @@ class TransactionOnline {
         items!.add(Items.fromJson(v));
       });
     }
+    platform =
+        json['platform'] != null ? Platform.fromJson(json['platform']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +102,9 @@ class TransactionOnline {
     if (items != null) {
       data['items'] = items!.map((v) => v.toJson()).toList();
     }
+    if (platform != null) {
+      data['platform'] = platform!.toJson();
+    }
     return data;
   }
 }
@@ -113,6 +124,8 @@ class Items {
   int? orderId;
   String? orderType;
   String? trackingNumber;
+  Product? gift;
+  List<ReceiptDetailProduct>? manuals;
 
   Items({
     this.imageUrl,
@@ -129,6 +142,8 @@ class Items {
     this.skuId,
     this.orderStatus,
     this.trackingNumber,
+    this.manuals,
+    this.gift,
   });
 
   Items.fromJson(Map<String, dynamic> json) {
@@ -146,6 +161,15 @@ class Items {
     orderId = json['order_id'];
     trackingNumber = json['tracking_number'];
     orderType = json['order_type'];
+    gift = json['product_gift'] != null
+        ? Product.fromJson(json['product_gift'])
+        : null;
+    if (json['manuals'] != null) {
+      manuals = <ReceiptDetailProduct>[];
+      json['manuals'].forEach((v) {
+        manuals!.add(ReceiptDetailProduct.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +187,12 @@ class Items {
     data['product_id'] = productId;
     data['order_id'] = orderId;
     data['tracking_number'] = trackingNumber;
+    if (gift != null) {
+      data['product_gift'] = gift!.toJson();
+    }
+    if (manuals != null) {
+      data['manuals'] = manuals!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

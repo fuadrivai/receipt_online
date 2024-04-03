@@ -19,9 +19,9 @@ part 'restclient.g.dart';
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
-  @GET("/platform")
+  @GET("/platform-api")
   Future<List<Platform>> getPlatforms();
-  @GET("/platform/active")
+  @GET("/platform-api/active")
   Future<List<Platform>> getActivePlatform();
 
   @POST("/shopee-order/rts/{orderSn}")
@@ -72,45 +72,45 @@ abstract class RestClient {
   @GET("/lazada-order/packed/{sorting}")
   Future<FullOrder> getPackedOrder(@Path() String sorting);
 
-  @GET("/daily-task/receipt/{id}")
+  @GET("/daily-task-api/receipt/{id}")
   Future<Receipt> receiptByDailyTaskId(@Path() int id);
 
-  @POST("/daily-task/receipt/{id}")
+  @POST("/daily-task-api/receipt/{id}")
   Future<dynamic> dailyTaskPostReceipt(@Path() int id, @Body() Receipt receipt);
 
-  @DELETE("/daily-task/receipt/{number}")
+  @DELETE("/daily-task-api/receipt/{number}")
   Future<dynamic> deleteReceipt(@Path() String number);
 
-  @DELETE("/daily-task/{id}")
+  @DELETE("/daily-task-api/{id}")
   Future<dynamic> deleteDailyTask(@Path() int id);
 
-  @GET("/daily-task/current")
+  @GET("/daily-task-api/current")
   Future<List<DailyTask>> findCurrentDailyTask();
 
-  @GET("/daily-task/{id}")
+  @GET("/daily-task-api/{id}")
   Future<DailyTask> dailyTaskFindById(@Path() int id);
 
-  @PATCH("/daily-task/finish/{id}")
+  @PATCH("/daily-task-api/finish/{id}")
   Future<dynamic> finishDailyTask(@Path() int id);
 
-  @POST("/daily-task")
+  @POST("/daily-task-api")
   Future<void> postDailyTask(@Body() DailyTask dailyTask);
 
-  @GET("/expedition")
+  @GET("/expedition-api")
   Future<List<Expedition>> findAllExpedition();
 
-  @GET("/expedition/{id}")
+  @GET("/expedition-api/{id}")
   Future<Expedition> expeditionFindById(@Path() int id);
 
-  @POST("/expedition")
+  @POST("/expedition-api")
   Future<Expedition> postExpedition(@Body() Expedition expedition);
 
-  @PUT("/expedition/{id}")
+  @PUT("/expedition-api/{id}")
   Future expeditionEdit(@Path() int id, @Body() Expedition cst);
 
-  @GET("/product/{barcode}")
+  @GET("/product-api/{barcode}")
   Future<Product> getProductByBarcode(@Path() String barcode);
-  @GET("/product")
+  @GET("/product-api")
   Future<ServerSide> getProducts();
 
   // @GET("/sales/{id}")

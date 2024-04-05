@@ -9,6 +9,7 @@ import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/jdid/data/jdid_api.dart';
 import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
+import 'package:receipt_online_shop/screen/product/data/product.dart';
 import 'package:receipt_online_shop/screen/product_checker/data/product_checker_api.dart';
 import 'package:receipt_online_shop/screen/shopee/data/shopee_api.dart';
 import 'package:receipt_online_shop/screen/tiktok/data/tiktok_api.dart';
@@ -26,6 +27,7 @@ class ProductCheckerBloc
     on<GetOrderEvent>(_getOrder);
     on<RtsEvent>(_rts);
     on<CreateOrderEvent>(_createOrder);
+    on<OnInputGift>(_onInputGift);
   }
 
   void _standBy(ProductCheckerStandByEvent event,
@@ -62,10 +64,28 @@ class ProductCheckerBloc
     ));
   }
 
+  void _onInputGift(
+      OnInputGift event, Emitter<ProductCheckerState> emit) async {
+    List<TransactionOnline> trans = state.data ?? [];
+    for (TransactionOnline e in trans) {
+      for (Items item in (e.items ?? [])) {
+        if (item == event.item) {
+          item.gift = event.product;
+        }
+      }
+    }
+    emit(state.copyWith(
+      data: trans,
+      isError: false,
+    ));
+  }
+
   void _getOrder(GetOrderEvent event, Emitter<ProductCheckerState> emit) async {
     emit(state.copyWith(isLoading: true, isError: false));
     try {
       List<TransactionOnline> listTrans = [];
+      List<bool> listManual = [];
+      List<bool> listGift = [];
       switch (event.platform.name?.toLowerCase()) {
         case "lazada":
           TransactionOnline trans = await LazadaApi.getOrder(event.orderSn);
@@ -89,10 +109,46 @@ class ProductCheckerBloc
           break;
         default:
       }
+
+      for (var order in listTrans) {
+        List<Items> listItem = [];
+        (order.items ?? []).sort(
+            (a, b) => (b.orderStatus ?? "").compareTo(a.orderStatus ?? ""));
+        for (Items e in (order.items ?? [])) {
+          bool isExis = listItem.any((el) =>
+              (el.skuId == e.skuId) && (el.orderStatus == e.orderStatus));
+          if (isExis) {
+            if (e.skuId == null) {
+              listItem.add(e);
+            } else {
+              listItem
+                  .where((elm) =>
+                      (elm.skuId == e.skuId) &&
+                      (elm.orderStatus == e.orderStatus))
+                  .toList()
+                  .forEach((elm) => elm.qty = elm.qty! + 1);
+            }
+          } else {
+            // e.qty = e.qty;
+            listItem.add(e);
+          }
+        }
+        order.items = listItem;
+      }
+      for (TransactionOnline e in listTrans) {
+        for (var i = 0; i < (e.items ?? []).length; i++) {
+          Items item = (e.items ?? [])[i];
+          listManual.add((item.manuals ?? []).isEmpty ? false : true);
+          listGift.add(item.gift == null ? false : true);
+        }
+      }
+
       emit(state.copyWith(
         platform: event.platform,
         data: listTrans,
         isLoading: false,
+        listManual: listManual,
+        listGift: listGift,
       ));
     } catch (e) {
       String message =
@@ -120,7 +176,6 @@ class ProductCheckerBloc
           print(
               "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");
           break;
-
         case "shopee":
           print(
               "${event.platform.name?.toLowerCase()} , ${order.trackingNumber}");

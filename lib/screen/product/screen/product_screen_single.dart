@@ -4,20 +4,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:receipt_online_shop/library/common.dart';
 import 'package:receipt_online_shop/screen/product/bloc/product_bloc.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
-import 'package:receipt_online_shop/screen/product_report/data/report_detail.dart';
 import 'package:receipt_online_shop/screen/theme/app_theme.dart';
 import 'package:receipt_online_shop/widget/custom_appbar.dart';
 import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+class ProductScreenSingle extends StatefulWidget {
+  const ProductScreenSingle({super.key});
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  State<ProductScreenSingle> createState() => _ProductScreenSingleState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenSingleState extends State<ProductScreenSingle> {
   Map<String, dynamic> map = {};
   final ScrollController _controller = ScrollController();
   TextEditingController searchController = TextEditingController();
@@ -43,9 +42,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: CustomAppbar(
                 title: "Produk",
                 leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back),
                 ),
               ),
@@ -59,27 +56,11 @@ class _ProductScreenState extends State<ProductScreen> {
             child: CustomAppbar(
               title: "Produk",
               leading: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: () => Navigator.pop(context),
                 icon: const Icon(Icons.arrow_back),
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: (state.details ?? []).isNotEmpty
-              ? FloatingActionButton.extended(
-                  elevation: 5,
-                  backgroundColor: AppTheme.nearlyDarkBlue.withOpacity(0.8),
-                  foregroundColor: Colors.white,
-                  onPressed: () {
-                    Navigator.pop<List<ReportDetail>>(context, state.details);
-                  },
-                  label: const Text('Submit'),
-                  icon: const Icon(FontAwesomeIcons.paperPlane),
-                )
-              : const SizedBox.shrink(),
           body: RefreshIndicator(
             onRefresh: () async {
               context.read<ProductBloc>().add(OnGetProduct(map));
@@ -123,53 +104,49 @@ class _ProductScreenState extends State<ProductScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppTheme.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: AppTheme.nearlyDarkBlue.withOpacity(0.2),
-                            ),
-                          ),
-                          child: CheckboxListTile(
-                            controlAffinity: ListTileControlAffinity.leading,
-                            dense: true,
-                            value: (state.details ?? []).any(
-                                (e) => e.product?.barcode == product.barcode),
-                            onChanged: (bool? value) {
-                              context
-                                  .read<ProductBloc>()
-                                  .add(OnTapProduct(value!, product));
-                              setState(() {});
-                            },
-                            title: Text(
-                              (product.name ?? '').toUpperCase(),
-                              style: const TextStyle(
-                                color: AppTheme.nearlyDarkBlue,
-                                fontWeight: FontWeight.w700,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pop<Product>(context, product);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppTheme.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: AppTheme.nearlyDarkBlue.withOpacity(0.2),
                               ),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.barcode ?? "",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: AppTheme.nearlyDarkBlue
-                                        .withOpacity(0.8),
-                                  ),
+                            child: ListTile(
+                              dense: true,
+                              title: Text(
+                                (product.name ?? '').toUpperCase(),
+                                style: const TextStyle(
+                                  color: AppTheme.nearlyDarkBlue,
+                                  fontWeight: FontWeight.w700,
                                 ),
-                                Text(
-                                  "Rp. ${Common.oCcy.format(product.price ?? 0)}",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppTheme.nearlyDarkBlue
-                                        .withOpacity(0.8),
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.barcode ?? "",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppTheme.nearlyDarkBlue
+                                          .withOpacity(0.8),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    "Rp. ${Common.oCcy.format(product.price ?? 0)}",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.nearlyDarkBlue
+                                          .withOpacity(0.8),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

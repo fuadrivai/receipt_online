@@ -112,6 +112,7 @@ class _JdIdDetailScreenState extends State<JdIdDetailScreen> {
                     }
                     if (state is JdIdOrderDetail) {
                       return DetailOrder(
+                        listExpands: [],
                         orders: [state.listOrder],
                         onCreateOrder: (order) {},
                         onPressed: (order) async {},

@@ -1,6 +1,5 @@
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/receipt_detail_product.dart';
-import 'package:receipt_online_shop/screen/product/data/product.dart';
 
 class TransactionOnline {
   String? createTimeOnline;
@@ -124,8 +123,8 @@ class Items {
   int? orderId;
   String? orderType;
   String? trackingNumber;
-  Product? gift;
   List<ReceiptDetailProduct>? manuals;
+  List<ReceiptDetailProduct>? gifts;
 
   Items({
     this.imageUrl,
@@ -143,7 +142,6 @@ class Items {
     this.orderStatus,
     this.trackingNumber,
     this.manuals,
-    this.gift,
   });
 
   Items.fromJson(Map<String, dynamic> json) {
@@ -161,13 +159,16 @@ class Items {
     orderId = json['order_id'];
     trackingNumber = json['tracking_number'];
     orderType = json['order_type'];
-    gift = json['product_gift'] != null
-        ? Product.fromJson(json['product_gift'])
-        : null;
     if (json['manuals'] != null) {
       manuals = <ReceiptDetailProduct>[];
       json['manuals'].forEach((v) {
         manuals!.add(ReceiptDetailProduct.fromJson(v));
+      });
+    }
+    if (json['gifts'] != null) {
+      gifts = <ReceiptDetailProduct>[];
+      json['gifts'].forEach((v) {
+        gifts!.add(ReceiptDetailProduct.fromJson(v));
       });
     }
   }
@@ -187,11 +188,11 @@ class Items {
     data['product_id'] = productId;
     data['order_id'] = orderId;
     data['tracking_number'] = trackingNumber;
-    if (gift != null) {
-      data['product_gift'] = gift!.toJson();
-    }
     if (manuals != null) {
       data['manuals'] = manuals!.map((v) => v.toJson()).toList();
+    }
+    if (gifts != null) {
+      data['gifts'] = manuals!.map((v) => v.toJson()).toList();
     }
     return data;
   }

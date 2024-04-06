@@ -116,6 +116,7 @@ class _ShopeeDetailScreenState extends State<ShopeeDetailScreen> {
                     }
                     if (state is ShopeeOrderDetail) {
                       return DetailOrder(
+                        listExpands: const [],
                         orders: state.listOrder,
                         onCreateOrder: (order) {},
                         onPressed: (order) async {

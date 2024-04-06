@@ -5,8 +5,7 @@ final class ProductCheckerState extends Equatable {
   final bool? isLoading;
   final bool? isError;
   final List<TransactionOnline>? data;
-  final List<bool>? listManual;
-  final List<bool>? listGift;
+  final List<List<bool>>? listManual;
   final Platform? platform;
   final String? errorMessage;
   const ProductCheckerState({
@@ -16,7 +15,6 @@ final class ProductCheckerState extends Equatable {
     this.isError,
     this.isLoading = true,
     this.data,
-    this.listGift,
     this.listManual,
   });
 
@@ -27,8 +25,7 @@ final class ProductCheckerState extends Equatable {
     Platform? platform,
     String? errorMessage,
     List<TransactionOnline>? data,
-    List<bool>? listManual,
-    List<bool>? listGift,
+    List<List<bool>>? listManual,
   }) {
     return ProductCheckerState(
       platforms: platforms ?? this.platforms,
@@ -38,7 +35,6 @@ final class ProductCheckerState extends Equatable {
       isError: isError ?? this.isError,
       errorMessage: errorMessage ?? this.errorMessage,
       listManual: listManual ?? this.listManual,
-      listGift: listGift ?? this.listGift,
     );
   }
 
@@ -50,7 +46,6 @@ final class ProductCheckerState extends Equatable {
         platform,
         isError,
         listManual,
-        listGift,
         errorMessage,
       ];
 }

@@ -6,6 +6,7 @@ import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/lazada/order_rts.dart';
 import 'package:receipt_online_shop/model/platform.dart';
+import 'package:receipt_online_shop/model/receipt_detail_product.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/jdid/data/jdid_api.dart';
 import 'package:receipt_online_shop/screen/lazada/data/lazada_api.dart';
@@ -28,6 +29,10 @@ class ProductCheckerBloc
     on<RtsEvent>(_rts);
     on<CreateOrderEvent>(_createOrder);
     on<OnInputGift>(_onInputGift);
+    on<OnInputProduct>(_onInputProduct);
+    on<OnChangeQtyProduct>(_onChangeQtyProduct);
+    on<OnRemoveProduct>(_onRemoveProduct);
+    on<OnRemoveGift>(_onRemoveGift);
   }
 
   void _standBy(ProductCheckerStandByEvent event,
@@ -64,13 +69,93 @@ class ProductCheckerBloc
     ));
   }
 
+  void _onInputProduct(
+      OnInputProduct event, Emitter<ProductCheckerState> emit) async {
+    List<TransactionOnline> trans = state.data ?? [];
+    for (TransactionOnline e in trans) {
+      for (Items item in (e.items ?? [])) {
+        if (item.itemSku == event.item.itemSku) {
+          if (item.manuals == null) {
+            List<ReceiptDetailProduct> manuals = [];
+            ReceiptDetailProduct detail = ReceiptDetailProduct();
+            detail.qty = 1;
+            detail.product = event.product;
+            manuals.add(detail);
+            item.manuals = manuals;
+          } else {
+            ReceiptDetailProduct detail = ReceiptDetailProduct();
+            detail.qty = 1;
+            detail.product = event.product;
+            item.manuals!.add(detail);
+          }
+        }
+      }
+    }
+    emit(state.copyWith(
+      data: trans,
+      isError: false,
+    ));
+  }
+
+  void _onChangeQtyProduct(
+      OnChangeQtyProduct event, Emitter<ProductCheckerState> emit) async {
+    List<TransactionOnline> trans = state.data ?? [];
+    for (TransactionOnline e in trans) {
+      for (Items item in (e.items ?? [])) {
+        if (item.itemSku == event.item.itemSku) {
+          for (ReceiptDetailProduct m in (item.manuals ?? [])) {
+            if (m.product?.barcode == event.barcode) {
+              m.qty = event.qty;
+            }
+          }
+        }
+      }
+    }
+    emit(state.copyWith(
+      data: trans,
+      isError: false,
+    ));
+  }
+
   void _onInputGift(
       OnInputGift event, Emitter<ProductCheckerState> emit) async {
     List<TransactionOnline> trans = state.data ?? [];
     for (TransactionOnline e in trans) {
       for (Items item in (e.items ?? [])) {
-        if (item == event.item) {
+        if (item.itemSku == event.item.itemSku) {
           item.gift = event.product;
+        }
+      }
+    }
+    emit(state.copyWith(
+      data: trans,
+      isError: false,
+    ));
+  }
+
+  void _onRemoveGift(
+      OnRemoveGift event, Emitter<ProductCheckerState> emit) async {
+    List<TransactionOnline> trans = state.data ?? [];
+    for (TransactionOnline e in trans) {
+      for (Items item in (e.items ?? [])) {
+        if (item.itemSku == event.item.itemSku) {
+          item.gift = null;
+        }
+      }
+    }
+    emit(state.copyWith(
+      data: trans,
+      isError: false,
+    ));
+  }
+
+  void _onRemoveProduct(
+      OnRemoveProduct event, Emitter<ProductCheckerState> emit) async {
+    List<TransactionOnline> trans = state.data ?? [];
+    for (TransactionOnline e in trans) {
+      for (Items item in (e.items ?? [])) {
+        if (item.itemSku == event.item.itemSku) {
+          item.manuals!.removeWhere((m) => m.product?.barcode == event.barcode);
         }
       }
     }
@@ -84,8 +169,6 @@ class ProductCheckerBloc
     emit(state.copyWith(isLoading: true, isError: false));
     try {
       List<TransactionOnline> listTrans = [];
-      List<bool> listManual = [];
-      List<bool> listGift = [];
       switch (event.platform.name?.toLowerCase()) {
         case "lazada":
           TransactionOnline trans = await LazadaApi.getOrder(event.orderSn);
@@ -135,11 +218,14 @@ class ProductCheckerBloc
         }
         order.items = listItem;
       }
+      List<List<bool>> expands = [];
       for (TransactionOnline e in listTrans) {
         for (var i = 0; i < (e.items ?? []).length; i++) {
           Items item = (e.items ?? [])[i];
+          List<bool> listManual = [];
           listManual.add((item.manuals ?? []).isEmpty ? false : true);
-          listGift.add(item.gift == null ? false : true);
+          listManual.add(item.gift == null ? false : true);
+          expands.add(listManual);
         }
       }
 
@@ -147,8 +233,7 @@ class ProductCheckerBloc
         platform: event.platform,
         data: listTrans,
         isLoading: false,
-        listManual: listManual,
-        listGift: listGift,
+        listManual: expands,
       ));
     } catch (e) {
       String message =

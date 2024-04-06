@@ -66,6 +66,7 @@ class _ShopeeScreenState extends State<ShopeeScreen> {
                   ),
                   Expanded(
                       child: DetailOrder(
+                    listExpands: const [],
                     orders: state.listOrder,
                     onCreateOrder: (order) {},
                     onPressed: (order) async {

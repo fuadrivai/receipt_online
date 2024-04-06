@@ -10,7 +10,8 @@ import 'package:receipt_online_shop/widget/loading_screen.dart';
 import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class ProductScreenSingle extends StatefulWidget {
-  const ProductScreenSingle({super.key});
+  final List<Product> products;
+  const ProductScreenSingle({super.key, required this.products});
 
   @override
   State<ProductScreenSingle> createState() => _ProductScreenSingleState();
@@ -100,17 +101,23 @@ class _ProductScreenSingleState extends State<ProductScreenSingle> {
                     physics: const ScrollPhysics(),
                     itemCount: (state.products ?? []).length,
                     itemBuilder: (c, i) {
-                      Product product = (state.products ?? [])[i];
+                      List<Product> products = widget.products;
+                      Product pr = (state.products ?? [])[i];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 4),
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.pop<Product>(context, product);
-                          },
+                          onTap: (products).any((e) => e.barcode == pr.barcode)
+                              ? null
+                              : () {
+                                  Navigator.pop<Product>(context, pr);
+                                },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: AppTheme.white,
+                              color:
+                                  (products).any((e) => e.barcode == pr.barcode)
+                                      ? const Color.fromARGB(255, 248, 160, 182)
+                                      : AppTheme.white,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: AppTheme.nearlyDarkBlue.withOpacity(0.2),
@@ -119,7 +126,7 @@ class _ProductScreenSingleState extends State<ProductScreenSingle> {
                             child: ListTile(
                               dense: true,
                               title: Text(
-                                (product.name ?? '').toUpperCase(),
+                                (pr.name ?? '').toUpperCase(),
                                 style: const TextStyle(
                                   color: AppTheme.nearlyDarkBlue,
                                   fontWeight: FontWeight.w700,
@@ -129,7 +136,7 @@ class _ProductScreenSingleState extends State<ProductScreenSingle> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    product.barcode ?? "",
+                                    pr.barcode ?? "",
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: AppTheme.nearlyDarkBlue
@@ -137,7 +144,7 @@ class _ProductScreenSingleState extends State<ProductScreenSingle> {
                                     ),
                                   ),
                                   Text(
-                                    "Rp. ${Common.oCcy.format(product.price ?? 0)}",
+                                    "Rp. ${Common.oCcy.format(pr.price ?? 0)}",
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,

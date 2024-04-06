@@ -1,16 +1,21 @@
 import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/common.dart';
+import 'package:receipt_online_shop/model/receipt_detail_product.dart';
 import 'package:receipt_online_shop/model/transaction_online.dart';
 import 'package:receipt_online_shop/screen/product/data/product.dart';
 import 'package:receipt_online_shop/screen/product/screen/product_screen_single.dart';
 import 'package:receipt_online_shop/screen/product_checker/bloc/product_checker_bloc.dart';
 import 'package:receipt_online_shop/widget/default_color.dart';
+import 'package:receipt_online_shop/widget/text_form_decoration.dart';
 
 class DetailOrder extends StatelessWidget {
   final List<TransactionOnline> orders;
+  final List<List<bool>> listExpands;
   final Function(TransactionOnline order) onPressed;
   final Function(TransactionOnline order) onCreateOrder;
   const DetailOrder({
@@ -18,6 +23,7 @@ class DetailOrder extends StatelessWidget {
     required this.orders,
     required this.onPressed,
     required this.onCreateOrder,
+    required this.listExpands,
   });
 
   @override
@@ -58,7 +64,8 @@ class DetailOrder extends StatelessWidget {
                       order: order,
                     ),
                     const Divider(color: Colors.black45),
-                    DetailItemWidget(listItem: order.items ?? []),
+                    DetailItemWidget(
+                        listItem: order.items ?? [], listExpands: listExpands),
                     const Divider(color: Colors.black45),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -291,181 +298,235 @@ class HeaderWidget extends StatelessWidget {
 
 class DetailItemWidget extends StatefulWidget {
   final List<Items> listItem;
-  const DetailItemWidget({super.key, required this.listItem});
+  final List<List<bool>> listExpands;
+  const DetailItemWidget(
+      {super.key, required this.listItem, required this.listExpands});
 
   @override
   State<DetailItemWidget> createState() => _DetailItemWidgetState();
 }
 
 class _DetailItemWidgetState extends State<DetailItemWidget> {
+  List<List<bool>> _listExpand = [];
+  @override
+  void initState() {
+    _listExpand = widget.listExpands;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: widget.listItem.map((e) {
-        TextStyle style = e.orderStatus == "BATAL"
-            ? const TextStyle(
-                color: Colors.redAccent,
-                fontWeight: FontWeight.bold,
-              )
-            : const TextStyle();
-        return Column(
-          children: [
-            ListTile(
-              visualDensity: VisualDensity.comfortable,
-              title: Text(
-                e.itemName ?? "",
-                style: style,
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  e.variation != ""
-                      ? Text(
-                          e.variation ?? "",
-                          style: style,
-                        )
-                      : const SizedBox(),
-                  e.itemSku == ""
-                      ? const SizedBox()
-                      : Text(
-                          "SKU : ${e.itemSku ?? '--'}",
-                          style: style,
-                        ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Rp. ${Common.oCcy.format(e.originalPrice)}",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      e.orderStatus == "BATAL"
-                          ? Padding(
-                              padding: const EdgeInsets.only(top: 4.0),
-                              child: badge.Badge(
-                                badgeStyle: badge.BadgeStyle(
-                                  shape: badge.BadgeShape.square,
-                                  badgeColor: Colors.redAccent,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                badgeContent: Text(
-                                  e.orderStatus ?? "",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 10,
-                                  ),
+      children: widget.listItem
+          .asMap()
+          .map((key, e) {
+            TextStyle style = e.orderStatus == "BATAL"
+                ? const TextStyle(
+                    color: Colors.redAccent,
+                    fontWeight: FontWeight.bold,
+                  )
+                : const TextStyle();
+            return MapEntry(
+                key,
+                Column(
+                  children: [
+                    ListTile(
+                      visualDensity: VisualDensity.comfortable,
+                      title: Text(e.itemName ?? "", style: style),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          e.variation != ""
+                              ? Text(e.variation ?? "", style: style)
+                              : const SizedBox(),
+                          e.itemSku == ""
+                              ? const SizedBox()
+                              : Text("SKU : ${e.itemSku ?? '--'}",
+                                  style: style),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Rp. ${Common.oCcy.format(e.originalPrice)}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      buttonManual(
-                        title: "Input Manual",
-                        onBack: (val) {},
+                              e.orderStatus == "BATAL"
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: badge.Badge(
+                                        badgeStyle: badge.BadgeStyle(
+                                          shape: badge.BadgeShape.square,
+                                          badgeColor: Colors.redAccent,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        badgeContent: Text(
+                                          e.orderStatus ?? "",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              buttonManual(
+                                item: e,
+                                isGift: false,
+                                title: "Input Manual",
+                                onBack: (val) {
+                                  context
+                                      .read<ProductCheckerBloc>()
+                                      .add(OnInputProduct(val, e));
+                                  setState(() {});
+                                },
+                              ),
+                              buttonManual(
+                                item: e,
+                                isGift: true,
+                                title: "Input Hadiah",
+                                backgroundColor: Colors.green[300],
+                                onBack: (val) {
+                                  context
+                                      .read<ProductCheckerBloc>()
+                                      .add(OnInputGift(val, e));
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      buttonManual(
-                        title: "Input Hadiah",
-                        backgroundColor: Colors.green[300],
-                        onBack: (val) {
-                          context
-                              .read<ProductCheckerBloc>()
-                              .add(OnInputGift(val, e));
-                          setState(() {});
-                          
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              trailing: Text(
-                e.qty.toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              leading: InkWell(
-                onTap: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (_) => ImageDialog(item: e),
-                  );
-                },
-                splashColor: Colors.white10, // Splash color over image
-                child: Image.network(
-                  e.imageUrl ?? "",
-                  width: 60,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            ((e.manuals ?? []).isEmpty && e.gift == null)
-                ? const SizedBox.shrink()
-                : ExpansionPanelList(
-                    expandedHeaderPadding:
-                        const EdgeInsets.only(top: 2, bottom: 0),
-                    animationDuration: const Duration(milliseconds: 1000),
-                    elevation: 0,
-                    expansionCallback: (i, val) {
-                      print("$i $val");
-                    },
-                    children: [
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: true,
-                        headerBuilder: (ctx, spand) {
-                          return const ListTile(
-                            title: Text("Produk Pengganti"),
-                          );
-                        },
-                        body: const Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Barang A"),
-                            Text("Barang B"),
-                            Text("Barang C"),
-                          ],
+                      trailing: Text(
+                        e.qty.toString(),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
                       ),
-                      ExpansionPanel(
-                        canTapOnHeader: true,
-                        isExpanded: true,
-                        headerBuilder: (ctx, spand) {
-                          return const ListTile(
-                            title: Text("Produk Hadiah"),
+                      leading: InkWell(
+                        onTap: () async {
+                          await showDialog(
+                            context: context,
+                            builder: (_) => ImageDialog(item: e),
                           );
                         },
-                        body: Text("Hadiah A"),
-                      )
-                    ],
-                  ),
-            widget.listItem.last == e
-                ? const SizedBox()
-                : const Divider(color: Colors.grey)
-          ],
-        );
-      }).toList(),
+                        splashColor: Colors.white10, // Splash color over image
+                        child: Image.network(
+                          e.imageUrl ?? "",
+                          width: 60,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    ((e.manuals ?? []).isEmpty && (e.gifts ?? []).isEmpty)
+                        ? const SizedBox.shrink()
+                        : ExpansionPanelList(
+                            expandedHeaderPadding:
+                                const EdgeInsets.only(top: 2, bottom: 0),
+                            animationDuration:
+                                const Duration(milliseconds: 1000),
+                            elevation: 0,
+                            expansionCallback: (i, val) {
+                              setState(() {
+                                _listExpand[key][i] = val;
+                              });
+                            },
+                            children: [
+                              ExpansionPanel(
+                                canTapOnHeader: true,
+                                isExpanded: (e.manuals ?? []).isEmpty
+                                    ? false
+                                    : _listExpand[key][0],
+                                headerBuilder: (ctx, spand) {
+                                  return ListTile(
+                                    dense: true,
+                                    title: const Text("Produk Pengganti"),
+                                    trailing: Text(
+                                        (e.manuals ?? []).length.toString()),
+                                  );
+                                },
+                                body: ((e.manuals ?? []).isEmpty)
+                                    ? const SizedBox.shrink()
+                                    : ExpansionBody(
+                                        data: (e.manuals ?? []),
+                                        onPressed: (c) async {},
+                                        onChanged: (val) {},
+                                      ),
+                              ),
+                              ExpansionPanel(
+                                canTapOnHeader: true,
+                                isExpanded: (e.gifts ?? []).isEmpty
+                                    ? false
+                                    : _listExpand[key][1],
+                                headerBuilder: (ctx, spand) {
+                                  return const ListTile(
+                                    dense: true,
+                                    title: Text("Produk Hadiah"),
+                                  );
+                                },
+                                body: (e.gifts ?? []).isEmpty
+                                    ? const SizedBox.shrink()
+                                    : ExpansionBody(
+                                        data: (e.gifts ?? []),
+                                        onPressed: (c) async {
+                                          context
+                                              .read<ProductCheckerBloc>()
+                                              .add(OnRemoveGift(e));
+                                          setState(() {});
+                                        },
+                                      ),
+                              )
+                            ],
+                          ),
+                    widget.listItem.last == e
+                        ? const SizedBox()
+                        : const Divider(color: Colors.grey)
+                  ],
+                ));
+          })
+          .values
+          .toList(),
     );
   }
 
-  Widget buttonManual(
-      {required String title,
-      required Function(Product) onBack,
-      Color? backgroundColor}) {
+  Widget buttonManual({
+    required String title,
+    required Items item,
+    bool? isGift,
+    required Function(Product) onBack,
+    Color? backgroundColor,
+  }) {
     return GestureDetector(
       onTap: () {
+        List<Product> products = [];
+        if (!(isGift ?? false)) {
+          if (item.manuals != null) {
+            for (ReceiptDetailProduct m in (item.manuals ?? [])) {
+              products.add(m.product!);
+            }
+          }
+        } else {
+          if (item.gifts != null) {
+            for (ReceiptDetailProduct m in (item.gifts ?? [])) {
+              products.add(m.product!);
+            }
+          }
+        }
         Navigator.push(
           context,
           MaterialPageRoute(builder: (c) {
-            return const ProductScreenSingle();
+            return ProductScreenSingle(
+              products: products,
+            );
           }),
         ).then((value) {
           if (value != null) {
@@ -489,6 +550,59 @@ class _DetailItemWidgetState extends State<DetailItemWidget> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ExpansionBody extends StatelessWidget {
+  final List<ReceiptDetailProduct> data;
+  final SlidableActionCallback? onPressed;
+  final ValueChanged<String>? onChanged;
+  const ExpansionBody(
+      {super.key, required this.data, this.onPressed, this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: data.map((f) {
+        return Slidable(
+          key: ValueKey(f.product?.barcode),
+          endActionPane: ActionPane(
+            motion: const ScrollMotion(),
+            children: [
+              SlidableAction(
+                flex: 7,
+                onPressed: onPressed,
+                backgroundColor: Colors.redAccent,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
+              ),
+            ],
+          ),
+          child: ListTile(
+            dense: true,
+            leading: const Icon(
+              FontAwesomeIcons.circleDot,
+              size: 15,
+            ),
+            title: Text(f.product?.name ?? ''),
+            subtitle: Text(f.product?.barcode ?? ''),
+            trailing: SizedBox(
+              width: 40,
+              child: TextFormField(
+                controller: TextEditingController(
+                  text: f.qty.toString(),
+                ),
+                textAlign: TextAlign.end,
+                keyboardType: TextInputType.number,
+                onChanged: onChanged,
+                decoration: TextFormDecoration.box("Qty", padding: 3),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

@@ -100,6 +100,7 @@ class _ProductCheckerBodyState extends State<ProductCheckerBody> {
         }
         return DetailOrder(
           orders: state.data ?? [],
+          listExpands: state.listManual ?? [],
           onCreateOrder: (order) {
             context
                 .read<ProductCheckerBloc>()

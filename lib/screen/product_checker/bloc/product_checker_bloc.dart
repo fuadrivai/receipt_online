@@ -123,7 +123,19 @@ class ProductCheckerBloc
     for (TransactionOnline e in trans) {
       for (Items item in (e.items ?? [])) {
         if (item.itemSku == event.item.itemSku) {
-          item.gift = event.product;
+          if (item.gifts == null) {
+            List<ReceiptDetailProduct> gifts = [];
+            ReceiptDetailProduct detail = ReceiptDetailProduct();
+            detail.qty = 1;
+            detail.product = event.product;
+            gifts.add(detail);
+            item.gifts = gifts;
+          } else {
+            ReceiptDetailProduct detail = ReceiptDetailProduct();
+            detail.qty = 1;
+            detail.product = event.product;
+            item.gifts!.add(detail);
+          }
         }
       }
     }
@@ -139,7 +151,7 @@ class ProductCheckerBloc
     for (TransactionOnline e in trans) {
       for (Items item in (e.items ?? [])) {
         if (item.itemSku == event.item.itemSku) {
-          item.gift = null;
+          item.gifts!.removeWhere((m) => m.product?.barcode == event.barcode);
         }
       }
     }
@@ -212,7 +224,6 @@ class ProductCheckerBloc
                   .forEach((elm) => elm.qty = elm.qty! + 1);
             }
           } else {
-            // e.qty = e.qty;
             listItem.add(e);
           }
         }
@@ -224,7 +235,7 @@ class ProductCheckerBloc
           Items item = (e.items ?? [])[i];
           List<bool> listManual = [];
           listManual.add((item.manuals ?? []).isEmpty ? false : true);
-          listManual.add(item.gift == null ? false : true);
+          listManual.add((item.gifts ?? []).isEmpty ? false : true);
           expands.add(listManual);
         }
       }

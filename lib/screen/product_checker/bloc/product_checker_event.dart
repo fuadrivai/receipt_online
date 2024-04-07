@@ -81,7 +81,8 @@ class OnRemoveProduct extends ProductCheckerEvent {
 
 class OnRemoveGift extends ProductCheckerEvent {
   final Items item;
-  const OnRemoveGift(this.item);
+  final String barcode;
+  const OnRemoveGift(this.item, this.barcode);
   @override
   List<Object?> get props => [item];
 }

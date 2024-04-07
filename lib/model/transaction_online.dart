@@ -6,18 +6,18 @@ class TransactionOnline {
   String? updateTimeOnline;
   String? messageToSeller;
   String? orderNo;
+  String? orderId;
   String? orderStatus;
   String? trackingNumber;
   String? deliveryBy;
-  String? shippingProviderType;
   String? pickupBy;
+  String? productPicture;
+  String? packagePicture;
   double? totalAmount;
   int? totalQty;
   int? status;
+  String? shippingProviderType;
   int? onlineShopId;
-  String? orderId;
-  String? productPicture;
-  String? packagePicture;
   bool? showRequest;
   bool? showButton;
   bool? scanned;
@@ -113,15 +113,14 @@ class Items {
   String? itemName;
   String? itemSku;
   String? variation;
+  String? orderType;
+  int? orderItemId;
+  int? orderId;
+  int? qty;
   String? skuId;
   String? orderStatus;
-  int? orderItemId;
-  int? qty;
   int? originalPrice;
   int? discountedPrice;
-  int? productId;
-  int? orderId;
-  String? orderType;
   String? trackingNumber;
   List<ReceiptDetailProduct>? manuals;
   List<ReceiptDetailProduct>? gifts;
@@ -135,7 +134,6 @@ class Items {
     this.qty,
     this.originalPrice,
     this.discountedPrice,
-    this.productId,
     this.orderId,
     this.orderType,
     this.skuId,
@@ -155,7 +153,6 @@ class Items {
     qty = json['qty'];
     originalPrice = json['original_price'];
     discountedPrice = json['discounted_price'];
-    productId = json['product_id'];
     orderId = json['order_id'];
     trackingNumber = json['tracking_number'];
     orderType = json['order_type'];
@@ -185,7 +182,6 @@ class Items {
     data['qty'] = qty;
     data['original_price'] = originalPrice;
     data['discounted_price'] = discountedPrice;
-    data['product_id'] = productId;
     data['order_id'] = orderId;
     data['tracking_number'] = trackingNumber;
     if (manuals != null) {

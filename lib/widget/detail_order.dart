@@ -118,8 +118,8 @@ class DetailOrder extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      // visible: order.showButton ?? false,
-                      visible: true,
+                      visible: order.showButton ?? false,
+                      // visible: true,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 5.0,
@@ -150,7 +150,6 @@ class DetailOrder extends StatelessWidget {
                               ),
                             ),
                             Visibility(
-                              // visible: !(order.showRequest ?? false),
                               visible: !(order.showRequest ?? false),
                               child: SizedBox(
                                 width: 150,
@@ -458,7 +457,13 @@ class _DetailItemWidgetState extends State<DetailItemWidget> {
                                     ? const SizedBox.shrink()
                                     : ExpansionBody(
                                         data: (e.manuals ?? []),
-                                        onPressed: (c) async {},
+                                        onPressed: (p) async {
+                                          context
+                                              .read<ProductCheckerBloc>()
+                                              .add(OnRemoveProduct(
+                                                  e, p.barcode ?? ""));
+                                          setState(() {});
+                                        },
                                         onChanged: (val) {},
                                       ),
                               ),
@@ -477,10 +482,11 @@ class _DetailItemWidgetState extends State<DetailItemWidget> {
                                     ? const SizedBox.shrink()
                                     : ExpansionBody(
                                         data: (e.gifts ?? []),
-                                        onPressed: (c) async {
+                                        onPressed: (p) async {
                                           context
                                               .read<ProductCheckerBloc>()
-                                              .add(OnRemoveGift(e));
+                                              .add(OnRemoveGift(
+                                                  e, p.barcode ?? ""));
                                           setState(() {});
                                         },
                                       ),
@@ -556,7 +562,7 @@ class _DetailItemWidgetState extends State<DetailItemWidget> {
 
 class ExpansionBody extends StatelessWidget {
   final List<ReceiptDetailProduct> data;
-  final SlidableActionCallback? onPressed;
+  final Function(Product)? onPressed;
   final ValueChanged<String>? onChanged;
   const ExpansionBody(
       {super.key, required this.data, this.onPressed, this.onChanged});
@@ -572,7 +578,9 @@ class ExpansionBody extends StatelessWidget {
             children: [
               SlidableAction(
                 flex: 7,
-                onPressed: onPressed,
+                onPressed: (c) {
+                  onPressed!(f.product!);
+                },
                 backgroundColor: Colors.redAccent,
                 foregroundColor: Colors.white,
                 icon: Icons.delete,

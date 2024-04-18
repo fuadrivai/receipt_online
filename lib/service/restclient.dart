@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/expired_token.dart';
 import 'package:receipt_online_shop/model/lazada/lazada_count.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/model/receipt.dart';
@@ -57,6 +58,8 @@ abstract class RestClient {
   Future<dynamic> orderRts(@Path() String tracking_number,
       @Path() String shipment_provider, @Path() List<int>? order_item_ids);
 
+  @GET("/lazada-order/auth-date")
+  Future<ExpiredToken> lazadaAuthDate();
   @GET("/lazada-order/count")
   Future<LazadaCount> lazadaGetCount();
 

@@ -4,6 +4,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/library/interceptor/injector.dart';
 import 'package:receipt_online_shop/library/interceptor/navigation_service.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
+import 'package:receipt_online_shop/model/expired_token.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/screen/daily_task/data/daily_task_api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,13 +27,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _getData(GetData event, Emitter<HomeState> emit) async {
     try {
       emit(HomeLoadingState());
-      List<DailyTask> dailyTasks = await DailyTaskApi.findCurrentDailyTask();
-      List<Expedition> expeditions = await ExpeditionApi.findAll();
-      List<Platform> platforms = await HomeApi.getPlatforms();
+      List<DailyTask> dailyTasks = [];
+      List<Expedition> expeditions = [];
+      List<Platform> platforms = [];
+      ExpiredToken lazadaAuthDate = ExpiredToken();
+      await Future.wait([
+        DailyTaskApi.findCurrentDailyTask().then((value) => dailyTasks = value),
+        ExpeditionApi.findAll().then((value) => expeditions = value),
+        HomeApi.getPlatforms().then((value) => platforms = value),
+        HomeApi.authDate().then((value) => lazadaAuthDate = value)
+      ]);
       emit(DataState(
         dailyTasks: dailyTasks,
         expeditions: expeditions,
         platforms: platforms,
+        expired: lazadaAuthDate,
       ));
     } catch (e) {
       emit(HomeErrorState(e.toString()));

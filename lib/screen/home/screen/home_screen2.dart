@@ -67,6 +67,7 @@ class _HomeScreen2State extends State<HomeScreen2>
                 dailyTasks: state.dailyTasks,
                 expeditions: state.expeditions ?? [],
                 platforms: state.platforms ?? [],
+                expired: state.expired,
               );
             }
             return Container();

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:receipt_online_shop/model/daily_task.dart';
 import 'package:receipt_online_shop/model/expired_token.dart';
 import 'package:receipt_online_shop/model/platform.dart';
 import 'package:receipt_online_shop/screen/expedition/data/expedition.dart';
+import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
+import 'package:receipt_online_shop/screen/home/screen/auth_screen.dart';
 import 'package:receipt_online_shop/screen/home/screen/package_card.dart';
 import 'package:receipt_online_shop/screen/home/screen/platform_body.dart';
 import 'package:receipt_online_shop/widget/title_view.dart';
@@ -61,7 +64,16 @@ class HomeBody extends StatelessWidget {
                   color: textColor,
                   size: 15,
                 ),
-                onTap: () {},
+                onTap: () {
+                  days < 0
+                      ? Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                          return const LazadaAuthScreen();
+                        })).then((value) {
+                          context.read<HomeBloc>().add(GetData());
+                        })
+                      : context.read<HomeBloc>().add(OnRefreshToken());
+                },
               ),
             ),
           ),

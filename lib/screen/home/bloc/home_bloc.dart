@@ -22,6 +22,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<OnChangeExpedition>(_onChangeExpedition);
     on<OnChangeTotal>(_onChangeTotal);
     on<OnSaveDailyTask>(_onSaveDailyTask);
+    on<OnRefreshToken>(_onRefreshToken);
+  }
+
+  void _onRefreshToken(OnRefreshToken event, Emitter<HomeState> emit) async {
+    try {
+      emit(HomeLoadingState());
+      await HomeApi.lazadaRefreshToken();
+      List<DailyTask> dailyTasks = [];
+      List<Expedition> expeditions = [];
+      List<Platform> platforms = [];
+      ExpiredToken lazadaAuthDate = ExpiredToken();
+      await Future.wait([
+        DailyTaskApi.findCurrentDailyTask().then((value) => dailyTasks = value),
+        ExpeditionApi.findAll().then((value) => expeditions = value),
+        HomeApi.getPlatforms().then((value) => platforms = value),
+        HomeApi.authDate().then((value) => lazadaAuthDate = value)
+      ]);
+      emit(DataState(
+        dailyTasks: dailyTasks,
+        expeditions: expeditions,
+        platforms: platforms,
+        expired: lazadaAuthDate,
+      ));
+    } catch (e) {
+      emit(HomeErrorState(e.toString()));
+    }
   }
 
   void _getData(GetData event, Emitter<HomeState> emit) async {

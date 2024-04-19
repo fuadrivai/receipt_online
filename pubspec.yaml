@@ -58,6 +58,8 @@ dependencies:
   camera: ^0.10.5+9
   permission_handler: ^11.3.1
   webview_flutter: ^4.7.0
+  webview_flutter_android: ^3.16.0
+  webview_flutter_wkwebview: ^3.13.0
 
 dev_dependencies:
   flutter_test:

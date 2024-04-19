@@ -14,4 +14,16 @@ class HomeApi {
     var data = client.lazadaAuthDate();
     return data;
   }
+
+  static Future<String> lazadaAuthLink() async {
+    final client = await Api.restClient();
+    var data = client.lazadaAuthLink();
+    return data;
+  }
+
+  static Future lazadaRefreshToken() async {
+    final client = await Api.restClient();
+    var data = client.lazadaRefreshToken();
+    return data;
+  }
 }

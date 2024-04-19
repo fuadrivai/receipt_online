@@ -9,6 +9,11 @@ class GetData extends HomeEvent {
   List<Object?> get props => [];
 }
 
+class OnRefreshToken extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class OnChangeExpedition extends HomeEvent {
   final Expedition expedition;
   const OnChangeExpedition(this.expedition);

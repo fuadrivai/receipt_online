@@ -58,8 +58,15 @@ abstract class RestClient {
   Future<dynamic> orderRts(@Path() String tracking_number,
       @Path() String shipment_provider, @Path() List<int>? order_item_ids);
 
+  @GET("/lazada-order/link")
+  Future<String> lazadaAuthLink();
+
   @GET("/lazada-order/auth-date")
   Future<ExpiredToken> lazadaAuthDate();
+
+  @GET("/lazada-order/token/refresh")
+  Future lazadaRefreshToken();
+
   @GET("/lazada-order/count")
   Future<LazadaCount> lazadaGetCount();
 

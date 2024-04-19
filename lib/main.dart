@@ -11,6 +11,7 @@ import 'package:receipt_online_shop/library/seesion_manager.dart';
 import 'package:receipt_online_shop/screen/daily_task/bloc/daily_task_bloc.dart';
 import 'package:receipt_online_shop/screen/expedition/bloc/expedition_bloc.dart';
 import 'package:receipt_online_shop/screen/home/bloc/home_bloc.dart';
+import 'package:receipt_online_shop/screen/home/bloc/lazada_auth_bloc.dart';
 import 'package:receipt_online_shop/screen/jdid/bloc/jd_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/by_id_bloc.dart';
 import 'package:receipt_online_shop/screen/lazada/bloc/lazada_bloc.dart';
@@ -77,6 +78,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<ProductFormBloc>(create: (__) => ProductFormBloc()),
         BlocProvider<ReportBloc>(create: (__) => ReportBloc()),
         BlocProvider<ProductBloc>(create: (__) => ProductBloc()),
+        BlocProvider<LazadaAuthBloc>(create: (__) => LazadaAuthBloc()),
       ],
       child: MaterialApp(
         navigatorKey: _nav.navKey,
